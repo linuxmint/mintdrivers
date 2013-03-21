@@ -11,6 +11,8 @@ from UbuntuDrivers import detect
 from aptdaemon import client
 from aptdaemon.errors import NotAuthorizedError, TransactionFailed
 
+gettext.install("mintdrivers", "/usr/share/linuxmint/locale")
+
 # i18n for menu item
 menuName = _("Driver Manager")
 menuComment = _("Manage the drivers for your devices")

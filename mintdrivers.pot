@@ -1,0 +1,114 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-21 18:04+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:17
+msgid "Driver Manager"
+msgstr ""
+
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:18
+msgid "Manage the drivers for your devices"
+msgstr ""
+
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:58
+msgid "Applying changes..."
+msgstr ""
+
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:140
+msgid "Re_vert"
+msgstr ""
+
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:142
+msgid "_Apply Changes"
+msgstr ""
+
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:144
+msgid "_Cancel"
+msgstr ""
+
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:146
+msgid "_Restart..."
+msgstr ""
+
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:229
+msgid "This device is using the recommended driver."
+msgstr ""
+
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:230
+msgid "This device is using an alternative driver."
+msgstr ""
+
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:231
+msgid "This device is using a manually-installed driver."
+msgstr ""
+
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:232
+msgid "This device is not working."
+msgstr ""
+
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:241
+msgid "Continue using a manually installed driver"
+msgstr ""
+
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:267
+msgid "Using {} from {}"
+msgstr ""
+
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:274
+msgid "open source"
+msgstr ""
+
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:276
+msgid "proprietary"
+msgstr ""
+
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:279
+msgid "{base_description} ({licence}, tested)"
+msgstr ""
+
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:281
+msgid "{base_description} ({licence})"
+msgstr ""
+
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:301
+msgid "Do not use the device"
+msgstr ""
+
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:334
+msgid "Unknown"
+msgstr ""
+
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:384
+msgid "You need to restart the computer to complete the driver changes."
+msgstr ""
+
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:398
+#, python-format
+msgid "%(count)d proprietary driver in use."
+msgid_plural "%(count)d proprietary drivers in use."
+msgstr[0] ""
+msgstr[1] ""
+
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:403
+msgid "No proprietary drivers are in use."
+msgstr ""
+
+#: /usr/bin/mintdrivers:10
+msgid "Please enter your password to start Driver Manager"
+msgstr ""
