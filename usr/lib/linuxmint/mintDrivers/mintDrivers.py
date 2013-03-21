@@ -34,6 +34,8 @@ class Application():
 
     self.window_main.show()
 
+    self.window_main.set_title(menuName)
+
     self.apt_cache = apt.Cache()
     self.apt_client = client.AptClient()
 
