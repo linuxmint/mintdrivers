@@ -10,6 +10,7 @@ from gi.repository import GObject, Gdk, Gtk, Gio
 from UbuntuDrivers import detect
 from aptdaemon import client
 from aptdaemon.errors import NotAuthorizedError, TransactionFailed
+import re
 
 gettext.install("mintdrivers", "/usr/share/linuxmint/locale")
 
@@ -264,7 +265,7 @@ class Application():
       try:
         pkg = self.apt_cache[pkg_driver_name]
         installed = pkg.is_installed
-        description = _("Using {} from {}").format(pkg.candidate.summary, pkg.shortname)
+        description = _("<b>%s</b>\n<small>%s</small> %s\n<small><span foreground='#3c3c3c'>%s</span></small>") % (pkg.shortname, _("Version"), pkg.candidate.version, pkg.candidate.summary)
       except KeyError:
         print("WARNING: a driver ({}) doesn't have any available package associated: {}".format(pkg_driver_name, current_driver))
         continue
@@ -279,7 +280,7 @@ class Application():
         base_string = _("{base_description} ({licence}, tested)")
       else:
         base_string = _("{base_description} ({licence})")
-      description = base_string.format(base_description=description, licence=licence)
+      #description = base_string.format(base_description=description, licence=licence)
 
       selected = False
       if not builtin and not returned_drivers['manually_installed']:
@@ -344,7 +345,10 @@ class Application():
       # define the order of introspection
       for section in ('recommended', 'alternative', 'manually_installed', 'no_driver'):
         for driver in drivers[section]:
-          radio_button = Gtk.RadioButton.new_with_label(None, drivers[section][driver]['description'])
+          radio_button = Gtk.RadioButton.new(None)
+          label = Gtk.Label()
+          label.set_markup(drivers[section][driver]['description'])
+          radio_button.add(label)
           if option_group:
             radio_button.join_group(option_group)
           else:
