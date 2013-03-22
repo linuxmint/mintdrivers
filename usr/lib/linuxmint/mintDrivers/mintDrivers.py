@@ -277,7 +277,7 @@ class Application():
         licence = _("proprietary")
 
       if driver_status == 'recommended':
-        base_string = _("{base_description} ({licence}, tested)")
+        base_string = _("{base_description} ({licence}, recommended)")
       else:
         base_string = _("{base_description} ({licence})")
       #description = base_string.format(base_description=description, licence=licence)
@@ -316,22 +316,37 @@ class Application():
 
     return (overall_status, icon, returned_drivers)
 
+  def get_device_icon(self, device):    
+    vendor = device.get('vendor', _('Unknown'))
+    icon = "generic"    
+    if "nvidia" in vendor.lower():
+      icon = "nvidia"
+    elif "Radeon" in vendor:
+      icon = "ati"
+    elif "broadcom" in vendor.lower():
+      icon = "broadcom"
+    elif "virtualbox" in vendor.lower():
+      icon = "virtualbox"    
+    return ("/usr/lib/linuxmint/mintDrivers/icons/%s.png" % icon)
+    
 
   def show_drivers(self):
     self.ui_building = True
     self.dynamic_device_status = {}
     for device in sorted(self.devices.keys()):
       (overall_status, icon, drivers) = self.gather_device_data(self.devices[device])
-
+      brand_icon = Gtk.Image()
+      brand_icon.set_valign(Gtk.Align.START)
+      brand_icon.set_halign(Gtk.Align.CENTER)
+      brand_icon.set_from_file(self.get_device_icon(self.devices[device]))
       driver_status = Gtk.Image()
       driver_status.set_valign(Gtk.Align.START)
-      driver_status.set_halign(Gtk.Align.CENTER)
+      driver_status.set_halign(Gtk.Align.CENTER)      
       driver_status.set_from_icon_name(icon, Gtk.IconSize.MENU)
       device_box = Gtk.Box(spacing=6, orientation=Gtk.Orientation.HORIZONTAL)
-      device_box.pack_start(driver_status, False, False, 6)
+      device_box.pack_start(brand_icon, False, False, 6)
       device_detail = Gtk.Box(spacing=6, orientation=Gtk.Orientation.VERTICAL)
-      device_box.pack_start(device_detail, True, True, 0)
-
+      device_box.pack_start(device_detail, True, True, 0)      
       widget = Gtk.Label("{}: {}".format(self.devices[device].get('vendor', _('Unknown')), self.devices[device].get('model', _('Unknown'))))
       widget.set_halign(Gtk.Align.START)
       device_detail.pack_start(widget, True, False, 0)
