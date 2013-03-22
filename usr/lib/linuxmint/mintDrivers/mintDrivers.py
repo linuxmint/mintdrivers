@@ -21,11 +21,8 @@ menuComment = _("Manage the drivers for your devices")
 class Application():
 
   def __init__(self):
-    
-    Gtk.Window.set_default_icon_name("software-properties")
-    
-    self.builder = Gtk.Builder()
-    self.builder.set_translation_domain("software-properties")
+            
+    self.builder = Gtk.Builder()    
     self.builder.add_from_file("/usr/lib/linuxmint/mintDrivers/main.ui")
     self.builder.connect_signals(self)
     for o in self.builder.get_objects():
@@ -39,13 +36,13 @@ class Application():
 
     self.window_main.set_title(menuName)
 
+    self.window_main.connect("delete_event", Gtk.main_quit)
+
     self.apt_cache = apt.Cache()
     self.apt_client = client.AptClient()
 
     self.init_drivers()
-    self.show_drivers() 
-
-    Gtk.main()   
+    self.show_drivers()       
   
   def on_driver_changes_progress(self, transaction, progress):
     #print(progress)
@@ -265,23 +262,14 @@ class Application():
       try:
         pkg = self.apt_cache[pkg_driver_name]
         installed = pkg.is_installed
-        description = _("<b>%s</b>\n<small>%s</small> %s\n<small><span foreground='#3c3c3c'>%s</span></small>") % (pkg.shortname, _("Version"), pkg.candidate.version, pkg.candidate.summary)
+        if driver_status == 'recommended':        
+          description = _("<b>%s <small><span foreground='#58822B'>(%s)</span></small></b>\n<small><span foreground='#3c3c3c'>%s</span></small> %s\n<small><span foreground='#3c3c3c'>%s</span></small>") % (pkg.shortname, _("recommended"), _("Version"), pkg.candidate.version, pkg.candidate.summary)
+        else:
+          description = _("<b>%s</b>\n<small><span foreground='#3c3c3c'>%s</span></small> %s\n<small><span foreground='#3c3c3c'>%s</span></small>") % (pkg.shortname, _("Version"), pkg.candidate.version, pkg.candidate.summary)
       except KeyError:
         print("WARNING: a driver ({}) doesn't have any available package associated: {}".format(pkg_driver_name, current_driver))
-        continue
-
-      # gather driver description
-      if current_driver['free']:
-        licence = _("open source")
-      else:
-        licence = _("proprietary")
-
-      if driver_status == 'recommended':
-        base_string = _("{base_description} ({licence}, recommended)")
-      else:
-        base_string = _("{base_description} ({licence})")
-      #description = base_string.format(base_description=description, licence=licence)
-
+        continue     
+          
       selected = False
       if not builtin and not returned_drivers['manually_installed']:
         selected = installed
@@ -425,4 +413,5 @@ if __name__ == "__main__":
     if os.getuid() != 0:
         os.execvp("gksu", ("", " ".join(sys.argv)))
     else:
-        Application().run()
+        Application()
+        Gtk.main()
