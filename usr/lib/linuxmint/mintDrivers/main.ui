@@ -7,6 +7,7 @@
     <property name="window_position">center</property>
     <property name="default_width">640</property>
     <property name="default_height">480</property>
+    <property name="icon_name">jockey</property>
     <child>
       <object class="GtkBox" id="vbox_drivers">
         <property name="visible">True</property>

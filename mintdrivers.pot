@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-21 18:04+0000\n"
+"POT-Creation-Date: 2013-04-08 13:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,97 +18,87 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:17
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:18
 msgid "Driver Manager"
 msgstr ""
 
-#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:18
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:19
 msgid "Manage the drivers for your devices"
 msgstr ""
 
-#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:58
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:56
 msgid "Applying changes..."
 msgstr ""
 
-#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:140
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:138
 msgid "Re_vert"
 msgstr ""
 
-#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:142
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:140
 msgid "_Apply Changes"
 msgstr ""
 
-#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:144
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:142
 msgid "_Cancel"
 msgstr ""
 
-#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:146
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:144
 msgid "_Restart..."
 msgstr ""
 
-#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:229
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:227
 msgid "This device is using the recommended driver."
 msgstr ""
 
-#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:230
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:228
 msgid "This device is using an alternative driver."
 msgstr ""
 
-#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:231
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:229
 msgid "This device is using a manually-installed driver."
 msgstr ""
 
-#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:232
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:230
 msgid "This device is not working."
 msgstr ""
 
-#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:241
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:239
 msgid "Continue using a manually installed driver"
 msgstr ""
 
-#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:267
-msgid "Using {} from {}"
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:266
+msgid "recommended"
 msgstr ""
 
-#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:274
-msgid "open source"
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:266
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:268
+msgid "Version"
 msgstr ""
 
-#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:276
-msgid "proprietary"
-msgstr ""
-
-#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:279
-msgid "{base_description} ({licence}, tested)"
-msgstr ""
-
-#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:281
-msgid "{base_description} ({licence})"
-msgstr ""
-
-#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:301
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:290
 msgid "Do not use the device"
 msgstr ""
 
-#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:334
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:308
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:338
 msgid "Unknown"
 msgstr ""
 
-#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:384
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:391
 msgid "You need to restart the computer to complete the driver changes."
 msgstr ""
 
-#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:398
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:405
 #, python-format
 msgid "%(count)d proprietary driver in use."
 msgid_plural "%(count)d proprietary drivers in use."
 msgstr[0] ""
 msgstr[1] ""
 
-#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:403
+#: usr/lib/linuxmint/mintDrivers/mintDrivers.py:410
 msgid "No proprietary drivers are in use."
 msgstr ""
 
-#: /usr/bin/mintdrivers:10
-msgid "Please enter your password to start Driver Manager"
+#: usr/bin/driver-manager:9
+msgid "Please enter your password to launch the driver manager"
 msgstr ""

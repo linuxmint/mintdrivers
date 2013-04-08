@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Driver Manager
 Comment=Manage the drivers for your devices
-Exec=mintdrivers
+Exec=driver-manager
 Icon=jockey
 Terminal=false
 X-MultipleArgs=false

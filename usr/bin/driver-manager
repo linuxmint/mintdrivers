@@ -1,0 +1,18 @@
+#! /usr/bin/python
+
+import os
+import gettext
+
+gettext.install("mintdrivers", "/usr/share/linuxmint/locale")
+
+tool = "/usr/lib/linuxmint/mintDrivers/mintDrivers.py"
+sentence = _("Please enter your password to launch the driver manager")
+icon = "/usr/share/icons/hicolor/48x48/apps/driver-manager.png"
+
+if os.path.exists("/usr/bin/gksu"):
+    launcher = "gksu  --message \"<b>%s</b>\"" % sentence   
+elif os.path.exists("/usr/bin/kdesudo"):
+    launcher = "kdesudo -i %s -d --comment \"<b>%s</b>\"" % (icon, sentence)
+
+command = "%s %s" % (launcher, tool)
+os.system(command)

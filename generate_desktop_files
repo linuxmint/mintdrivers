@@ -20,7 +20,7 @@ menuComment = menuComment.replace("\"", "")
 menuComment = menuComment.replace(")", "")
 menuComment = menuComment.strip()
 
-desktopFile = open("usr/share/applications/mintDrivers.desktop", "w")
+desktopFile = open("usr/share/applications/driver-manager.desktop", "w")
 desktopFile.writelines("""[Desktop Entry]
 Name=Driver Manager
 """)
@@ -48,7 +48,7 @@ for directory in os.listdir("/usr/share/linuxmint/locale"):
 		except:
 			pass
 
-desktopFile.writelines("""Exec=mintdrivers
+desktopFile.writelines("""Exec=driver-manager
 Icon=jockey
 Terminal=false
 X-MultipleArgs=false

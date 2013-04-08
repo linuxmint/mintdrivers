@@ -263,9 +263,9 @@ class Application():
         pkg = self.apt_cache[pkg_driver_name]
         installed = pkg.is_installed
         if driver_status == 'recommended':        
-          description = _("<b>%s <small><span foreground='#58822B'>(%s)</span></small></b>\n<small><span foreground='#3c3c3c'>%s</span></small> %s\n<small><span foreground='#3c3c3c'>%s</span></small>") % (pkg.shortname, _("recommended"), _("Version"), pkg.candidate.version, pkg.candidate.summary)
+          description = ("<b>%s <small><span foreground='#58822B'>(%s)</span></small></b>\n<small><span foreground='#3c3c3c'>%s</span></small> %s\n<small><span foreground='#3c3c3c'>%s</span></small>") % (pkg.shortname, _("recommended"), _("Version"), pkg.candidate.version, pkg.candidate.summary)
         else:
-          description = _("<b>%s</b>\n<small><span foreground='#3c3c3c'>%s</span></small> %s\n<small><span foreground='#3c3c3c'>%s</span></small>") % (pkg.shortname, _("Version"), pkg.candidate.version, pkg.candidate.summary)
+          description = ("<b>%s</b>\n<small><span foreground='#3c3c3c'>%s</span></small> %s\n<small><span foreground='#3c3c3c'>%s</span></small>") % (pkg.shortname, _("Version"), pkg.candidate.version, pkg.candidate.summary)
       except KeyError:
         print("WARNING: a driver ({}) doesn't have any available package associated: {}".format(pkg_driver_name, current_driver))
         continue     
