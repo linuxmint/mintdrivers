@@ -33,7 +33,7 @@ class Application():
 
     self.window_main.show()
 
-    self.window_main.set_title(menuName)
+    self.window_main.set_title(_("Driver Manager"))
 
     self.window_main.connect("delete_event", Gtk.main_quit)
 

@@ -20,7 +20,7 @@ menuComment = menuComment.replace("\"", "")
 menuComment = menuComment.replace(")", "")
 menuComment = menuComment.strip()
 
-desktopFile = open("usr/share/applications/driver-manager.desktop", "w")
+desktopFile = open("usr/share/applications/mintdrivers.desktop", "w")
 desktopFile.writelines("""[Desktop Entry]
 Name=Driver Manager
 """)
