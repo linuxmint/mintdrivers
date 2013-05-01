@@ -1,7 +1,6 @@
 #! /usr/bin/python3
 # -*- coding=utf-8 -*-
 
-from gettext import gettext as _
 import gettext
 import os, sys
 import apt

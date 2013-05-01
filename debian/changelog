@@ -1,3 +1,9 @@
+mintdrivers (1.0.3) olivia; urgency=low
+
+  * 1.0.3
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 25 Apr 2013 18:04:38 +0100
+
 mintdrivers (1.0.2) olivia; urgency=low
 
   * More generic branding
