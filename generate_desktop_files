@@ -49,11 +49,11 @@ for directory in os.listdir("/usr/share/linuxmint/locale"):
 			pass
 
 desktopFile.writelines("""Exec=driver-manager
-Icon=jockey
+Icon=/usr/share/icons/hicolor/scalable/apps/driver-manager.svg
 Terminal=false
 X-MultipleArgs=false
 Type=Application
-Categories=GNOME;GTK;Settings;X-GNOME-SystemSettings;X-GNOME-Settings-Panel;
+Categories=GNOME;GTK;System;Settings;X-GNOME-SystemSettings;X-GNOME-Settings-Panel;
 X-GNOME-Settings-Panel=driver-manager
 X-KDE-SubstituteUID=true
 X-Ubuntu-Gettext-Domain=mintdrivers
