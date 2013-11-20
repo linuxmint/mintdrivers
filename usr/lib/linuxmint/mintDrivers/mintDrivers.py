@@ -86,9 +86,18 @@ class Application():
     for pkg in self.driver_changes:
       if pkg.is_installed:
         removals.append(pkg.shortname)
-      else:
+        print ("Remove %s" % pkg.shortname)
+      else:        
         installs.append(pkg.shortname)
-
+        print ("Install %s" % pkg.shortname)
+        try:
+          for recommend in pkg.candidate.recommends:
+            if recommend[0].name in self.apt_cache:
+              installs.append(recommend[0].name)
+              print ("Install %s" % recommend[0].name)
+        except:
+          print ("A problem occured, some recommended deps might not get installed")
+    
     try:
       self.transaction = self.apt_client.commit_packages(install=installs, remove=removals,
                                                          reinstall=[], purge=[], upgrade=[], downgrade=[])
@@ -305,15 +314,16 @@ class Application():
 
   def get_device_icon(self, device):    
     vendor = device.get('vendor', _('Unknown'))
-    icon = "generic"    
+    model =  device.get('model', _('Unknown'))
+    icon = "generic"
     if "nvidia" in vendor.lower():
       icon = "nvidia"
-    elif "Radeon" in vendor:
+    elif "radeon" in vendor.lower() or "radeon" in model.lower():
       icon = "ati"
     elif "broadcom" in vendor.lower():
       icon = "broadcom"
     elif "virtualbox" in vendor.lower():
-      icon = "virtualbox"    
+      icon = "virtualbox"
     return ("/usr/lib/linuxmint/mintDrivers/icons/%s.png" % icon)
     
 
