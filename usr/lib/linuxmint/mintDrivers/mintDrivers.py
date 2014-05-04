@@ -13,10 +13,6 @@ import re
 
 gettext.install("mintdrivers", "/usr/share/linuxmint/locale")
 
-# i18n for menu item
-menuName = _("Driver Manager")
-menuComment = _("Manage the drivers for your devices")
-
 class Application():
 
   def __init__(self):
