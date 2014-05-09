@@ -10,6 +10,7 @@ from UbuntuDrivers import detect
 from aptdaemon import client
 from aptdaemon.errors import NotAuthorizedError, TransactionFailed
 import re
+import urllib
 
 gettext.install("mintdrivers", "/usr/share/linuxmint/locale")
 
@@ -31,14 +32,88 @@ class Application():
 
     self.window_main.set_title(_("Driver Manager"))
 
-    self.window_main.connect("delete_event", Gtk.main_quit)
+    self.window_main.connect("delete_event", self.quit_application)
 
     self.apt_cache = apt.Cache()
     self.apt_client = client.AptClient()
 
     self.init_drivers()
-    self.show_drivers()       
+    self.show_drivers()   
+
+    self.info_bar_label.set_text(_("Drivers cannot be installed.\nPlease connect to the Internet or insert the Linux Mint installation DVD (or USB stick)."))
+    self.check_internet_or_live_dvd()
+    self.button_info_bar.connect("clicked", self.check_internet_or_live_dvd)
   
+  def quit_application(self, widget=None, event=None):
+    self.clean_up_media_cdrom()
+    Gtk.main_quit()
+
+  def clean_up_media_cdrom(self):
+    if os.path.exists("/media/cdrom"):
+      print ("umounting...")
+      os.system("umount /media/cdrom")
+      print ("removing...")
+      os.system("rm -rf /media/cdrom")
+
+  def check_connectivity(self, reference):
+    try:
+      urllib.request.urlopen(reference, timeout=1)
+      return True
+    except urllib.request.URLError:
+      return False
+
+  def check_internet_or_live_dvd(self, widget=None):
+    
+    try:
+      print ("Checking...")    
+
+      # We either get drivers from the Internet of from the liveDVD
+      # So check the connection to the Internet or scan for a liveDVD
+      
+      if self.check_connectivity("http://archive.ubuntu.com"):
+        # We can reach the repository, everything's fine
+        self.info_bar.hide()
+        return
+      
+      # We can't reach the repository, we need the installation media
+      mount_point = None
+      mounted_on_media_cdrom = False
+     
+      # Find the live media
+      try:
+        live_medias = subprocess.check_output("find /media | grep README.diskdefines", shell=True)
+        live_medias = str(live_medias, encoding='utf8').split("\n")
+        for live_media in live_medias:
+          if ("README.diskdefines" in live_media):
+            mount_point = live_media.replace("/README.diskdefines", "") # This is where our live DVD is mounted 
+            # Add it to apt-cdrom
+            os.system("sudo apt-cdrom -d \"%s\" -m add" % mount_point)
+            if ("/media/cdrom" in mount_point):
+              mounted_on_media_cdrom = True
+      except:
+        pass
+
+      if mount_point is None:
+        # Not mounted..
+        self.info_bar.show()        
+        return
+      
+      if mounted_on_media_cdrom == False:
+        # Mounted, but not in the right place...
+        print ("Binding mount %s to /media/cdrom" % mount_point)
+        self.clean_up_media_cdrom()
+        os.system("mkdir -p /media/cdrom")
+        os.system("mount --bind \"%s\" /media/cdrom" % mount_point)
+
+      # It should now be mounted to /media/cdrom, else something went wrong..
+      if os.path.exists("/media/cdrom/README.diskdefines"):
+        self.info_bar.hide()
+      else:
+        self.info_bar.show()
+    except (NotAuthorizedError, TransactionFailed) as e:
+      print("An error occured: {}".format(e))      
+      self.info_bar.show()      
+
   def on_driver_changes_progress(self, transaction, progress):
     #print(progress)
     self.button_driver_revert.set_visible(False)
@@ -130,6 +205,7 @@ class Application():
     self.clear_changes()
 
   def on_driver_restart_clicked(self, button_restart):
+    self.clean_up_media_cdrom()
     subprocess.call(['/usr/lib/indicator-session/gtk-logout-helper', '--shutdown'])
 
   def clear_changes(self):
