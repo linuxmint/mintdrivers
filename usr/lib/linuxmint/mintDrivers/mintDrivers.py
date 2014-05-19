@@ -57,9 +57,9 @@ class Application():
 
   def check_connectivity(self, reference):
     try:
-      urllib.request.urlopen(reference, timeout=1)
+      urllib.request.urlopen(reference, timeout=10)
       return True
-    except urllib.request.URLError:
+    except:
       return False
 
   def check_internet_or_live_dvd(self, widget=None):
