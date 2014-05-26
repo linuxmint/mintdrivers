@@ -50,10 +50,12 @@ class Application():
 
   def clean_up_media_cdrom(self):
     if os.path.exists("/media/cdrom"):
-      print ("umounting...")
+      print ("umounting /media/cdrom...")
       os.system("umount /media/cdrom")
-      print ("removing...")
+      print ("removing /media/cdrom...")
       os.system("rm -rf /media/cdrom")
+      print ("removing cdrom repository...")
+      os.system("sed -i '/deb cdrom/d' /etc/apt/sources.list")
 
   def check_connectivity(self, reference):
     try:
