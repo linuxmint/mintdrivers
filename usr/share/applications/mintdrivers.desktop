@@ -144,4 +144,4 @@ Categories=GNOME;GTK;System;Settings;X-GNOME-SystemSettings;X-GNOME-Settings-Pan
 X-GNOME-Settings-Panel=driver-manager
 X-KDE-SubstituteUID=true
 X-Ubuntu-Gettext-Domain=mintdrivers
-NotShowIn=KDE
+NotShowIn=KDE;
