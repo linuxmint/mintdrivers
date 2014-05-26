@@ -21,7 +21,7 @@ Categories=GNOME;GTK;System;Settings;X-GNOME-SystemSettings;X-GNOME-Settings-Pan
 X-GNOME-Settings-Panel=driver-manager
 X-KDE-SubstituteUID=true
 X-Ubuntu-Gettext-Domain=mintdrivers
-NotShowIn=KDE
+NotShowIn=KDE;
 """
 
 additionalfiles.generate(DOMAIN, PATH, "usr/share/applications/mintdrivers.desktop", prefix, _("Driver Manager"), _("Manage the drivers for your devices"), suffix)
@@ -37,7 +37,7 @@ Type=Application
 Encoding=UTF-8
 Categories=Qt;KDE;System;
 X-KDE-StartupNotify=false
-OnlyShowIn=KDE
+OnlyShowIn=KDE;
 """
 
 additionalfiles.generate(DOMAIN, PATH, "usr/share/applications/kde4/mintdrivers.desktop", prefix, _("Driver Manager"), _("Manage the drivers for your devices"),  suffix, genericName=_("Manage the drivers for your devices"))
