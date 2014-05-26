@@ -1,3 +1,11 @@
+mintdrivers (1.1.2) qiana; urgency=low
+
+  * [9f31d38] KDE desktop file generation
+  * [ba67d50] New KDE4 desktop file
+  * [409e85a] GNOME based desktop file hidden in KDE
+
+ -- Frédéric Gaudet <fred@linuxmint.com>  Mon, 26 May 2014 10:59:00 +0200
+
 mintdrivers (1.1.1) qiana; urgency=medium
 
   * 1.1.1
