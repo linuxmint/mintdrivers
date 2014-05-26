@@ -50,7 +50,7 @@ class Application():
 
   def clean_up_media_cdrom(self):
     if os.path.exists("/media/cdrom"):
-      print ("umounting /media/cdrom...")
+      print ("unmounting /media/cdrom...")
       os.system("umount /media/cdrom")
       print ("removing /media/cdrom...")
       os.system("rm -rf /media/cdrom")
