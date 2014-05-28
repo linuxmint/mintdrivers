@@ -1,3 +1,15 @@
+mintdrivers (1.1.3) qiana; urgency=low
+
+  [ Clement Lefebvre ]
+  * [6c56b6d] When cleaning up, remove CDROM repositories from /etc/apt/sources.list
+  * [22a7b18] changelog
+
+  [ Frédéric Gaudet ]
+  * [fa861d1] Add trailing semicolon
+  * [3ae8be8] Update translations
+
+ -- Frédéric Gaudet <fred@linuxmint.com>  Mon, 26 May 2014 13:34:29 +0200
+
 mintdrivers (1.1.2) qiana; urgency=medium
 
   * 1.1.2
