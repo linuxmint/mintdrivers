@@ -448,7 +448,7 @@ class Application():
             radio_button.connect("toggled", self.on_driver_selection_changed, device)
           else:
             radio_button.connect("toggled", self.on_driver_selection_changed, device, driver)
-          if drivers['manually_installed'] and section != 'manually_installed':
+          if drivers['manually_installed'] and section != 'manually_installed' and "firmware" not in str(driver):
             radio_button.set_sensitive(False)
 
       self.box_driver_detail.pack_start(device_box, False, False, 6)
