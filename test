@@ -1,5 +1,5 @@
-#!/bin/bash
+#!/bin/sh
 
-sudo rm -rf /usr/lib/linuxmint/mintDrivers
+sudo rm -rf /usr/share/linuxmint/mintDrivers
 sudo cp -R usr /
 mintdrivers
