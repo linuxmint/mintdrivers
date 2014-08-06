@@ -19,7 +19,7 @@ class Application():
   def __init__(self):
             
     self.builder = Gtk.Builder()    
-    self.builder.add_from_file("/usr/lib/linuxmint/mintDrivers/main.ui")
+    self.builder.add_from_file("/usr/share/linuxmint/mintDrivers/main.ui")
     self.builder.connect_signals(self)
     for o in self.builder.get_objects():
         if issubclass(type(o), Gtk.Buildable):
@@ -398,7 +398,7 @@ class Application():
       icon = "broadcom"
     elif "virtualbox" in vendor.lower():
       icon = "virtualbox"
-    return ("/usr/lib/linuxmint/mintDrivers/icons/%s.png" % icon)
+    return ("/usr/share/linuxmint/mintDrivers/icons/%s.png" % icon)
     
 
   def show_drivers(self):
