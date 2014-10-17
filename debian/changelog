@@ -1,3 +1,9 @@
+mintdrivers (1.1.5) rebecca; urgency=medium
+
+  * Updated debian files
+
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 17 Oct 2014 14:20:25 +0200
+
 mintdrivers (1.1.4) qiana; urgency=medium
 
   * Don't consider firmware as manually installed
