@@ -398,7 +398,7 @@ class Application():
       icon = "broadcom"
     elif "virtualbox" in vendor.lower():
       icon = "virtualbox"
-    return ("/usr/lib/linuxmint/mintDrivers/icons/%s.png" % icon)
+    return ("/usr/share/linuxmint/mintDrivers/icons/%s.png" % icon)
     
 
   def show_drivers(self):
