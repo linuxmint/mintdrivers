@@ -38,11 +38,18 @@ class Application():
     self.apt_client = client.AptClient()
 
     self.init_drivers()
-    self.show_drivers()   
-
-    self.info_bar_label.set_text(_("Drivers cannot be installed.\nPlease connect to the Internet or insert the Linux Mint installation DVD (or USB stick)."))
-    self.check_internet_or_live_dvd()
-    self.button_info_bar.connect("clicked", self.check_internet_or_live_dvd)
+    self.show_drivers()  
+    
+    with open('/proc/cmdline') as f:
+      cmdline = f.read()
+      if ((not "boot=casper" in cmdline) and (not "boot=live" in cmdline)):
+        print ("Post-install mode detected")
+        self.info_bar_label.set_text(_("Drivers cannot be installed.\nPlease connect to the Internet or insert the Linux Mint installation DVD (or USB stick)."))
+        self.check_internet_or_live_dvd()
+        self.button_info_bar.connect("clicked", self.check_internet_or_live_dvd)
+      else:
+        print ("Live mode detected")
+        self.info_bar.hide()
   
   def quit_application(self, widget=None, event=None):
     self.clean_up_media_cdrom()
