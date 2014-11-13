@@ -1,3 +1,9 @@
+mintdrivers (1.1.6) rebecca; urgency=medium
+
+  * Don't check for live media in live mode
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 13 Nov 2014 13:14:24 +0100
+
 mintdrivers (1.1.5) rebecca; urgency=medium
 
   * Updated debian files
