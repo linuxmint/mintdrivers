@@ -1,3 +1,10 @@
+mintdrivers (1.1.7) rafaela; urgency=medium
+
+  * Better ATI/AMD icon detection
+  * Only describe devices as "Unknown" when both vendor and model names aren't set by manufacturer
+
+ -- Clement Lefebvre <root@linuxmint.com>  Sun, 28 Jun 2015 17:37:38 +0200
+
 mintdrivers (1.1.6) rebecca; urgency=medium
 
   * Don't check for live media in live mode
