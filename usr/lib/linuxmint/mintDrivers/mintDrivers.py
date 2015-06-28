@@ -399,7 +399,7 @@ class Application():
     icon = "generic"
     if "nvidia" in vendor.lower():
       icon = "nvidia"
-    elif "radeon" in vendor.lower() or "radeon" in model.lower():
+    elif "radeon" in vendor.lower() or "radeon" in model.lower() or "Advanced Micro Devices" in vendor or "AMD" in vendor or "ATI" in vendor:
       icon = "ati"
     elif "broadcom" in vendor.lower():
       icon = "broadcom"
