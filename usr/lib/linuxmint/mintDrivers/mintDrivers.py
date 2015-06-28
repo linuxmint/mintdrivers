@@ -424,8 +424,18 @@ class Application():
       device_box = Gtk.Box(spacing=6, orientation=Gtk.Orientation.HORIZONTAL)
       device_box.pack_start(brand_icon, False, False, 6)
       device_detail = Gtk.Box(spacing=6, orientation=Gtk.Orientation.VERTICAL)
-      device_box.pack_start(device_detail, True, True, 0)      
-      widget = Gtk.Label("{}: {}".format(self.devices[device].get('vendor', _('Unknown')), self.devices[device].get('model', _('Unknown'))))
+      device_box.pack_start(device_detail, True, True, 0)
+      model_name = self.devices[device].get('model', None)
+      vendor_name = self.devices[device].get('vendor', None)
+      if vendor_name is None and model_name is None:
+        device_name = _("Unknown")
+      elif vendor_name is None:
+        device_name = model_name
+      elif model_name is None:
+        device_name = vendor_name
+      else:
+        device_name = "%s: %s" % (vendor_name, model_name)
+      widget = Gtk.Label(device_name)
       widget.set_halign(Gtk.Align.START)
       device_detail.pack_start(widget, True, False, 0)
       widget = Gtk.Label("<small>{}</small>".format(overall_status))
