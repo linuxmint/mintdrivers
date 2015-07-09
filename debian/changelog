@@ -1,3 +1,9 @@
+mintdrivers (1.1.8) rafaela; urgency=medium
+
+  * Fixed desktop file for multiple DEs
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 09 Jul 2015 13:38:21 +0200
+
 mintdrivers (1.1.7) rafaela; urgency=medium
 
   * Better ATI/AMD icon detection
