@@ -419,7 +419,7 @@ class Application():
       brand_icon.set_from_file(self.get_device_icon(self.devices[device]))
       driver_status = Gtk.Image()
       driver_status.set_valign(Gtk.Align.START)
-      driver_status.set_halign(Gtk.Align.CENTER)      
+      driver_status.set_halign(Gtk.Align.CENTER)
       driver_status.set_from_icon_name(icon, Gtk.IconSize.MENU)
       device_box = Gtk.Box(spacing=6, orientation=Gtk.Orientation.HORIZONTAL)
       device_box.pack_start(brand_icon, False, False, 6)

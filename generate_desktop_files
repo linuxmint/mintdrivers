@@ -13,14 +13,13 @@ gettext.install(DOMAIN, PATH)
 prefix = "[Desktop Entry]\n"
 
 suffix = """Exec=driver-manager
-Icon=/usr/share/icons/hicolor/scalable/apps/driver-manager.svg
+Icon=mintdrivers
 Terminal=false
 X-MultipleArgs=false
 Type=Application
-Categories=GNOME;GTK;System;Settings;X-GNOME-SystemSettings;X-GNOME-Settings-Panel;
+Categories=GNOME;GTK;System;Settings;X-GNOME-SystemSettings;X-GNOME-Settings-Panel;XFCE;X-XFCE-SettingsDialog;X-XFCE-SystemSettings;
 X-GNOME-Settings-Panel=driver-manager
 X-KDE-SubstituteUID=true
-X-Ubuntu-Gettext-Domain=mintdrivers
 NotShowIn=KDE;
 """
 
