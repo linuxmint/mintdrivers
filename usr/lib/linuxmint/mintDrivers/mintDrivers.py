@@ -17,8 +17,8 @@ gettext.install("mintdrivers", "/usr/share/linuxmint/locale")
 class Application():
 
   def __init__(self):
-            
-    self.builder = Gtk.Builder()    
+
+    self.builder = Gtk.Builder()
     self.builder.add_from_file("/usr/lib/linuxmint/mintDrivers/main.ui")
     self.builder.connect_signals(self)
     for o in self.builder.get_objects():
@@ -38,8 +38,8 @@ class Application():
     self.apt_client = client.AptClient()
 
     self.init_drivers()
-    self.show_drivers()  
-    
+    self.show_drivers()
+
     with open('/proc/cmdline') as f:
       cmdline = f.read()
       if ((not "boot=casper" in cmdline) and (not "boot=live" in cmdline)):
@@ -50,7 +50,7 @@ class Application():
       else:
         print ("Live mode detected")
         self.info_bar.hide()
-  
+
   def quit_application(self, widget=None, event=None):
     self.clean_up_media_cdrom()
     Gtk.main_quit()
@@ -72,29 +72,29 @@ class Application():
       return False
 
   def check_internet_or_live_dvd(self, widget=None):
-    
+
     try:
-      print ("Checking...")    
+      print ("Checking...")
 
       # We either get drivers from the Internet of from the liveDVD
       # So check the connection to the Internet or scan for a liveDVD
-      
+
       if self.check_connectivity("http://archive.ubuntu.com"):
         # We can reach the repository, everything's fine
         self.info_bar.hide()
         return
-      
+
       # We can't reach the repository, we need the installation media
       mount_point = None
       mounted_on_media_cdrom = False
-     
+
       # Find the live media
       try:
         live_medias = subprocess.check_output("find /media | grep README.diskdefines", shell=True)
         live_medias = str(live_medias, encoding='utf8').split("\n")
         for live_media in live_medias:
           if ("README.diskdefines" in live_media):
-            mount_point = live_media.replace("/README.diskdefines", "") # This is where our live DVD is mounted 
+            mount_point = live_media.replace("/README.diskdefines", "") # This is where our live DVD is mounted
             # Add it to apt-cdrom
             os.system("sudo apt-cdrom -d \"%s\" -m add" % mount_point)
             if ("/media/cdrom" in mount_point):
@@ -104,9 +104,9 @@ class Application():
 
       if mount_point is None:
         # Not mounted..
-        self.info_bar.show()        
+        self.info_bar.show()
         return
-      
+
       if mounted_on_media_cdrom == False:
         # Mounted, but not in the right place...
         print ("Binding mount %s to /media/cdrom" % mount_point)
@@ -120,8 +120,8 @@ class Application():
       else:
         self.info_bar.show()
     except (NotAuthorizedError, TransactionFailed) as e:
-      print("An error occured: {}".format(e))      
-      self.info_bar.show()      
+      print("An error occured: {}".format(e))
+      self.info_bar.show()
 
   def on_driver_changes_progress(self, transaction, progress):
     #print(progress)
@@ -167,7 +167,7 @@ class Application():
       if pkg.is_installed:
         removals.append(pkg.shortname)
         print ("Remove %s" % pkg.shortname)
-      else:        
+      else:
         installs.append(pkg.shortname)
         print ("Install %s" % pkg.shortname)
         try:
@@ -177,7 +177,7 @@ class Application():
               print ("Install %s" % recommend[0].name)
         except:
           print ("A problem occured, some recommended deps might not get installed")
-    
+
     try:
       self.transaction = self.apt_client.commit_packages(install=installs, remove=removals,
                                                          reinstall=[], purge=[], upgrade=[], downgrade=[])
@@ -252,7 +252,7 @@ class Application():
     self.orig_selection = {}
     # HACK: the case where the selection is actually "Do not use"; is a little
     #       tricky to implement because you can't check for whether a package is
-    #       installed or any such thing. So let's keep a list of all the 
+    #       installed or any such thing. So let's keep a list of all the
     #       "Do not use" radios, set those active first, then iterate through
     #       orig_selection when doing a Reset.
     self.no_drv = []
@@ -274,7 +274,7 @@ class Application():
       if pkg in self.driver_changes:
         self.driver_changes.remove(pkg)
 
-      if (pkg is not None 
+      if (pkg is not None
          and modalias in self.orig_selection
          and button is not self.orig_selection[modalias]):
         self.driver_changes.append(pkg)
@@ -351,14 +351,14 @@ class Application():
       try:
         pkg = self.apt_cache[pkg_driver_name]
         installed = pkg.is_installed
-        if driver_status == 'recommended':        
+        if driver_status == 'recommended':
           description = ("<b>%s <small><span foreground='#58822B'>(%s)</span></small></b>\n<small><span foreground='#3c3c3c'>%s</span></small> %s\n<small><span foreground='#3c3c3c'>%s</span></small>") % (pkg.shortname, _("recommended"), _("Version"), pkg.candidate.version, pkg.candidate.summary)
         else:
           description = ("<b>%s</b>\n<small><span foreground='#3c3c3c'>%s</span></small> %s\n<small><span foreground='#3c3c3c'>%s</span></small>") % (pkg.shortname, _("Version"), pkg.candidate.version, pkg.candidate.summary)
       except KeyError:
         print("WARNING: a driver ({}) doesn't have any available package associated: {}".format(pkg_driver_name, current_driver))
-        continue     
-          
+        continue
+
       selected = False
       if not builtin and not returned_drivers['manually_installed']:
         selected = installed
@@ -393,7 +393,7 @@ class Application():
 
     return (overall_status, icon, returned_drivers)
 
-  def get_device_icon(self, device):    
+  def get_device_icon(self, device):
     vendor = device.get('vendor', _('Unknown'))
     model =  device.get('model', _('Unknown'))
     icon = "generic"
@@ -406,7 +406,7 @@ class Application():
     elif "virtualbox" in vendor.lower():
       icon = "virtualbox"
     return ("/usr/share/linuxmint/mintDrivers/icons/%s.png" % icon)
-    
+
 
   def show_drivers(self):
     self.ui_building = True
@@ -503,7 +503,7 @@ class Application():
     if self.nonfree_drivers > 0:
       self.label_driver_action.set_label(gettext.ngettext (
                                                 "%(count)d proprietary driver in use.",
-                                                "%(count)d proprietary drivers in use.", 
+                                                "%(count)d proprietary drivers in use.",
                                                 self.nonfree_drivers)
                                                 % { 'count': self.nonfree_drivers})
     else:
