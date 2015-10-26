@@ -9,6 +9,7 @@ from gi.repository import GObject, Gdk, Gtk, Gio
 from UbuntuDrivers import detect
 from aptdaemon import client
 from aptdaemon.errors import NotAuthorizedError, TransactionFailed
+from aptdaemon.gtk3widgets import AptErrorDialog, AptProgressDialog
 import re
 import urllib
 
@@ -34,11 +35,33 @@ class Application():
 
     self.window_main.connect("delete_event", self.quit_application)
 
+    self.button_driver_revert = Gtk.Button(label=_("Re_vert"), use_underline=True)
+    self.button_driver_revert.connect("clicked", self.on_driver_changes_revert)
+    self.button_driver_apply = Gtk.Button(label=_("_Apply Changes"), use_underline=True)
+    self.button_driver_apply.connect("clicked", self.on_driver_changes_apply)
+    self.button_driver_cancel = Gtk.Button(label=_("_Cancel"), use_underline=True)
+    self.button_driver_cancel.connect("clicked", self.on_driver_changes_cancel)
+    self.button_driver_restart = Gtk.Button(label=_("_Restart..."), use_underline=True)
+    self.button_driver_restart.connect("clicked", self.on_driver_restart_clicked)
+    self.button_driver_revert.set_sensitive(False)
+    self.button_driver_revert.set_visible(True)
+    self.button_driver_apply.set_sensitive(False)
+    self.button_driver_apply.set_visible(True)
+    self.button_driver_cancel.set_visible(False)
+    self.button_driver_restart.set_visible(False)
+    self.box_driver_action.pack_end(self.button_driver_apply, False, False, 0)
+    self.box_driver_action.pack_end(self.button_driver_revert, False, False, 0)
+    self.box_driver_action.pack_end(self.button_driver_restart, False, False, 0)
+    self.box_driver_action.pack_end(self.button_driver_cancel, False, False, 0)
+
+    self.info_bar.set_no_show_all (True)
+
+    self.progress_bar = Gtk.ProgressBar()
+    self.box_driver_action.pack_end(self.progress_bar, False, False, 0)
+    self.progress_bar.set_visible(False)
+
     self.apt_cache = apt.Cache()
     self.apt_client = client.AptClient()
-
-    self.init_drivers()
-    self.show_drivers()
 
     with open('/proc/cmdline') as f:
       cmdline = f.read()
@@ -50,6 +73,32 @@ class Application():
       else:
         print ("Live mode detected")
         self.info_bar.hide()
+        self.update_cache()
+
+  def update_cache(self):
+    self.update_transaction = self.apt_client.update_cache()
+    self.update_transaction.connect("finished", self._on_cache_update_finished)
+    dia = AptProgressDialog(self.update_transaction)
+    dia.set_transient_for(self.window_main)
+    dia.set_modal(True)
+    dia.run(close_on_finished=True, show_error=True,
+            reply_handler=lambda: True,
+            error_handler=self.on_error,
+            )
+
+  def on_error(self, error):
+    if isinstance(error, aptdaemon.errors.NotAuthorizedError):
+        # Silently ignore auth failures
+        return
+    elif not isinstance(error, aptdaemon.errors.TransactionFailed):
+        # Catch internal errors of the client
+        error = aptdaemon.errors.TransactionFailed(ERROR_UNKNOWN,str(error))
+    dia = AptErrorDialog(error)
+    dia.run()
+    dia.hide()
+
+  def _on_cache_update_finished(self, transaction, exit_state):
+    self.show_drivers()
 
   def quit_application(self, widget=None, event=None):
     self.clean_up_media_cdrom()
@@ -74,14 +123,16 @@ class Application():
   def check_internet_or_live_dvd(self, widget=None):
 
     try:
-      print ("Checking...")
+      print ("Checking connectivity or live media...")
 
       # We either get drivers from the Internet of from the liveDVD
       # So check the connection to the Internet or scan for a liveDVD
 
       if self.check_connectivity("http://archive.ubuntu.com"):
         # We can reach the repository, everything's fine
+        print ("Internet connection detected")
         self.info_bar.hide()
+        self.update_cache()
         return
 
       # We can't reach the repository, we need the installation media
@@ -116,7 +167,9 @@ class Application():
 
       # It should now be mounted to /media/cdrom, else something went wrong..
       if os.path.exists("/media/cdrom/README.diskdefines"):
+        print ("Live media detected")
         self.info_bar.hide()
+        self.update_cache()
       else:
         self.info_bar.show()
     except (NotAuthorizedError, TransactionFailed) as e:
@@ -220,44 +273,6 @@ class Application():
   def clear_changes(self):
     self.orig_selection = {}
     self.driver_changes = []
-
-  def init_drivers(self):
-    """Additional Drivers tab"""
-
-    self.button_driver_revert = Gtk.Button(label=_("Re_vert"), use_underline=True)
-    self.button_driver_revert.connect("clicked", self.on_driver_changes_revert)
-    self.button_driver_apply = Gtk.Button(label=_("_Apply Changes"), use_underline=True)
-    self.button_driver_apply.connect("clicked", self.on_driver_changes_apply)
-    self.button_driver_cancel = Gtk.Button(label=_("_Cancel"), use_underline=True)
-    self.button_driver_cancel.connect("clicked", self.on_driver_changes_cancel)
-    self.button_driver_restart = Gtk.Button(label=_("_Restart..."), use_underline=True)
-    self.button_driver_restart.connect("clicked", self.on_driver_restart_clicked)
-    self.button_driver_revert.set_sensitive(False)
-    self.button_driver_revert.set_visible(True)
-    self.button_driver_apply.set_sensitive(False)
-    self.button_driver_apply.set_visible(True)
-    self.button_driver_cancel.set_visible(False)
-    self.button_driver_restart.set_visible(False)
-    self.box_driver_action.pack_end(self.button_driver_apply, False, False, 0)
-    self.box_driver_action.pack_end(self.button_driver_revert, False, False, 0)
-    self.box_driver_action.pack_end(self.button_driver_restart, False, False, 0)
-    self.box_driver_action.pack_end(self.button_driver_cancel, False, False, 0)
-
-    self.progress_bar = Gtk.ProgressBar()
-    self.box_driver_action.pack_end(self.progress_bar, False, False, 0)
-    self.progress_bar.set_visible(False)
-
-    self.devices = detect.system_device_drivers()
-    self.driver_changes = []
-    self.orig_selection = {}
-    # HACK: the case where the selection is actually "Do not use"; is a little
-    #       tricky to implement because you can't check for whether a package is
-    #       installed or any such thing. So let's keep a list of all the
-    #       "Do not use" radios, set those active first, then iterate through
-    #       orig_selection when doing a Reset.
-    self.no_drv = []
-    self.nonfree_drivers = 0
-    self.ui_building = False
 
   def on_driver_selection_changed(self, button, modalias, pkg_name=None):
     if self.ui_building:
@@ -409,6 +424,16 @@ class Application():
 
 
   def show_drivers(self):
+    self.devices = detect.system_device_drivers()
+    self.driver_changes = []
+    self.orig_selection = {}
+    # HACK: the case where the selection is actually "Do not use"; is a little
+    #       tricky to implement because you can't check for whether a package is
+    #       installed or any such thing. So let's keep a list of all the
+    #       "Do not use" radios, set those active first, then iterate through
+    #       orig_selection when doing a Reset.
+    self.no_drv = []
+    self.nonfree_drivers = 0
     self.ui_building = True
     self.dynamic_device_status = {}
     for device in sorted(self.devices.keys()):
