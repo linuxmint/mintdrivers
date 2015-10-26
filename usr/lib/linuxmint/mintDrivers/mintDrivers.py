@@ -317,7 +317,8 @@ class Application():
         {"recommended/alternative": {pkg_name: {
                                                   'selected': True/False
                                                   'description': 'description'
-                                                  'builtin': True/False
+                                                  'builtin': True/False,
+                                                  'free': True/False
                                                 }
                                      }}
          "manually_installed": {"manual": {'selected': True, 'description': description_string}}
@@ -366,10 +367,14 @@ class Application():
       try:
         pkg = self.apt_cache[pkg_driver_name]
         installed = pkg.is_installed
+        description_line1 = "<b>%s</b>" % pkg.shortname
+        description_line2 = "<small><span foreground='#3c3c3c'>%s</span></small> %s" % (_("Version"), pkg.candidate.version)
+        description_line3 = "<small><span foreground='#3c3c3c'>%s</span></small>" % pkg.candidate.summary
         if driver_status == 'recommended':
-          description = ("<b>%s <small><span foreground='#58822B'>(%s)</span></small></b>\n<small><span foreground='#3c3c3c'>%s</span></small> %s\n<small><span foreground='#3c3c3c'>%s</span></small>") % (pkg.shortname, _("recommended"), _("Version"), pkg.candidate.version, pkg.candidate.summary)
-        else:
-          description = ("<b>%s</b>\n<small><span foreground='#3c3c3c'>%s</span></small> %s\n<small><span foreground='#3c3c3c'>%s</span></small>") % (pkg.shortname, _("Version"), pkg.candidate.version, pkg.candidate.summary)
+          description_line1 = "%s <b><small><span foreground='#58822B'>(%s)</span></small></b>" % (description_line1, _("recommended"))
+        if current_driver['free']:
+          description_line1 = "%s <b><small><span foreground='#2b3882'>(%s)</span></small></b>" % (description_line1, _("open-source"))
+        description = "%s\n%s\n%s" % (description_line1, description_line2, description_line3)
       except KeyError:
         print("WARNING: a driver ({}) doesn't have any available package associated: {}".format(pkg_driver_name, current_driver))
         continue
@@ -383,7 +388,8 @@ class Application():
 
       returned_drivers[driver_status].setdefault(pkg_driver_name, {'selected': selected,
                                                                    'description': description,
-                                                                   'builtin': builtin})
+                                                                   'builtin': builtin,
+                                                                   'free': current_driver['free']})
 
     # adjust making the needed addition
     if not have_builtin:
@@ -472,7 +478,7 @@ class Application():
       option_group = None
       # define the order of introspection
       for section in ('recommended', 'alternative', 'manually_installed', 'no_driver'):
-        for driver in drivers[section]:
+        for driver in sorted(drivers[section], key=lambda x: self.sort_string(drivers[section], x)):
           radio_button = Gtk.RadioButton.new(None)
           label = Gtk.Label()
           label.set_markup(drivers[section][driver]['description'])
@@ -498,6 +504,14 @@ class Application():
     self.ui_building = False
     self.box_driver_detail.show_all()
     self.set_driver_action_status()
+
+  def sort_string(self, drivers, x):
+    value = drivers[x]['description']
+    try:
+      value = "%s %s" % (not drivers[x]['free'], value)
+    except:
+      pass #best effort (some driver options don't have a 'free' flag, and that's alright)
+    return value
 
   def update_label_and_icons_from_status(self):
     '''Update the current label and icon, computing the new device status'''
