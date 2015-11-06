@@ -1,3 +1,13 @@
+mintdrivers (1.1.9) rosa; urgency=medium
+
+  * Removed trailing spaces
+  * Open the window immediately and update the APT cache prior to loading the drivers.
+  * Indicate whether drivers are open-source and sort by status/open-source/name
+  * Updated pot file
+  * Updated desktop files
+
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 06 Nov 2015 16:10:40 +0000
+
 mintdrivers (1.1.8) rafaela; urgency=medium
 
   * Fixed desktop file for multiple DEs
