@@ -1,3 +1,10 @@
+mintdrivers (1.2.0) rosa; urgency=medium
+
+  * Show an error dialog when failing to install a driver
+  * Don't let unauthenticated packages (can happen with an incomplete cache) make mintdrivers fail
+
+ -- Clement Lefebvre <root@linuxmint.com>  Sat, 07 Nov 2015 23:47:36 +0000
+
 mintdrivers (1.1.9) rosa; urgency=medium
 
   * Removed trailing spaces
