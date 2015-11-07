@@ -235,6 +235,7 @@ class Application():
     try:
       self.transaction = self.apt_client.commit_packages(install=installs, remove=removals,
                                                          reinstall=[], purge=[], upgrade=[], downgrade=[])
+      self.transaction.set_allow_unauthenticated(True)
       self.transaction.connect("progress-changed", self.on_driver_changes_progress)
       self.transaction.connect("cancellable-changed", self.on_driver_changes_cancellable_changed)
       self.transaction.connect("finished", self.on_driver_changes_finish)
