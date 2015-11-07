@@ -87,12 +87,12 @@ class Application():
             )
 
   def on_error(self, error):
-    if isinstance(error, aptdaemon.errors.NotAuthorizedError):
+    if isinstance(error, NotAuthorizedError):
         # Silently ignore auth failures
         return
-    elif not isinstance(error, aptdaemon.errors.TransactionFailed):
+    elif not isinstance(error, TransactionFailed):
         # Catch internal errors of the client
-        error = aptdaemon.errors.TransactionFailed(ERROR_UNKNOWN,str(error))
+        error = TransactionFailed(ERROR_UNKNOWN,str(error))
     dia = AptErrorDialog(error)
     dia.run()
     dia.hide()
@@ -207,6 +207,7 @@ class Application():
     self.button_driver_apply.set_visible(True)
     self.button_driver_cancel.set_visible(False)
     self.scrolled_window_drivers.set_sensitive(True)
+    self.on_error(transaction.error)
 
   def on_driver_changes_cancellable_changed(self, transaction, cancellable):
     self.button_driver_cancel.set_sensitive(cancellable)
