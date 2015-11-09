@@ -60,7 +60,6 @@ class Application():
     self.box_driver_action.pack_end(self.progress_bar, False, False, 0)
     self.progress_bar.set_visible(False)
 
-    self.apt_cache = apt.Cache()
     self.apt_client = client.AptClient()
 
     with open('/proc/cmdline') as f:
@@ -96,6 +95,7 @@ class Application():
     dia = AptErrorDialog(error)
     dia.run()
     dia.hide()
+    self.apt_cache = apt.Cache()
 
   def _on_cache_update_finished(self, transaction, exit_state):
     self.show_drivers()
@@ -432,6 +432,7 @@ class Application():
 
 
   def show_drivers(self):
+    self.apt_cache = apt.Cache()
     self.devices = detect.system_device_drivers()
     self.driver_changes = []
     self.orig_selection = {}
