@@ -374,7 +374,7 @@ class Application():
         description_line3 = "<small><span foreground='#3c3c3c'>%s</span></small>" % pkg.candidate.summary
         if driver_status == 'recommended':
           description_line1 = "%s <b><small><span foreground='#58822B'>(%s)</span></small></b>" % (description_line1, _("recommended"))
-        if current_driver['free']:
+        if current_driver['free'] and pkg.shortname != "bcmwl-kernel-source":
           description_line1 = "%s <b><small><span foreground='#2b3882'>(%s)</span></small></b>" % (description_line1, _("open-source"))
         description = "%s\n%s\n%s" % (description_line1, description_line2, description_line3)
       except KeyError:
