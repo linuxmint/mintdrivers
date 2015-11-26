@@ -376,6 +376,12 @@ class Application():
           description_line1 = "%s <b><small><span foreground='#58822B'>(%s)</span></small></b>" % (description_line1, _("recommended"))
         if current_driver['free'] and pkg.shortname != "bcmwl-kernel-source":
           description_line1 = "%s <b><small><span foreground='#2b3882'>(%s)</span></small></b>" % (description_line1, _("open-source"))
+        if pkg.shortname == "bcmwl-kernel-source":
+          # Always recommend STA driver (B43 is always present alongside it now)
+          description_line1 = "%s <b><small><span foreground='#58822B'>(%s)</span></small></b>" % (description_line1, _("recommended"))
+        if pkg.shortname.startswith("firmware-b43"):
+          # B43 requires a connection to the Internet
+          description_line1 = "%s <b><small><span foreground='#822b32'>(%s)</span></small></b>" % (description_line1, _("requires a connection to the Internet"))
         description = "%s\n%s\n%s" % (description_line1, description_line2, description_line3)
       except KeyError:
         print("WARNING: a driver ({}) doesn't have any available package associated: {}".format(pkg_driver_name, current_driver))
