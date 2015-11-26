@@ -545,7 +545,7 @@ class Application():
     for device in self.devices:
       for pkg_name in self.devices[device]['drivers']:
         pkg = self.apt_cache[pkg_name]
-        if not self.devices[device]['drivers'][pkg_name]['free'] and pkg.is_installed:
+        if (not self.devices[device]['drivers'][pkg_name]['free'] or pkg_name == "bcmwl-kernel-source") and pkg.is_installed:
           self.nonfree_drivers = self.nonfree_drivers + 1
 
     if self.nonfree_drivers > 0:
