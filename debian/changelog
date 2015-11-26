@@ -1,3 +1,11 @@
+mintdrivers (1.2.3) rosa; urgency=medium
+
+  * Always STA as recommended, mark B43 as requiring an Internet connection
+  * Count STA as proprietary
+  * Suggest a restart after driver changes
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 26 Nov 2015 15:55:55 +0000
+
 mintdrivers (1.2.2) rosa; urgency=medium
 
   * Broadcom: Don't describe STA as open-source.
