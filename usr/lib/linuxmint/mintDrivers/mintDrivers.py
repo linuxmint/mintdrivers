@@ -60,6 +60,8 @@ class Application():
     self.box_driver_action.pack_end(self.progress_bar, False, False, 0)
     self.progress_bar.set_visible(False)
 
+    self.needs_restart = False
+
     self.apt_client = client.AptClient()
 
     with open('/proc/cmdline') as f:
@@ -189,6 +191,7 @@ class Application():
     self.progress_bar.set_fraction(progress / 100.0)
 
   def on_driver_changes_finish(self, transaction, exit_state):
+    self.needs_restart = True
     self.progress_bar.set_visible(False)
     self.clear_changes()
     self.apt_cache = apt.Cache()
@@ -270,7 +273,7 @@ class Application():
 
   def on_driver_restart_clicked(self, button_restart):
     self.clean_up_media_cdrom()
-    subprocess.call(['/usr/lib/indicator-session/gtk-logout-helper', '--shutdown'])
+    subprocess.call(['reboot'])
 
   def clear_changes(self):
     self.orig_selection = {}
@@ -535,7 +538,7 @@ class Application():
 
   def set_driver_action_status(self):
     # Update the label in case we end up having some kind of proprietary driver in use.
-    if (os.path.exists('/var/run/reboot-required')):
+    if (os.path.exists('/var/run/reboot-required') or self.needs_restart):
       self.label_driver_action.set_label(_("You need to restart the computer to complete the driver changes."))
       self.button_driver_restart.set_visible(True)
       self.window_main.set_urgency_hint(True)
