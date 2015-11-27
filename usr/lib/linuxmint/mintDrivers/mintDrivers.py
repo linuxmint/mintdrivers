@@ -61,7 +61,7 @@ class Application():
     self.progress_bar.set_visible(False)
 
     self.needs_restart = False
-
+    self.live_mode = False
     self.apt_client = client.AptClient()
 
     with open('/proc/cmdline') as f:
@@ -73,6 +73,7 @@ class Application():
         self.button_info_bar.connect("clicked", self.check_internet_or_live_dvd)
       else:
         print ("Live mode detected")
+        self.live_mode = True
         self.info_bar.hide()
         self.update_cache()
 
@@ -538,7 +539,7 @@ class Application():
 
   def set_driver_action_status(self):
     # Update the label in case we end up having some kind of proprietary driver in use.
-    if (os.path.exists('/var/run/reboot-required') or self.needs_restart):
+    if (not self.live_mode) and (os.path.exists('/var/run/reboot-required') or self.needs_restart):
       self.label_driver_action.set_label(_("You need to restart the computer to complete the driver changes."))
       self.button_driver_restart.set_visible(True)
       self.window_main.set_urgency_hint(True)
