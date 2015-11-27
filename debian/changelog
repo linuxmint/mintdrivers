@@ -1,3 +1,9 @@
+mintdrivers (1.2.4) rosa; urgency=medium
+
+  * Don't suggest to reboot in live mode
+
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 27 Nov 2015 14:06:40 +0000
+
 mintdrivers (1.2.3) rosa; urgency=medium
 
   * Always STA as recommended, mark B43 as requiring an Internet connection
