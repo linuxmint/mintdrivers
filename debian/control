@@ -2,14 +2,14 @@ Source: mintdrivers
 Section: admin
 Priority: optional
 Maintainer: Clement Lefebvre <root@linuxmint.com>
-Build-Depends: debhelper (>= 9), python
+Build-Depends: debhelper (>= 9)
 Standards-Version: 3.9.5
 
 Package: mintdrivers
 Architecture: all
-Depends:
- ${python:Depends}, ${misc:Depends},
- python (>= 2.4), python (<< 3), python-gtk2, python-glade2,
- ubuntu-drivers-common
+Depends: python3 (>= 3.3),
+         python3-gi,
+         ubuntu-drivers-common,
+         ${misc:Depends},
 Description: Driver Manager
  Manage the drivers for your devices.
