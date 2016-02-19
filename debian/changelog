@@ -1,3 +1,16 @@
+mintdrivers (1.2.5) sarah; urgency=medium
+
+  [ kmikov ]
+  * Fixed bulgarian word
+
+  [ Clement Lefebvre ]
+  * Reviewed shebangs
+
+  [ Daniel Alley ]
+  * updated debian/control
+
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 19 Feb 2016 11:47:26 +0000
+
 mintdrivers (1.2.4) rosa; urgency=medium
 
   * Don't suggest to reboot in live mode
