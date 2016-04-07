@@ -20,7 +20,7 @@ class Application():
   def __init__(self):
 
     self.builder = Gtk.Builder()
-    self.builder.add_from_file("/usr/lib/linuxmint/mintDrivers/main.ui")
+    self.builder.add_from_file("/usr/share/linuxmint/mintDrivers/main.ui")
     self.builder.connect_signals(self)
     for o in self.builder.get_objects():
         if issubclass(type(o), Gtk.Buildable):
