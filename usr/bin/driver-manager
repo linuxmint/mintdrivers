@@ -5,7 +5,7 @@ import gettext
 
 gettext.install("mintdrivers", "/usr/share/linuxmint/locale")
 
-tool = "/usr/lib/linuxmint/mintDrivers/mintDrivers.py"
+tool = "/usr/lib/linuxmint/mintdrivers/mintdrivers.py"
 sentence = _("Please enter your password to launch the driver manager")
 icon = "/usr/share/icons/hicolor/48x48/apps/driver-manager.png"
 

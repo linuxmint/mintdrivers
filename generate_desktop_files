@@ -3,7 +3,9 @@
 DOMAIN = "mintdrivers"
 PATH = "/usr/share/linuxmint/locale"
 
-import os, gettext, sys
+import os
+import gettext
+import sys
 sys.path.append('/usr/lib/linuxmint/common')
 import additionalfiles
 
@@ -28,7 +30,7 @@ additionalfiles.generate(DOMAIN, PATH, "usr/share/applications/mintdrivers.deskt
 
 prefix = "[Desktop Entry]\n"
 
-suffix= """Exec=driver-manager
+suffix = """Exec=driver-manager
 NoDisplay=true
 Icon=/usr/share/icons/hicolor/scalable/apps/driver-manager.svg
 Terminal=false
@@ -39,5 +41,4 @@ X-KDE-StartupNotify=false
 OnlyShowIn=KDE;
 """
 
-additionalfiles.generate(DOMAIN, PATH, "usr/share/applications/kde4/mintdrivers.desktop", prefix, _("Driver Manager"), _("Manage the drivers for your devices"),  suffix, genericName=_("Manage the drivers for your devices"))
-
+additionalfiles.generate(DOMAIN, PATH, "usr/share/applications/kde4/mintdrivers.desktop", prefix, _("Driver Manager"), _("Manage the drivers for your devices"), suffix, genericName=_("Manage the drivers for your devices"))
