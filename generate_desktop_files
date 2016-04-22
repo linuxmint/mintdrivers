@@ -32,7 +32,7 @@ prefix = "[Desktop Entry]\n"
 
 suffix = """Exec=driver-manager
 NoDisplay=true
-Icon=/usr/share/icons/hicolor/scalable/apps/driver-manager.svg
+Icon=mintdrivers
 Terminal=false
 Type=Application
 Encoding=UTF-8
