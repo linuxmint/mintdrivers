@@ -1,3 +1,10 @@
+mintdrivers (1.2.7) sarah; urgency=medium
+
+  * Don't recommend Broadcom STA drivers in the mintdrivers code (it's already done in ubuntu-drivers-common now)
+  * Don't ask a password to launch the driver manager
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue, 03 May 2016 10:43:11 +0100
+
 mintdrivers (1.2.6) sarah; urgency=medium
 
   [ Daniel Alley ]
