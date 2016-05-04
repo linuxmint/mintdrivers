@@ -434,7 +434,7 @@ class Application():
             icon = "ati"
         elif "broadcom" in vendor.lower():
             icon = "broadcom"
-        elif "virtualbox" in vendor.lower():
+        elif "virtualbox" in vendor.lower() or "virtualbox" in model.lower():
             icon = "virtualbox"
         return ("/usr/share/linuxmint/mintdrivers/icons/%s.png" % icon)
 
