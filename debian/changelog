@@ -1,3 +1,9 @@
+mintdrivers (1.2.9) sarah; urgency=medium
+
+  * Revert "Don't ask a password to launch the driver manager"
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 05 May 2016 09:32:29 +0100
+
 mintdrivers (1.2.8) sarah; urgency=medium
 
   * Fixed icons not showing for virtualbox devices
