@@ -501,7 +501,7 @@ class Application():
 
 if __name__ == "__main__":
     if os.getuid() != 0:
-        os.execvp("gksu", ("", " ".join(sys.argv)))
+        os.execvp("gksu", ("", "-k", " ".join(sys.argv)))
     else:
         Application()
         Gtk.main()
