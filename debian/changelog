@@ -1,3 +1,9 @@
+mintdrivers (1.3.0) sarah; urgency=medium
+
+  * Fixed unreadable text when using dark themes
+
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 10 Jun 2016 14:48:34 +0100
+
 mintdrivers (1.2.9) sarah; urgency=medium
 
   * Revert "Don't ask a password to launch the driver manager"
