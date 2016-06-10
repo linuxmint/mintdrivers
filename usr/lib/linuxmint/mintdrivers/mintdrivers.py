@@ -375,15 +375,15 @@ class Application():
                 pkg = self.apt_cache[pkg_driver_name]
                 installed = pkg.is_installed
                 description_line1 = "<b>%s</b>" % pkg.shortname
-                description_line2 = "<small><span foreground='#3c3c3c'>%s</span></small> %s" % (_("Version"), pkg.candidate.version)
-                description_line3 = "<small><span foreground='#3c3c3c'>%s</span></small>" % pkg.candidate.summary
+                description_line2 = "<small>%s</small> %s" % (_("Version"), pkg.candidate.version)
+                description_line3 = "<small>%s</small>" % pkg.candidate.summary
                 if driver_status == 'recommended':
                     description_line1 = "%s <b><small><span foreground='#58822B'>(%s)</span></small></b>" % (description_line1, _("recommended"))
                 if current_driver['free'] and pkg.shortname != "bcmwl-kernel-source":
-                    description_line1 = "%s <b><small><span foreground='#2b3882'>(%s)</span></small></b>" % (description_line1, _("open-source"))
+                    description_line1 = "%s <b><small><span foreground='#717bbd'>(%s)</span></small></b>" % (description_line1, _("open-source"))
                 if pkg.shortname.startswith("firmware-b43"):
                     # B43 requires a connection to the Internet
-                    description_line1 = "%s <b><small><span foreground='#822b32'>(%s)</span></small></b>" % (description_line1, _("requires a connection to the Internet"))
+                    description_line1 = "%s <b><small><span foreground='#9f5258'>(%s)</span></small></b>" % (description_line1, _("requires a connection to the Internet"))
                 description = "%s\n%s\n%s" % (description_line1, description_line2, description_line3)
             except KeyError:
                 print("WARNING: a driver ({}) doesn't have any available package associated: {}".format(pkg_driver_name, current_driver))
