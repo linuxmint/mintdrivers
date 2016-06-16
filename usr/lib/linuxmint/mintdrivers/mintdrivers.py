@@ -379,7 +379,7 @@ class Application():
                 description_line3 = "<small>%s</small>" % pkg.candidate.summary
                 if driver_status == 'recommended':
                     description_line1 = "%s <b><small><span foreground='#58822B'>(%s)</span></small></b>" % (description_line1, _("recommended"))
-                if current_driver['free'] and pkg.shortname != "bcmwl-kernel-source":
+                if current_driver['free'] and pkg.shortname != "bcmwl-kernel-source" and (not pkg.shortname.startswith("nvidia-")):
                     description_line1 = "%s <b><small><span foreground='#717bbd'>(%s)</span></small></b>" % (description_line1, _("open-source"))
                 if pkg.shortname.startswith("firmware-b43"):
                     # B43 requires a connection to the Internet
