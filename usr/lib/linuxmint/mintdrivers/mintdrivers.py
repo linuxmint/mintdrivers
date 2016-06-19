@@ -178,7 +178,7 @@ class Application():
             else:
                 self.info_bar.show()
         except (NotAuthorizedError, TransactionFailed) as e:
-            print("An error occured: {}".format(e))
+            print("An error occurred: {}".format(e))
             self.info_bar.show()
 
     def on_driver_changes_progress(self, transaction, progress):
@@ -236,7 +236,7 @@ class Application():
                             installs.append(recommend[0].name)
                             print ("Install %s" % recommend[0].name)
                 except:
-                    print ("A problem occured, some recommended deps might not get installed")
+                    print ("A problem occurred, some recommended deps might not get installed")
 
         try:
             self.transaction = self.apt_client.commit_packages(install=installs, remove=removals,
