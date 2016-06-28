@@ -231,10 +231,15 @@ class Application():
                 installs.append(pkg.shortname)
                 print ("Install %s" % pkg.shortname)
                 try:
-                    for recommend in pkg.candidate.recommends:
-                        if recommend[0].name in self.apt_cache:
-                            installs.append(recommend[0].name)
-                            print ("Install %s" % recommend[0].name)
+                    for recommended in pkg.candidate.recommends:
+                        recommended_name = recommended[0].name
+                        if recommended_name in self.apt_cache:
+                            recommended_pkg = self.apt_cache[recommended_name]
+                            if recommended_pkg.is_installed:
+                                print ("Skipped %s (recommended but already installed)" % recommended_name)
+                            else:
+                                installs.append(recommended_name)
+                                print ("Install %s (recommended)" % recommended_name)
                 except:
                     print ("A problem occurred, some recommended deps might not get installed")
 
