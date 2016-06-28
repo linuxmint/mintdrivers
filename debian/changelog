@@ -1,3 +1,13 @@
+mintdrivers (1.3.2) sarah; urgency=medium
+
+  [ leigh123linux ]
+  * fix spelling mistakes
+
+  [ Clement Lefebvre ]
+  * Don't install recommends which are already installed
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue, 28 Jun 2016 12:35:36 +0100
+
 mintdrivers (1.3.1) sarah; urgency=medium
 
   [ Brett Randall ]
