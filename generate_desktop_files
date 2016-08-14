@@ -31,7 +31,6 @@ additionalfiles.generate(DOMAIN, PATH, "usr/share/applications/mintdrivers.deskt
 prefix = "[Desktop Entry]\n"
 
 suffix = """Exec=driver-manager
-NoDisplay=true
 Icon=mintdrivers
 Terminal=false
 Type=Application
