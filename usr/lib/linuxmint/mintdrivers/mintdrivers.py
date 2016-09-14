@@ -6,9 +6,12 @@ import os
 import sys
 import apt
 import subprocess
-from gi.repository import GObject, Gdk, Gtk, Gio
+import gi
+gi.require_version("Gtk", "3.0")
+from gi.repository import Gtk
 from UbuntuDrivers import detect
 from aptdaemon import client
+from aptdaemon.enums import ERROR_UNKNOWN
 from aptdaemon.errors import NotAuthorizedError, TransactionFailed
 from aptdaemon.gtk3widgets import AptErrorDialog, AptProgressDialog
 import re
