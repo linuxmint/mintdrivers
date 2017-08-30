@@ -8,7 +8,8 @@ import apt
 import subprocess
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk
+gi.require_version("XApp", "1.0")
+from gi.repository import Gtk, XApp
 from UbuntuDrivers import detect
 from aptdaemon import client
 from aptdaemon.enums import ERROR_UNKNOWN
@@ -195,6 +196,7 @@ class Application():
 
         self.label_driver_action.set_label(_("Applying changes..."))
         self.progress_bar.set_fraction(progress / 100.0)
+        XApp.set_window_progress(self.window_main, progress)
 
     def on_driver_changes_finish(self, transaction, exit_state):
         self.needs_restart = True
@@ -207,6 +209,7 @@ class Application():
         self.button_driver_apply.set_visible(True)
         self.button_driver_cancel.set_visible(False)
         self.scrolled_window_drivers.set_sensitive(True)
+        XApp.set_window_progress(self.window_main, 0)
 
     def on_driver_changes_error(self, transaction, error_code, error_details):
         self.on_driver_changes_revert()
@@ -217,6 +220,7 @@ class Application():
         self.button_driver_cancel.set_visible(False)
         self.scrolled_window_drivers.set_sensitive(True)
         self.on_error(transaction.error)
+        XApp.set_window_progress(self.window_main, 0)
 
     def on_driver_changes_cancellable_changed(self, transaction, cancellable):
         self.button_driver_cancel.set_sensitive(cancellable)

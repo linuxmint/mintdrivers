@@ -13,6 +13,7 @@ Depends: python3 (>= 3.3),
          python3-aptdaemon.gtk3widgets,
          gksu | kdesudo,
          ubuntu-drivers-common,
+         gir1.2-xapp-1.0,
          ${misc:Depends},
 Description: Driver Manager
  Manage the drivers for your devices.
