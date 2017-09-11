@@ -7,9 +7,10 @@ import sys
 import apt
 import subprocess
 import gi
+gi.require_version("GdkPixbuf", "2.0")
 gi.require_version("Gtk", "3.0")
 gi.require_version("XApp", "1.0")
-from gi.repository import Gtk, XApp
+from gi.repository import GdkPixbuf, Gtk, XApp
 from UbuntuDrivers import detect
 from aptdaemon import client
 from aptdaemon.enums import ERROR_UNKNOWN
@@ -448,7 +449,20 @@ class Application():
             icon = "broadcom"
         elif "virtualbox" in vendor.lower() or "virtualbox" in model.lower():
             icon = "virtualbox"
-        return ("/usr/share/linuxmint/mintdrivers/icons/%s.png" % icon)
+
+        if "intel-microcode" in device['drivers']:
+            icon = "intel"
+        elif "amd-microcode" in device['drivers']:
+            icon = "amd"
+
+        return (GdkPixbuf.Pixbuf.new_from_file_at_size("/usr/share/linuxmint/mintdrivers/icons/%s.svg" % icon, 48, -1))
+
+    def get_cpu_name(self):
+        with open("/proc/cpuinfo") as cpuinfo:
+            for line in cpuinfo:
+                if "model name" in line:
+                    return re.sub( ".*model name.*:", "", line, 1).strip()
+        return _("Processor")
 
     def show_drivers(self):
         self.apt_cache = apt.Cache()
@@ -466,10 +480,14 @@ class Application():
         self.dynamic_device_status = {}
         for device in sorted(self.devices.keys()):
             (overall_status, icon, drivers) = self.gather_device_data(self.devices[device])
+            is_cpu = False
+            if "intel-microcode" in self.devices[device]['drivers'] or "amd-microcode" in self.devices[device]['drivers']:
+                is_cpu = True
+                overall_status = _("Processor microcode")
             brand_icon = Gtk.Image()
             brand_icon.set_valign(Gtk.Align.START)
             brand_icon.set_halign(Gtk.Align.CENTER)
-            brand_icon.set_from_file(self.get_device_icon(self.devices[device]))
+            brand_icon.set_from_pixbuf(self.get_device_icon(self.devices[device]))
             driver_status = Gtk.Image()
             driver_status.set_valign(Gtk.Align.START)
             driver_status.set_halign(Gtk.Align.CENTER)
@@ -480,7 +498,9 @@ class Application():
             device_box.pack_start(device_detail, True, True, 0)
             model_name = self.devices[device].get('model', None)
             vendor_name = self.devices[device].get('vendor', None)
-            if vendor_name is None and model_name is None:
+            if is_cpu:
+                device_name = self.get_cpu_name()
+            elif vendor_name is None and model_name is None:
                 device_name = _("Unknown")
             elif vendor_name is None:
                 device_name = model_name
@@ -514,6 +534,8 @@ class Application():
 
                     if section == 'no_driver':
                         self.no_drv.append(radio_button)
+                        if is_cpu:
+                            label.set_markup(_("Do not update the CPU microcode"))
                     if section in ('manually_install', 'no_driver') or ('builtin' in drivers[section][driver] and drivers[section][driver]['builtin']):
                         radio_button.connect("toggled", self.on_driver_selection_changed, device)
                     else:
