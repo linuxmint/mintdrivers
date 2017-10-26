@@ -1,3 +1,11 @@
+mintdrivers (1.3.6) sylvia; urgency=medium
+
+  * Implement support for window progress
+  * Improve HiDPI support and presentation of CPU microcode
+  * l10n: Generate additional files
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 26 Oct 2017 13:15:26 +0100
+
 mintdrivers (1.3.5) sonya; urgency=medium
 
   [ JosephMcc ]
