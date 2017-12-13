@@ -452,7 +452,7 @@ class Application():
 
         if "intel-microcode" in device['drivers']:
             icon = "intel"
-        elif "amd-microcode" in device['drivers']:
+        elif "amd64-microcode" in device['drivers']:
             icon = "amd"
 
         return (GdkPixbuf.Pixbuf.new_from_file_at_size("/usr/share/linuxmint/mintdrivers/icons/%s.svg" % icon, 48, -1))
@@ -481,7 +481,7 @@ class Application():
         for device in sorted(self.devices.keys()):
             (overall_status, icon, drivers) = self.gather_device_data(self.devices[device])
             is_cpu = False
-            if "intel-microcode" in self.devices[device]['drivers'] or "amd-microcode" in self.devices[device]['drivers']:
+            if "intel-microcode" in self.devices[device]['drivers'] or "amd64-microcode" in self.devices[device]['drivers']:
                 is_cpu = True
                 overall_status = _("Processor microcode")
             brand_icon = Gtk.Image()
