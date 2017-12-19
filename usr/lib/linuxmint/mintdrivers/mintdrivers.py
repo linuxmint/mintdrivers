@@ -2,6 +2,7 @@
 # -*- coding=utf-8 -*-
 
 import gettext
+import locale
 import os
 import sys
 import apt
@@ -19,7 +20,13 @@ from aptdaemon.gtk3widgets import AptErrorDialog, AptProgressDialog
 import re
 import urllib
 
-gettext.install("mintdrivers", "/usr/share/linuxmint/locale")
+# i18n
+APP = 'mintdrivers'
+LOCALE_DIR = "/usr/share/linuxmint/locale"
+locale.bindtextdomain(APP, LOCALE_DIR)
+gettext.bindtextdomain(APP, LOCALE_DIR)
+gettext.textdomain(APP)
+_ = gettext.gettext
 
 
 class Application():
@@ -27,6 +34,7 @@ class Application():
     def __init__(self):
 
         self.builder = Gtk.Builder()
+        self.builder.set_translation_domain(APP)
         self.builder.add_from_file("/usr/share/linuxmint/mintdrivers/main.ui")
         self.builder.connect_signals(self)
         for o in self.builder.get_objects():
