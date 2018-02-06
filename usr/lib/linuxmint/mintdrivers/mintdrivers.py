@@ -165,9 +165,11 @@ class Application():
                     if ("README.diskdefines" in live_media):
                         mount_point = live_media.replace("/README.diskdefines", "") # This is where our live DVD is mounted
                         # Add it to apt-cdrom
-                        os.system("sudo apt-cdrom -d \"%s\" -m add" % mount_point)
-                        if ("/media/cdrom" in mount_point):
-                            mounted_on_media_cdrom = True
+                        p = subprocess.Popen(["sudo", "apt-cdrom", "-d", mount_point, "-m", "add"], stderr=subprocess.PIPE)
+                        stderr = p.communicate()
+                        mounted_on_media_cdrom = True
+                        if 'No CD-ROM could be auto-detected or found using the default mount point' in stderr[1]:
+                           mounted_on_media_cdrom = False
             except:
                 pass
 
@@ -181,7 +183,8 @@ class Application():
                 print ("Binding mount %s to /media/cdrom" % mount_point)
                 self.clean_up_media_cdrom()
                 os.system("mkdir -p /media/cdrom")
-                os.system("mount --bind \"%s\" /media/cdrom" % mount_point)
+                p = subprocess.Popen(["mount", "--bind", mount_point, "/media/cdrom"], stderr=subprocess.PIPE)
+                stderr = p.communicate()
 
             # It should now be mounted to /media/cdrom, else something went wrong..
             if os.path.exists("/media/cdrom/README.diskdefines"):
