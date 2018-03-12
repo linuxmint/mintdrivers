@@ -1,18 +1,11 @@
 #!/usr/bin/python3
 
 import os
-import gettext
+import subprocess
+import sys
 
-gettext.install("mintdrivers", "/usr/share/linuxmint/locale")
+if os.getuid() != 0:
+	print("mintdrivers needs to be run as root.")
+	sys.exit(1)
 
-tool = "/usr/lib/linuxmint/mintdrivers/mintdrivers.py"
-sentence = _("Please enter your password to launch the driver manager")
-icon = "/usr/share/icons/hicolor/48x48/apps/driver-manager.png"
-
-if os.path.exists("/usr/bin/gksu"):
-    launcher = "gksu  --message \"<b>%s</b>\"" % sentence
-elif os.path.exists("/usr/bin/kdesudo"):
-    launcher = "kdesudo -i %s -d --comment \"<b>%s</b>\"" % (icon, sentence)
-
-command = "%s %s" % (launcher, tool)
-os.system(command)
+subprocess.Popen("/usr/lib/linuxmint/mintdrivers/mintdrivers.py")
