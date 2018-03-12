@@ -603,8 +603,5 @@ class Application():
             self.label_driver_action.set_label(_("No proprietary drivers are in use."))
 
 if __name__ == "__main__":
-    if os.getuid() != 0:
-        os.execvp("gksu", ("", " ".join(sys.argv)))
-    else:
-        Application()
-        Gtk.main()
+    Application()
+    Gtk.main()
