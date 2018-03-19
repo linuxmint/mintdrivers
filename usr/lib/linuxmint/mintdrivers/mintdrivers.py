@@ -2,7 +2,6 @@
 # -*- coding=utf-8 -*-
 
 import gettext
-import locale
 import os
 import sys
 import apt
@@ -21,12 +20,7 @@ import re
 import urllib
 
 # i18n
-APP = 'mintdrivers'
-LOCALE_DIR = "/usr/share/linuxmint/locale"
-locale.bindtextdomain(APP, LOCALE_DIR)
-gettext.bindtextdomain(APP, LOCALE_DIR)
-gettext.textdomain(APP)
-_ = gettext.gettext
+gettext.install("mintdrivers", "/usr/share/linuxmint/locale", names="ngettext")
 
 
 class Application():
@@ -34,7 +28,6 @@ class Application():
     def __init__(self):
 
         self.builder = Gtk.Builder()
-        self.builder.set_translation_domain(APP)
         self.builder.add_from_file("/usr/share/linuxmint/mintdrivers/main.ui")
         self.builder.connect_signals(self)
         for o in self.builder.get_objects():
@@ -594,7 +587,7 @@ class Application():
                     self.nonfree_drivers = self.nonfree_drivers + 1
 
         if self.nonfree_drivers > 0:
-            self.label_driver_action.set_label(gettext.ngettext(
+            self.label_driver_action.set_label(ngettext(
                 "%(count)d proprietary driver in use.",
                 "%(count)d proprietary drivers in use.",
                 self.nonfree_drivers)
