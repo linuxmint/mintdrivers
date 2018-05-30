@@ -41,3 +41,31 @@ OnlyShowIn=KDE;
 """
 
 additionalfiles.generate(DOMAIN, PATH, "usr/share/applications/kde4/mintdrivers.desktop", prefix, _("Driver Manager"), _("Manage the drivers for your devices"), suffix, genericName=_("Manage the drivers for your devices"))
+
+prefix = """<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+ "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+<policyconfig>
+
+  <vendor>Linux Mint</vendor>
+  <vendor_url>https://linuxmint.com/</vendor_url>
+  <action id="com.linuxmint.mintdrivers">
+"""
+
+suffix = """
+    <icon_name>mintdrivers</icon_name>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/mintdrivers</annotate>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/driver-manager</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
+</policyconfig>
+"""
+
+additionalfiles.generate_polkit_policy(DOMAIN, PATH, "usr/share/polkit-1/actions/com.linuxmint.mintdrivers.policy", prefix, _("Driver Manager"), suffix)

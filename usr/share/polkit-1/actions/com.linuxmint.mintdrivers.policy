@@ -6,8 +6,92 @@
 
   <vendor>Linux Mint</vendor>
   <vendor_url>https://linuxmint.com/</vendor_url>
-
   <action id="com.linuxmint.mintdrivers">
+<message>Driver Manager</message>
+<message xml:lang="af">Aandrywer Bestuurder</message>
+<message xml:lang="am">የ Driver አስተዳዳሪ</message>
+<message xml:lang="ar">مدير برامج التشغيل</message>
+<message xml:lang="as">ড্ৰাইভাৰ মেনেজাৰ</message>
+<message xml:lang="az">Drayver Meneceri</message>
+<message xml:lang="be">Кіраўнік драйвераў</message>
+<message xml:lang="bg">Управление на драйвери</message>
+<message xml:lang="bn">ড্রাইভার ব্যবস্থাপক</message>
+<message xml:lang="bs">Upravljač drajvera</message>
+<message xml:lang="ca">Gestor de controladors</message>
+<message xml:lang="ca@valencia">Administrador de controladors</message>
+<message xml:lang="cs">Správa ovladačů</message>
+<message xml:lang="cy">Rheolwr Gyrwyr</message>
+<message xml:lang="da">Driverhåndtering</message>
+<message xml:lang="de">Treiberverwaltung</message>
+<message xml:lang="el">Διαχειριστής οδηγών</message>
+<message xml:lang="es">Administrador de controladores</message>
+<message xml:lang="et">Ajuri haldur</message>
+<message xml:lang="eu">Kontrolatzaile-kudeatzailea</message>
+<message xml:lang="fa">مدیریت گرداننده</message>
+<message xml:lang="fi">Ajureiden hallinta</message>
+<message xml:lang="fil">Ayusin ang Driver</message>
+<message xml:lang="fr">Gestionnaire de pilotes</message>
+<message xml:lang="fr_CA">Gestionnaire de pilotes</message>
+<message xml:lang="fy">Stjoerprogramma behear</message>
+<message xml:lang="ga">Bainisteoir Tiománaí</message>
+<message xml:lang="gd">Manaidsear nan draibhearan</message>
+<message xml:lang="gl">Administrador do controlador</message>
+<message xml:lang="he">מנהל ההתקנים</message>
+<message xml:lang="hi">ड्राइवर प्रबंधक</message>
+<message xml:lang="hr">Upravitelj upravljačkih programa</message>
+<message xml:lang="hu">Illesztőprogram-kezelő</message>
+<message xml:lang="ia">Gestor de driver</message>
+<message xml:lang="id">Manager Driver</message>
+<message xml:lang="is">Stjórnun rekla</message>
+<message xml:lang="it">Gestore dei Driver</message>
+<message xml:lang="ja">ドライバマネージャ</message>
+<message xml:lang="jv">Manajer Driver</message>
+<message xml:lang="ka">დრაივერის მენეჯერი</message>
+<message xml:lang="kab">Amsefrak n inuḍafen</message>
+<message xml:lang="kk">Драйверлердің менеджері</message>
+<message xml:lang="ko">드라이버 매니저</message>
+<message xml:lang="ku">Rêvebirê Ajoyan</message>
+<message xml:lang="ky">Драйвер менеджери</message>
+<message xml:lang="lo">ການຈັດການໄດຣເວີ</message>
+<message xml:lang="lt">Tvarkyklių valdymas</message>
+<message xml:lang="lv">Draiveru pārvaldnieks</message>
+<message xml:lang="ml">ഡ്രൈവർ നിയന്ത്രിതാവ്</message>
+<message xml:lang="mr">ड्राइव्हर व्यवस्थापक</message>
+<message xml:lang="ms">Pengurus Pemacu</message>
+<message xml:lang="nap">Gestore d''i Driver</message>
+<message xml:lang="nb">Driverbehandler</message>
+<message xml:lang="nds">Treiber Verwaltung</message>
+<message xml:lang="ne">ड्राइभर म्यानेजर</message>
+<message xml:lang="nl">Stuurprogrammabeheer</message>
+<message xml:lang="oc">Gestionari de pilòts</message>
+<message xml:lang="om">Taliigaa ooftuu</message>
+<message xml:lang="pa">ਡਰਾਇਵਰ ਮੈਨੇਜਰ</message>
+<message xml:lang="pap">Atministrado di aparato</message>
+<message xml:lang="pl">Zarządzanie sterownikami</message>
+<message xml:lang="pt">Gestor de controladores</message>
+<message xml:lang="pt_BR">Gerenciador de Drivers</message>
+<message xml:lang="pt_PT">Gestor de controladores</message>
+<message xml:lang="ro">Administrator drivere</message>
+<message xml:lang="ru">Менеджер драйверов</message>
+<message xml:lang="sk">Správca ovládačov</message>
+<message xml:lang="sl">Upravljalnik gonilnikov</message>
+<message xml:lang="sq">Menaxhuesi i driver-ave</message>
+<message xml:lang="sr">Управник управљачких програма</message>
+<message xml:lang="sr@latin">Управник управљачких програма</message>
+<message xml:lang="sv">Drivrutinshanterare</message>
+<message xml:lang="ta">இயக்கி நிர்வாகி</message>
+<message xml:lang="tg">Мудири драйверҳо</message>
+<message xml:lang="th">โปรแกรมจัดการไดรเวอร์</message>
+<message xml:lang="tl">Ayusin ang Driver</message>
+<message xml:lang="tr">Sürücü Yöneticisi</message>
+<message xml:lang="uk">Керування драйверами</message>
+<message xml:lang="ur">ڈرائیور منتظم</message>
+<message xml:lang="uz">Драйверлар менежери</message>
+<message xml:lang="vi">Quản lý Trình điều khiển</message>
+<message xml:lang="zh_CN">驱动管理器</message>
+<message xml:lang="zh_HK">驅動程式管理員</message>
+<message xml:lang="zh_TW">驅動程式管理員</message>
+
     <icon_name>mintdrivers</icon_name>
     <defaults>
       <allow_any>no</allow_any>
