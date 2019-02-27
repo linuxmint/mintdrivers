@@ -24,6 +24,7 @@
 <message xml:lang="da">Driverhåndtering</message>
 <message xml:lang="de">Treiberverwaltung</message>
 <message xml:lang="el">Διαχειριστής οδηγών</message>
+<message xml:lang="eo">Pelila mastrumilo</message>
 <message xml:lang="es">Administrador de controladores</message>
 <message xml:lang="et">Ajuri haldur</message>
 <message xml:lang="eu">Kontrolatzaile-kudeatzailea</message>
@@ -73,11 +74,12 @@
 <message xml:lang="pt_PT">Gestor de controladores</message>
 <message xml:lang="ro">Administrator drivere</message>
 <message xml:lang="ru">Менеджер драйверов</message>
+<message xml:lang="sc">Manigiadore Driver</message>
 <message xml:lang="sk">Správca ovládačov</message>
 <message xml:lang="sl">Upravljalnik gonilnikov</message>
 <message xml:lang="sq">Menaxhuesi i driver-ave</message>
 <message xml:lang="sr">Управник управљачких програма</message>
-<message xml:lang="sr@latin">Управник управљачких програма</message>
+<message xml:lang="sr@latin">Upravnik upravljačkih programa</message>
 <message xml:lang="sv">Drivrutinshanterare</message>
 <message xml:lang="ta">இயக்கி நிர்வாகி</message>
 <message xml:lang="tg">Мудири драйверҳо</message>
