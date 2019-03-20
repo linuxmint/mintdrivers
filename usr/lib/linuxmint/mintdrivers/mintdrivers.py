@@ -392,7 +392,7 @@ class Application():
                 pkg = self.apt_cache[pkg_driver_name]
                 installed = pkg.is_installed
                 description_line1 = "<b>%s</b>" % pkg.shortname
-                description_line2 = "<small>%s</small> %s" % (_("Version"), pkg.candidate.version)
+                description_line2 = "<small>%s</small> %s" % (_("Version"), pkg.candidate.version if not pkg.is_installed else pkg.installed.version)
                 description_line3 = "<small>%s</small>" % pkg.candidate.summary
                 if driver_status == 'recommended':
                     description_line1 = "%s <b><small><span foreground='#58822B'>(%s)</span></small></b>" % (description_line1, _("recommended"))
