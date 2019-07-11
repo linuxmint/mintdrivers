@@ -1,3 +1,9 @@
+mintdrivers (1.4.3) tina; urgency=medium
+
+  * Add cinnamon hook to run driver manager
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 11 Jul 2019 15:18:49 +0200
+
 mintdrivers (1.4.2) tina; urgency=medium
 
   * Fix generate_desktop_files
