@@ -1,3 +1,9 @@
+mintdrivers (1.4.4) tricia; urgency=medium
+
+  * Ignore VMware and Virtualbox recommendations
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 05 Dec 2019 16:01:36 +0000
+
 mintdrivers (1.4.3) tina; urgency=medium
 
   * Add cinnamon hook to run driver manager
