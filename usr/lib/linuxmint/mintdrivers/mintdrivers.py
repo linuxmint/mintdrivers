@@ -512,6 +512,9 @@ class Application():
                 device_name = vendor_name
             else:
                 device_name = "%s: %s" % (vendor_name, model_name)
+            if "vmware" in device_name.lower() or "virtualbox" in device_name.lower():
+                print ("Skipping device %s" % device_name)
+                continue
             widget = Gtk.Label(device_name)
             widget.set_halign(Gtk.Align.START)
             device_detail.pack_start(widget, True, False, 0)
