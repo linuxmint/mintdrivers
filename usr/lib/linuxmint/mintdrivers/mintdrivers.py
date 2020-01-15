@@ -484,8 +484,6 @@ class Application():
         self.dynamic_device_status = {}
         for device in sorted(self.devices.keys()):
             (overall_status, icon, drivers) = self.gather_device_data(self.devices[device])
-            if drivers["manually_installed"]:
-                continue
             is_cpu = False
             if "intel-microcode" in self.devices[device]['drivers'] or "amd64-microcode" in self.devices[device]['drivers']:
                 is_cpu = True
@@ -515,7 +513,10 @@ class Application():
             else:
                 device_name = "%s: %s" % (vendor_name, model_name)
             if "vmware" in device_name.lower() or "virtualbox" in device_name.lower():
-                print ("Skipping device %s" % device_name)
+                print ("Ignoring device %s" % device_name)
+                continue
+            if drivers["manually_installed"]:
+                print("Ignoring device: %s (manually_installed)" % device_name)
                 continue
             widget = Gtk.Label(device_name)
             widget.set_halign(Gtk.Align.START)
