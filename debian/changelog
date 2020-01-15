@@ -1,3 +1,13 @@
+mintdrivers (1.4.5) tricia; urgency=medium
+
+  [ Michael Webster ]
+  * mintdrivers.py: Don't show devices that have 'manual_install'
+
+  [ Clement Lefebvre ]
+  * Print ignored device in terminal output for manually installed drivers
+
+ -- Clement Lefebvre <root@linuxmint.com>  Wed, 15 Jan 2020 17:47:40 +0000
+
 mintdrivers (1.4.4) tricia; urgency=medium
 
   * Ignore VMware and Virtualbox recommendations
