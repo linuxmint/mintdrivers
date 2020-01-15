@@ -484,6 +484,8 @@ class Application():
         self.dynamic_device_status = {}
         for device in sorted(self.devices.keys()):
             (overall_status, icon, drivers) = self.gather_device_data(self.devices[device])
+            if drivers["manually_installed"]:
+                continue
             is_cpu = False
             if "intel-microcode" in self.devices[device]['drivers'] or "amd64-microcode" in self.devices[device]['drivers']:
                 is_cpu = True
