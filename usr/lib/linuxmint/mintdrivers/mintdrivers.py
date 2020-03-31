@@ -482,78 +482,92 @@ class Application():
         self.nonfree_drivers = 0
         self.ui_building = True
         self.dynamic_device_status = {}
-        for device in sorted(self.devices.keys()):
-            (overall_status, icon, drivers) = self.gather_device_data(self.devices[device])
-            is_cpu = False
-            if "intel-microcode" in self.devices[device]['drivers'] or "amd64-microcode" in self.devices[device]['drivers']:
-                is_cpu = True
-                overall_status = _("Processor microcode")
-            brand_icon = Gtk.Image()
-            brand_icon.set_valign(Gtk.Align.START)
-            brand_icon.set_halign(Gtk.Align.CENTER)
-            brand_icon.set_from_pixbuf(self.get_device_icon(self.devices[device]))
-            driver_status = Gtk.Image()
-            driver_status.set_valign(Gtk.Align.START)
-            driver_status.set_halign(Gtk.Align.CENTER)
-            driver_status.set_from_icon_name(icon, Gtk.IconSize.MENU)
-            device_box = Gtk.Box(spacing=6, orientation=Gtk.Orientation.HORIZONTAL)
-            device_box.pack_start(brand_icon, False, False, 6)
-            device_detail = Gtk.Box(spacing=6, orientation=Gtk.Orientation.VERTICAL)
+        if(len(self.devices)!=0):
+            for device in sorted(self.devices.keys()):
+                (overall_status, icon, drivers) = self.gather_device_data(self.devices[device])
+                is_cpu = False
+                if "intel-microcode" in self.devices[device]['drivers'] or "amd64-microcode" in self.devices[device]['drivers']:
+                    is_cpu = True
+                    overall_status = _("Processor microcode")
+                brand_icon = Gtk.Image()
+                brand_icon.set_valign(Gtk.Align.START)
+                brand_icon.set_halign(Gtk.Align.CENTER)
+                brand_icon.set_from_pixbuf(self.get_device_icon(self.devices[device]))
+                driver_status = Gtk.Image()
+                driver_status.set_valign(Gtk.Align.START)
+                driver_status.set_halign(Gtk.Align.CENTER)
+                driver_status.set_from_icon_name(icon, Gtk.IconSize.MENU)
+                device_box = Gtk.Box(spacing=6, orientation=Gtk.Orientation.HORIZONTAL)
+                device_box.pack_start(brand_icon, False, False, 6)
+                device_detail = Gtk.Box(spacing=6, orientation=Gtk.Orientation.VERTICAL)
+                device_box.pack_start(device_detail, True, True, 0)
+                model_name = self.devices[device].get('model', None)
+                vendor_name = self.devices[device].get('vendor', None)
+                if is_cpu:
+                    device_name = self.get_cpu_name()
+                elif vendor_name is None and model_name is None:
+                    device_name = _("Unknown")
+                elif vendor_name is None:
+                    device_name = model_name
+                elif model_name is None:
+                    device_name = vendor_name
+                else:
+                    device_name = "%s: %s" % (vendor_name, model_name)
+                if "vmware" in device_name.lower() or "virtualbox" in device_name.lower():
+                    print ("Ignoring device %s" % device_name)
+                    continue
+                if drivers["manually_installed"]:
+                    print("Ignoring device: %s (manually_installed)" % device_name)
+                    continue
+                widget = Gtk.Label(device_name)
+                widget.set_halign(Gtk.Align.START)
+                device_detail.pack_start(widget, True, False, 0)
+                widget = Gtk.Label("<small>{}</small>".format(overall_status))
+                widget.set_halign(Gtk.Align.START)
+                widget.set_use_markup(True)
+                device_detail.pack_start(widget, True, False, 0)
+                self.dynamic_device_status[device] = (driver_status, widget)
+
+                option_group = None
+                # define the order of introspection
+                for section in ('recommended', 'alternative', 'manually_installed', 'no_driver'):
+                    for driver in sorted(drivers[section], key=lambda x: self.sort_string(drivers[section], x)):
+                        radio_button = Gtk.RadioButton.new(None)
+                        label = Gtk.Label()
+                        label.set_markup(drivers[section][driver]['description'])
+                        radio_button.add(label)
+                        if option_group:
+                            radio_button.join_group(option_group)
+                        else:
+                            option_group = radio_button
+                        device_detail.pack_start(radio_button, True, False, 0)
+                        radio_button.set_active(drivers[section][driver]['selected'])
+
+                        if section == 'no_driver':
+                            self.no_drv.append(radio_button)
+                            if is_cpu:
+                                label.set_markup(_("Do not update the CPU microcode"))
+                        if section in ('manually_install', 'no_driver') or ('builtin' in drivers[section][driver] and drivers[section][driver]['builtin']):
+                            radio_button.connect("toggled", self.on_driver_selection_changed, device)
+                        else:
+                            radio_button.connect("toggled", self.on_driver_selection_changed, device, driver)
+                        if drivers['manually_installed'] and section != 'manually_installed' and "firmware" not in str(driver):
+                            radio_button.set_sensitive(False)
+
+                self.box_driver_detail.pack_start(device_box, False, False, 6)
+        else:
+            print("Your computer does not need any additional drivers")
+            device_box = Gtk.Box(spacing=0, orientation=Gtk.Orientation.VERTICAL)
+
+            device_detail = Gtk.Box(spacing=0, orientation=Gtk.Orientation.VERTICAL)
             device_box.pack_start(device_detail, True, True, 0)
-            model_name = self.devices[device].get('model', None)
-            vendor_name = self.devices[device].get('vendor', None)
-            if is_cpu:
-                device_name = self.get_cpu_name()
-            elif vendor_name is None and model_name is None:
-                device_name = _("Unknown")
-            elif vendor_name is None:
-                device_name = model_name
-            elif model_name is None:
-                device_name = vendor_name
-            else:
-                device_name = "%s: %s" % (vendor_name, model_name)
-            if "vmware" in device_name.lower() or "virtualbox" in device_name.lower():
-                print ("Ignoring device %s" % device_name)
-                continue
-            if drivers["manually_installed"]:
-                print("Ignoring device: %s (manually_installed)" % device_name)
-                continue
-            widget = Gtk.Label(device_name)
-            widget.set_halign(Gtk.Align.START)
-            device_detail.pack_start(widget, True, False, 0)
-            widget = Gtk.Label("<small>{}</small>".format(overall_status))
-            widget.set_halign(Gtk.Align.START)
-            widget.set_use_markup(True)
-            device_detail.pack_start(widget, True, False, 0)
-            self.dynamic_device_status[device] = (driver_status, widget)
 
-            option_group = None
-            # define the order of introspection
-            for section in ('recommended', 'alternative', 'manually_installed', 'no_driver'):
-                for driver in sorted(drivers[section], key=lambda x: self.sort_string(drivers[section], x)):
-                    radio_button = Gtk.RadioButton.new(None)
-                    label = Gtk.Label()
-                    label.set_markup(drivers[section][driver]['description'])
-                    radio_button.add(label)
-                    if option_group:
-                        radio_button.join_group(option_group)
-                    else:
-                        option_group = radio_button
-                    device_detail.pack_start(radio_button, True, False, 0)
-                    radio_button.set_active(drivers[section][driver]['selected'])
+            NO_DRIVERS_MSG = _("Your computer does not need any additional drivers")
+            self.builder.get_object("label_no_drivers").set_text(NO_DRIVERS_MSG)
+            self.builder.get_object("no_drivers_status").set_from_icon_name("object-select-symbolic", 96)
+            device_detail.pack_start(self.builder.get_object("no_drivers"), True, True, 0)
 
-                    if section == 'no_driver':
-                        self.no_drv.append(radio_button)
-                        if is_cpu:
-                            label.set_markup(_("Do not update the CPU microcode"))
-                    if section in ('manually_install', 'no_driver') or ('builtin' in drivers[section][driver] and drivers[section][driver]['builtin']):
-                        radio_button.connect("toggled", self.on_driver_selection_changed, device)
-                    else:
-                        radio_button.connect("toggled", self.on_driver_selection_changed, device, driver)
-                    if drivers['manually_installed'] and section != 'manually_installed' and "firmware" not in str(driver):
-                        radio_button.set_sensitive(False)
-
-            self.box_driver_detail.pack_start(device_box, False, False, 6)
+            self.box_driver_detail.pack_start(device_box, True, True, 0)
 
         self.ui_building = False
         self.box_driver_detail.show_all()
