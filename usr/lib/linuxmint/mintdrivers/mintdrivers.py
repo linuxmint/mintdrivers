@@ -482,7 +482,7 @@ class Application():
         self.nonfree_drivers = 0
         self.ui_building = True
         self.dynamic_device_status = {}
-        if(len(self.devices)!=0):
+        if len(self.devices) != 0:
             for device in sorted(self.devices.keys()):
                 (overall_status, icon, drivers) = self.gather_device_data(self.devices[device])
                 is_cpu = False
