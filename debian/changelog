@@ -1,3 +1,14 @@
+mintdrivers (1.4.6) ulyana; urgency=medium
+
+  [ Pyroxar ]
+  * Added information if your computer doesn't need any additional driver (#53)
+
+  [ Clement Lefebvre ]
+  * l10n: Update POT file
+  * l10n: Generate additional files
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue, 21 Apr 2020 16:12:29 +0100
+
 mintdrivers (1.4.5) tricia; urgency=medium
 
   [ Michael Webster ]
