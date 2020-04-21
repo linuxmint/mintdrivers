@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-07 11:51+0100\n"
+"POT-Creation-Date: 2020-04-21 15:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,8 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:42 generate_desktop_files:28
-#: generate_desktop_files:43
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:42 generate_desktop_files:26
+#: generate_desktop_files:41 generate_desktop_files:69
 msgid "Driver Manager"
 msgstr ""
 
@@ -92,7 +92,7 @@ msgstr ""
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:445
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:446
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:508
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:509
 msgid "Unknown"
 msgstr ""
 
@@ -100,29 +100,33 @@ msgstr ""
 msgid "Processor"
 msgstr ""
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:490
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:491
 msgid "Processor microcode"
 msgstr ""
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:542
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:549
 msgid "Do not update the CPU microcode"
 msgstr ""
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:577
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:565
+msgid "Your computer does not need any additional drivers"
+msgstr ""
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:597
 msgid "You need to restart the computer to complete the driver changes."
 msgstr ""
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:591
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:611
 #, python-format
 msgid "%(count)d proprietary driver in use."
 msgid_plural "%(count)d proprietary drivers in use."
 msgstr[0] ""
 msgstr[1] ""
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:596
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:616
 msgid "No proprietary drivers are in use."
 msgstr ""
 
-#: generate_desktop_files:28 generate_desktop_files:43
+#: generate_desktop_files:26 generate_desktop_files:41
 msgid "Manage the drivers for your devices"
 msgstr ""
