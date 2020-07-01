@@ -2,6 +2,7 @@
 # -*- coding=utf-8 -*-
 
 import gettext
+import locale
 import os
 import sys
 import apt
@@ -19,9 +20,12 @@ from aptdaemon.gtk3widgets import AptErrorDialog, AptProgressDialog
 import re
 import urllib
 
-# i18n
-gettext.install("mintdrivers", "/usr/share/linuxmint/locale", names="ngettext")
-
+APP = 'mintdrivers'
+LOCALE_DIR = "/usr/share/linuxmint/locale"
+locale.bindtextdomain(APP, LOCALE_DIR)
+gettext.bindtextdomain(APP, LOCALE_DIR)
+gettext.textdomain(APP)
+_ = gettext.gettext
 
 class Application():
 
@@ -607,7 +611,7 @@ class Application():
                     self.nonfree_drivers = self.nonfree_drivers + 1
 
         if self.nonfree_drivers > 0:
-            self.label_driver_action.set_label(ngettext(
+            self.label_driver_action.set_label(gettext.ngettext(
                 "%(count)d proprietary driver in use.",
                 "%(count)d proprietary drivers in use.",
                 self.nonfree_drivers)
