@@ -68,8 +68,8 @@ class Application():
 
         self.info_bar.set_no_show_all(True)
 
-        self.progress_bar = Gtk.ProgressBar()
-        self.box_driver_action.pack_end(self.progress_bar, False, False, 0)
+        self.progress_bar = Gtk.ProgressBar(valign=Gtk.Align.CENTER)
+        self.box_driver_action.pack_end(self.progress_bar, True, True, 0)
         self.progress_bar.set_visible(False)
 
         self.needs_restart = False
