@@ -242,6 +242,20 @@ class Application():
         for pkg in self.driver_changes:
             if pkg.is_installed:
                 removals.append(pkg.shortname)
+
+                if pkg.shortname.startswith("nvidia-driver"):
+                    # most nvidia packages get caught with remove_obsolete_depends,
+                    # but they don't end up purged.  We need to purge every related
+                    # package or else there will be dependency issues if the user
+                    # tries to reinstall a different version, either simultaneously,
+                    # or at a later date.
+                    version = pkg.shortname.rpartition("-")[2]
+                    for pkg_name in self.apt_cache.keys():
+                        if "nvidia" in pkg_name and version in pkg_name:
+                            if self.apt_cache[pkg_name].is_installed:
+                                if pkg_name not in removals:
+                                    print ("Remove %s" % pkg_name)
+                                    removals.append(pkg_name)
                 print ("Remove %s" % pkg.shortname)
             else:
                 installs.append(pkg.shortname)
@@ -259,9 +273,40 @@ class Application():
                 except:
                     print ("A problem occurred, some recommended deps might not get installed")
 
+        adding_nvidia = False
+        removing_nvidia = False
+        for pkg_name in installs:
+            if "nvidia" in pkg_name:
+                adding_nvidia = True
+        for pkg_name in removals:
+            if "nvidia" in pkg_name:
+                removing_nvidia = True
+        # If we end up with no nvidia drivers, remove nvidia-settings so it's not in the menu.
+        # nvidia settings is always the latest driver version
+        if removing_nvidia and not adding_nvidia:
+            try:
+                pkg = self.apt_cache["nvidia-settings"]
+                if pkg.is_installed:
+                    print("Removing nvidia-settings")
+                    removals.append("nvidia-settings")
+            except:
+                pass
+        # If we're adding nvidia from not having them, add the nvidia-prime and the prime applet
+        # nvidia-prime-applet is not pulled in by anything, and it may have been removed accidentally
+        # at some point.
+        elif adding_nvidia and not removing_nvidia:
+            for pkg_name in ("nvidia-prime", "nvidia-prime-applet"):
+                try:
+                    pkg = self.apt_cache[pkg_name]
+                    if not pkg.is_installed:
+                        print("Installing %s" % pkg_name)
+                        installs.append(pkg_name)
+                except:
+                    pass
+
         try:
-            self.transaction = self.apt_client.commit_packages(install=installs, remove=removals,
-                                                               reinstall=[], purge=[], upgrade=[], downgrade=[])
+            self.transaction = self.apt_client.commit_packages(install=installs, remove=[],
+                                                               reinstall=[], purge=removals, upgrade=[], downgrade=[])
             self.transaction.set_allow_unauthenticated(True)
             self.transaction.connect("progress-changed", self.on_driver_changes_progress)
             self.transaction.connect("cancellable-changed", self.on_driver_changes_cancellable_changed)
