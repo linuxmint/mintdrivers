@@ -1,3 +1,12 @@
+mintdrivers (1.4.7) ulyana; urgency=medium
+
+  [ Michael Webster ]
+  * i18n: Fix error with ngettext.
+  *  Fix installation and removal of nvidia drivers.
+  * Center the progress bar and allow it to expand a bit.
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue, 11 Aug 2020 14:51:11 +0100
+
 mintdrivers (1.4.6) ulyana; urgency=medium
 
   [ Pyroxar ]
