@@ -581,6 +581,9 @@ class Application():
                 # define the order of introspection
                 for section in ('recommended', 'alternative', 'manually_installed', 'no_driver'):
                     for driver in sorted(drivers[section], key=lambda x: self.sort_string(drivers[section], x)):
+                        if driver.startswith("nvidia-driver") and driver.endswith("-server"):
+                            print("Ignoring server NVIDIA driver: ", driver)
+                            continue
                         radio_button = Gtk.RadioButton.new(None)
                         label = Gtk.Label()
                         label.set_markup(drivers[section][driver]['description'])
