@@ -568,10 +568,10 @@ class Application():
                 if drivers["manually_installed"]:
                     print("Ignoring device: %s (manually_installed)" % device_name)
                     continue
-                widget = Gtk.Label(device_name)
+                widget = Gtk.Label(label=device_name)
                 widget.set_halign(Gtk.Align.START)
                 device_detail.pack_start(widget, True, False, 0)
-                widget = Gtk.Label("<small>{}</small>".format(overall_status))
+                widget = Gtk.Label(label="<small>{}</small>".format(overall_status))
                 widget.set_halign(Gtk.Align.START)
                 widget.set_use_markup(True)
                 device_detail.pack_start(widget, True, False, 0)
