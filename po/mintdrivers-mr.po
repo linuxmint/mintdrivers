@@ -1,0 +1,135 @@
+# Marathi translation for linuxmint
+# Copyright (c) 2013 Rosetta Contributors and Canonical Ltd 2013
+# This file is distributed under the same license as the linuxmint package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: linuxmint\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2020-04-21 15:36+0100\n"
+"PO-Revision-Date: 2020-01-11 10:27+0000\n"
+"Last-Translator: Vikram Kulkarni <kul.vikram@gmail.com>\n"
+"Language-Team: Marathi <mr@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2020-06-24 10:07+0000\n"
+"X-Generator: Launchpad (build 1cbd0aa39df153c901321817f9b57cf3f232b507)\n"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:42 generate_desktop_files:26
+#: generate_desktop_files:41 generate_desktop_files:69
+msgid "Driver Manager"
+msgstr "ड्राइव्हर व्यवस्थापक"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:46
+msgid "Re_vert"
+msgstr "पूर्ववत करा (_V)"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:48
+msgid "_Apply Changes"
+msgstr "बदल लागू करा (_A)"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:50
+msgid "_Cancel"
+msgstr "रद्द करा (_C)"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:52
+msgid "_Restart..."
+msgstr "पुन्हा सुरु करा (_R)..."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:79
+msgid ""
+"Drivers cannot be installed.\n"
+"Please connect to the Internet or insert the Linux Mint installation DVD (or "
+"USB stick)."
+msgstr ""
+"ड्राइव्हर्स इंस्टॉल केले जाऊ शकत नाही\n"
+"इंटरनेट कनेक्ट करा किंवा लिनक्स Mint ⁠⁠⁠इंस्टॉलेशन DVD(वा यूएसबी स्टिक) "
+"अंतर्भूत करा"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:202
+msgid "Applying changes..."
+msgstr "बदल लागू करत आहे..."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:356
+msgid "This device is using the recommended driver."
+msgstr "हे उपकरण सिफारिश केलेला ड्राइव्हर वापरत आहे."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:357
+msgid "This device is using an alternative driver."
+msgstr "हे उपकरण वैकल्पिक ड्राइव्हर वापरत आहे."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:358
+msgid "This device is using a manually-installed driver."
+msgstr "हे उपकरण स्वहस्ते प्रतिष्ठापीत केलेला ड्राइव्हर वापरत आहे."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:359
+msgid "This device is not working."
+msgstr "हे उपकरण काम करीत नाहीये"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:368
+msgid "Continue using a manually installed driver"
+msgstr "स्वहस्ते प्रतिष्ठापीत केलेला ड्राइव्हर वापरणे चालू ठेवा"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:395
+msgid "Version"
+msgstr "आवृत्ती"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:398
+msgid "recommended"
+msgstr "शिफारस केलेलं"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:400
+msgid "open-source"
+msgstr "मुक्त स्रोत"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:403
+msgid "requires a connection to the Internet"
+msgstr "इंटरनेट जोडणी आवश्यक आहे"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:427
+msgid "Do not use the device"
+msgstr "हे उपकरण वापरू नका"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:445
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:446
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:509
+msgid "Unknown"
+msgstr "अपरिचीत"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:469
+msgid "Processor"
+msgstr "प्रोसेसर"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:491
+msgid "Processor microcode"
+msgstr "प्रोसेसर मायक्रोकोड"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:549
+msgid "Do not update the CPU microcode"
+msgstr "प्रोसेसर मायक्रोकोड अद्ययावत करू नका"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:565
+msgid "Your computer does not need any additional drivers"
+msgstr ""
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:597
+msgid "You need to restart the computer to complete the driver changes."
+msgstr "ड्राइव्हर बदल पूर्ण करण्याकरिता संगणक पुन्हा चालू करणे आवश्यक आहे."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:611
+#, python-format
+msgid "%(count)d proprietary driver in use."
+msgid_plural "%(count)d proprietary drivers in use."
+msgstr[0] "%(count)d वैयक्तिक मालकिचा ड्राइव्हर वापरात आहे."
+msgstr[1] "%(count)d वैयक्तिक मालकिचे ड्राइव्हर्स वापरात आहेत."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:616
+msgid "No proprietary drivers are in use."
+msgstr "कोणतेही वैयक्तिक मालकिचे ड्राइव्हर्स वापरात नाहीत."
+
+#: generate_desktop_files:26 generate_desktop_files:41
+msgid "Manage the drivers for your devices"
+msgstr "आपल्या उपकरणांचे  ड्राइव्हर्स् व्यवस्थापित करा"

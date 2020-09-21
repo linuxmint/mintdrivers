@@ -1,0 +1,134 @@
+# Javanese translation for linuxmint
+# Copyright (c) 2015 Rosetta Contributors and Canonical Ltd 2015
+# This file is distributed under the same license as the linuxmint package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: linuxmint\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2020-04-21 15:36+0100\n"
+"PO-Revision-Date: 2017-07-02 02:05+0000\n"
+"Last-Translator: anandiamy <Unknown>\n"
+"Language-Team: Javanese <jv@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 0;\n"
+"X-Launchpad-Export-Date: 2020-06-24 10:07+0000\n"
+"X-Generator: Launchpad (build 1cbd0aa39df153c901321817f9b57cf3f232b507)\n"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:48
+msgid "_Apply Changes"
+msgstr "_Nerapke Perubahan"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:356
+msgid "This device is using the recommended driver."
+msgstr "Perangkat iki nggunakke driver sing direkomendasikke."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:42 generate_desktop_files:26
+#: generate_desktop_files:41 generate_desktop_files:69
+msgid "Driver Manager"
+msgstr "Manajer Driver"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:46
+msgid "Re_vert"
+msgstr "Re_vert"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:50
+msgid "_Cancel"
+msgstr "_Batal"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:52
+msgid "_Restart..."
+msgstr "_Mulai Ulang..."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:79
+msgid ""
+"Drivers cannot be installed.\n"
+"Please connect to the Internet or insert the Linux Mint installation DVD (or "
+"USB stick)."
+msgstr ""
+"Driver mboten saged di pasang\n"
+"Monggo konek neng Internet utawa lebokko DVD instalasi Linux Mint (utawa USB)"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:202
+msgid "Applying changes..."
+msgstr "Nerapke perubahan..."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:357
+msgid "This device is using an alternative driver."
+msgstr "Perangkat iki nggunakke driver alternatif."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:358
+msgid "This device is using a manually-installed driver."
+msgstr "Perangkat iki nggunakke instalasi driver manual."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:359
+msgid "This device is not working."
+msgstr "Perangkat ora bekerja."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:368
+msgid "Continue using a manually installed driver"
+msgstr "Nglanjutke nggunakke driver manual sing diinstall"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:395
+msgid "Version"
+msgstr "Versi"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:398
+msgid "recommended"
+msgstr "rekomedasi"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:400
+msgid "open-source"
+msgstr "open-source"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:403
+msgid "requires a connection to the Internet"
+msgstr "mbutuhke koneksi dinggo internet"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:427
+msgid "Do not use the device"
+msgstr "Ojo nggunakke perangkat iki"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:445
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:446
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:509
+msgid "Unknown"
+msgstr "Ora dikenali"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:469
+msgid "Processor"
+msgstr ""
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:491
+msgid "Processor microcode"
+msgstr ""
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:549
+msgid "Do not update the CPU microcode"
+msgstr ""
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:565
+msgid "Your computer does not need any additional drivers"
+msgstr ""
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:597
+msgid "You need to restart the computer to complete the driver changes."
+msgstr "Kowe mbutuhke restart komputer dinggo perubahan driver"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:611
+#, python-format
+msgid "%(count)d proprietary driver in use."
+msgid_plural "%(count)d proprietary drivers in use."
+msgstr[0] "%(count)d driver proprietari sing digunakke."
+msgstr[1] "%(count)d driver proprietari sing digunakke."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:616
+msgid "No proprietary drivers are in use."
+msgstr "Gak enek driver proprietari sing digunakke."
+
+#: generate_desktop_files:26 generate_desktop_files:41
+msgid "Manage the drivers for your devices"
+msgstr "Atur driver iki dinggo perangkatmu"

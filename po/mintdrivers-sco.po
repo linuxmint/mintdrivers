@@ -1,0 +1,135 @@
+# Scots translation for linuxmint
+# Copyright (c) 2017 Rosetta Contributors and Canonical Ltd 2017
+# This file is distributed under the same license as the linuxmint package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: linuxmint\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2020-04-21 15:36+0100\n"
+"PO-Revision-Date: 2018-08-28 19:46+0000\n"
+"Last-Translator: Eilidh Martin <Unknown>\n"
+"Language-Team: Scots <sco@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2020-06-24 10:07+0000\n"
+"X-Generator: Launchpad (build 1cbd0aa39df153c901321817f9b57cf3f232b507)\n"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:42 generate_desktop_files:26
+#: generate_desktop_files:41 generate_desktop_files:69
+msgid "Driver Manager"
+msgstr "Driver Manager"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:46
+msgid "Re_vert"
+msgstr "Re_vert"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:48
+msgid "_Apply Changes"
+msgstr "_Apply Changes"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:50
+msgid "_Cancel"
+msgstr "_Cancel"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:52
+msgid "_Restart..."
+msgstr "_Restert..."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:79
+msgid ""
+"Drivers cannot be installed.\n"
+"Please connect to the Internet or insert the Linux Mint installation DVD (or "
+"USB stick)."
+msgstr ""
+"Drivers cannae be installit.\n"
+"Please connect tae the internet or insert the Linux Mint installation DVD "
+"(or USB stick)"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:202
+msgid "Applying changes..."
+msgstr "Applyin' changes..."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:356
+msgid "This device is using the recommended driver."
+msgstr "This device is usin' the recommended driver."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:357
+msgid "This device is using an alternative driver."
+msgstr "This device is usin' an alternative driver."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:358
+msgid "This device is using a manually-installed driver."
+msgstr "This device is usin' a manually-installit driver."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:359
+msgid "This device is not working."
+msgstr "This device isnae workin'."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:368
+msgid "Continue using a manually installed driver"
+msgstr "Continue usin' a manually installit driver"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:395
+msgid "Version"
+msgstr "Version"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:398
+msgid "recommended"
+msgstr "recommended"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:400
+msgid "open-source"
+msgstr "appen-source"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:403
+msgid "requires a connection to the Internet"
+msgstr "requeres a connection tae the internet"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:427
+msgid "Do not use the device"
+msgstr "Dinnae use the device"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:445
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:446
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:509
+msgid "Unknown"
+msgstr "Unkent"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:469
+msgid "Processor"
+msgstr "Processer"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:491
+msgid "Processor microcode"
+msgstr "Processer microcode"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:549
+msgid "Do not update the CPU microcode"
+msgstr "Dinna update yon CPU microcode"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:565
+msgid "Your computer does not need any additional drivers"
+msgstr ""
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:597
+msgid "You need to restart the computer to complete the driver changes."
+msgstr "You need tae restert the computer tae complete the driver changes."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:611
+#, python-format
+msgid "%(count)d proprietary driver in use."
+msgid_plural "%(count)d proprietary drivers in use."
+msgstr[0] "%(count)d proprietary driver bein' used."
+msgstr[1] "%(count)d proprietary drivers bein' used."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:616
+msgid "No proprietary drivers are in use."
+msgstr "Nae proprietary drivers are bein' used."
+
+#: generate_desktop_files:26 generate_desktop_files:41
+msgid "Manage the drivers for your devices"
+msgstr "Manage the drivers fer yer devices"

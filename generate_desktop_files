@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 DOMAIN = "mintdrivers"
-PATH = "/usr/share/linuxmint/locale"
+PATH = "/usr/share/locale"
 
 import os
 import gettext
