@@ -1,3 +1,12 @@
+mintdrivers (1.4.8) ulyana; urgency=medium
+
+  * Ignore NVIDIA server drivers
+  * Fix some GTK warnings
+  * Own translations
+  * Don't explicitly install recommended packages
+
+ -- Clement Lefebvre <root@linuxmint.com>  Mon, 21 Sep 2020 13:49:16 +0100
+
 mintdrivers (1.4.7) ulyana; urgency=medium
 
   [ Michael Webster ]
