@@ -212,6 +212,7 @@ class Application():
             self.on_driver_changes_revert()
             self.on_error(_("Error while applying changes"), str(e))
         if not installs_pending:
+            self.needs_restart = True
             self.progress_bar.set_visible(False)
             self.clear_changes()
             self.apt_cache = apt.Cache()
