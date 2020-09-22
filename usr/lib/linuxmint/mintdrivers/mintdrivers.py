@@ -320,7 +320,7 @@ class Application():
 
     def on_driver_restart_clicked(self, button_restart):
         self.clean_up_media_cdrom()
-        subprocess.call(['reboot'])
+        subprocess.call(['systemctl', 'reboot'])
 
     def clear_changes(self):
         self.orig_selection = {}
