@@ -11,12 +11,10 @@ import gi
 gi.require_version("GdkPixbuf", "2.0")
 gi.require_version("Gtk", "3.0")
 gi.require_version("XApp", "1.0")
-from gi.repository import GdkPixbuf, Gtk, XApp
+gi.require_version("PackageKitGlib", "1.0")
+from gi.repository import GdkPixbuf, Gtk, XApp, Gio
+from gi.repository import PackageKitGlib as packagekit
 from UbuntuDrivers import detect
-from aptdaemon import client
-from aptdaemon.enums import ERROR_UNKNOWN
-from aptdaemon.errors import NotAuthorizedError, TransactionFailed
-from aptdaemon.gtk3widgets import AptErrorDialog, AptProgressDialog
 import re
 import urllib
 
@@ -74,7 +72,6 @@ class Application():
 
         self.needs_restart = False
         self.live_mode = False
-        self.apt_client = client.AptClient()
 
         with open('/proc/cmdline') as f:
             cmdline = f.read()
@@ -90,29 +87,27 @@ class Application():
                 self.update_cache()
 
     def update_cache(self):
-        self.update_transaction = self.apt_client.update_cache()
-        self.update_transaction.connect("finished", self._on_cache_update_finished)
-        dia = AptProgressDialog(self.update_transaction)
-        dia.set_transient_for(self.window_main)
-        dia.set_modal(True)
-        dia.run(close_on_finished=True, show_error=True,
-                reply_handler=lambda: True,
-                error_handler=self.on_error,
-                )
+        task = packagekit.Task()
+        task.refresh_cache_async(True, Gio.Cancellable(), self.on_cache_update_progress, (None, ), self.on_cache_update_finished, (None, ))
 
-    def on_error(self, error):
-        if isinstance(error, NotAuthorizedError):
-                # Silently ignore auth failures
-            return
-        elif not isinstance(error, TransactionFailed):
-            # Catch internal errors of the client
-            error = TransactionFailed(ERROR_UNKNOWN, str(error))
-        dia = AptErrorDialog(error)
-        dia.run()
-        dia.hide()
-        self.apt_cache = apt.Cache()
+    def on_error(summary, msg):
+        """ show a error dialog """
+        dialog = Gtk.MessageDialog(parent=self.window_main,
+                                   flags=Gtk.DialogFlags.MODAL,
+                                   type=Gtk.MessageType.ERROR,
+                                   buttons=Gtk.ButtonsType.OK,
+                                   message_format=None)
+        dialog.set_markup("<big><b>%s</b></big>\n\n%s" % (summary, msg))
+        dialog.run()
+        dialog.destroy()
+        return False
 
-    def _on_cache_update_finished(self, transaction, exit_state):
+    def on_cache_update_progress(self, progress, ptype, data=None):
+        if ptype == packagekit.ProgressType.PERCENTAGE:
+            prog_value = progress.get_property('percentage')
+            #print("cache progress", prog_value)
+
+    def on_cache_update_finished(self, source, result, data=None):
         self.show_drivers()
 
     def quit_application(self, widget=None, event=None):
@@ -190,11 +185,11 @@ class Application():
                 self.update_cache()
             else:
                 self.info_bar.show()
-        except (NotAuthorizedError, TransactionFailed) as e:
+        except Exception as e:
             print("An error occurred: {}".format(e))
             self.info_bar.show()
 
-    def on_driver_changes_progress(self, transaction, progress):
+    def on_driver_changes_progress(self, progress, ptype, data=None):
         #print(progress)
         self.button_driver_revert.set_visible(False)
         self.button_driver_apply.set_visible(False)
@@ -204,108 +199,78 @@ class Application():
         self.progress_bar.set_visible(True)
 
         self.label_driver_action.set_label(_("Applying changes..."))
-        self.progress_bar.set_fraction(progress / 100.0)
-        XApp.set_window_progress(self.window_main, progress)
+        if ptype == packagekit.ProgressType.PERCENTAGE:
+            prog_value = progress.get_property('percentage')
+            self.progress_bar.set_fraction(prog_value / 100.0)
+            XApp.set_window_progress(self.window_main, progress)
 
-    def on_driver_changes_finish(self, transaction, exit_state):
-        self.needs_restart = True
-        self.progress_bar.set_visible(False)
-        self.clear_changes()
-        self.apt_cache = apt.Cache()
-        self.set_driver_action_status()
-        self.update_label_and_icons_from_status()
-        self.button_driver_revert.set_visible(True)
-        self.button_driver_apply.set_visible(True)
-        self.button_driver_cancel.set_visible(False)
-        self.scrolled_window_drivers.set_sensitive(True)
+    def on_driver_changes_finish(self, source, result, installs_pending):
+        results = None
+        try:
+            results = self.pk_task.generic_finish(result)
+        except Exception as e:
+            self.on_driver_changes_revert()
+            self.on_error(_("Error while applying changes"), str(e))
+        if not installs_pending:
+            self.progress_bar.set_visible(False)
+            self.clear_changes()
+            self.apt_cache = apt.Cache()
+            self.set_driver_action_status()
+            self.update_label_and_icons_from_status()
+            self.button_driver_revert.set_visible(True)
+            self.button_driver_apply.set_visible(True)
+            self.button_driver_cancel.set_visible(False)
+            self.scrolled_window_drivers.set_sensitive(True)
         XApp.set_window_progress(self.window_main, 0)
-
-    def on_driver_changes_error(self, transaction, error_code, error_details):
-        self.on_driver_changes_revert()
-        self.set_driver_action_status()
-        self.update_label_and_icons_from_status()
-        self.button_driver_revert.set_visible(True)
-        self.button_driver_apply.set_visible(True)
-        self.button_driver_cancel.set_visible(False)
-        self.scrolled_window_drivers.set_sensitive(True)
-        self.on_error(transaction.error)
-        XApp.set_window_progress(self.window_main, 0)
-
-    def on_driver_changes_cancellable_changed(self, transaction, cancellable):
-        self.button_driver_cancel.set_sensitive(cancellable)
 
     def on_driver_changes_apply(self, button):
-
+        self.pk_task = packagekit.Task()
         installs = []
         removals = []
 
         for pkg in self.driver_changes:
             if pkg.is_installed:
-                removals.append(pkg.shortname)
-
-                if pkg.shortname.startswith("nvidia-driver"):
-                    # most nvidia packages get caught with remove_obsolete_depends,
-                    # but they don't end up purged.  We need to purge every related
-                    # package or else there will be dependency issues if the user
-                    # tries to reinstall a different version, either simultaneously,
-                    # or at a later date.
-                    version = pkg.shortname.rpartition("-")[2]
-                    for pkg_name in self.apt_cache.keys():
-                        if "nvidia" in pkg_name and version in pkg_name:
-                            if self.apt_cache[pkg_name].is_installed:
-                                if pkg_name not in removals:
-                                    print ("Remove %s" % pkg_name)
-                                    removals.append(pkg_name)
-                print ("Remove %s" % pkg.shortname)
+                removals.append(self.get_package_id(pkg.installed))
+                # The main NVIDIA package is only a metapackage.
+                # We need to collect its dependencies, so that
+                # we can uninstall the driver properly.
+                if 'nvidia' in pkg.shortname:
+                    for dep in self.get_dependencies(self.apt_cache, pkg.shortname, 'nvidia'):
+                        dep_pkg = self.apt_cache[dep]
+                        if dep_pkg.is_installed:
+                            removals.append(self.get_package_id(dep_pkg.installed))
             else:
-                installs.append(pkg.shortname)
-                print ("Install %s" % pkg.shortname)
+                installs.append(self.get_package_id(pkg.candidate))
 
-        adding_nvidia = False
-        removing_nvidia = False
-        for pkg_name in installs:
-            if "nvidia" in pkg_name:
-                adding_nvidia = True
-        for pkg_name in removals:
-            if "nvidia" in pkg_name:
-                removing_nvidia = True
-        # If we end up with no nvidia drivers, remove nvidia-settings so it's not in the menu.
-        # nvidia settings is always the latest driver version
-        if removing_nvidia and not adding_nvidia:
-            try:
-                pkg = self.apt_cache["nvidia-settings"]
-                if pkg.is_installed:
-                    print("Removing nvidia-settings")
-                    removals.append("nvidia-settings")
-            except:
-                pass
-        # If we're adding nvidia from not having them, add the nvidia-prime and the prime applet
-        # nvidia-prime-applet is not pulled in by anything, and it may have been removed accidentally
-        # at some point.
-        elif adding_nvidia and not removing_nvidia:
-            for pkg_name in ("nvidia-prime", "nvidia-prime-applet"):
-                try:
-                    pkg = self.apt_cache[pkg_name]
-                    if not pkg.is_installed:
-                        print("Installing %s" % pkg_name)
-                        installs.append(pkg_name)
-                except:
-                    pass
-
+        self.cancellable = Gio.Cancellable()
         try:
-            self.transaction = self.apt_client.commit_packages(install=installs, remove=[],
-                                                               reinstall=[], purge=removals, upgrade=[], downgrade=[])
-            self.transaction.set_allow_unauthenticated(True)
-            self.transaction.connect("progress-changed", self.on_driver_changes_progress)
-            self.transaction.connect("cancellable-changed", self.on_driver_changes_cancellable_changed)
-            self.transaction.connect("finished", self.on_driver_changes_finish)
-            self.transaction.connect("error", self.on_driver_changes_error)
-            self.transaction.run()
+            if removals:
+                installs_pending = False
+                if installs:
+                    installs_pending = True
+                self.pk_task.remove_packages_async(removals,
+                            False,  # allow deps
+                            True,  # autoremove
+                            self.cancellable,  # cancellable
+                            self.on_driver_changes_progress,
+                            (None, ),  # progress data
+                            self.on_driver_changes_finish,  # callback ready
+                            installs_pending  # callback data
+                 )
+            if installs:
+                self.pk_task.install_packages_async(installs,
+                        self.cancellable,  # cancellable
+                        self.on_driver_changes_progress,
+                        (None, ),  # progress data
+                        self.on_driver_changes_finish,  # GAsyncReadyCallback
+                        False  # ready data
+                 )
+
             self.button_driver_revert.set_sensitive(False)
             self.button_driver_apply.set_sensitive(False)
             self.scrolled_window_drivers.set_sensitive(False)
-        except (NotAuthorizedError, TransactionFailed) as e:
-            print("Warning: install transaction not completed successfully: {}".format(e))
+        except Exception as e:
+            print("Warning: install not completed successfully: {}".format(e))
 
     def on_driver_changes_revert(self, button_revert=None):
 
@@ -324,7 +289,7 @@ class Application():
         self.button_driver_apply.set_sensitive(False)
 
     def on_driver_changes_cancel(self, button_cancel):
-        self.transaction.cancel()
+        self.cancellable.cancel()
         self.clear_changes()
 
     def on_driver_restart_clicked(self, button_restart):
