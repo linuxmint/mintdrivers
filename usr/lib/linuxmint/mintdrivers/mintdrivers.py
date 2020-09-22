@@ -12,11 +12,27 @@ gi.require_version("GdkPixbuf", "2.0")
 gi.require_version("Gtk", "3.0")
 gi.require_version("XApp", "1.0")
 gi.require_version("PackageKitGlib", "1.0")
-from gi.repository import GdkPixbuf, Gtk, XApp, Gio
+from gi.repository import GdkPixbuf, Gtk, XApp, Gio, GLib
 from gi.repository import PackageKitGlib as packagekit
 from UbuntuDrivers import detect
 import re
 import urllib
+import threading
+
+# Used as a decorator to run things in the background
+def _async(func):
+    def wrapper(*args, **kwargs):
+        thread = threading.Thread(target=func, args=args, kwargs=kwargs)
+        thread.daemon = True
+        thread.start()
+        return thread
+    return wrapper
+
+# Used as a decorator to run things in the main loop, from another thread
+def idle(func):
+    def wrapper(*args):
+        GLib.idle_add(func, *args)
+    return wrapper
 
 APP = 'mintdrivers'
 LOCALE_DIR = "/usr/share/locale"
@@ -45,6 +61,9 @@ class Application():
 
         self.window_main.connect("delete_event", self.quit_application)
 
+        self.stack = self.builder.get_object("stack")
+        self.spinner = self.builder.get_object("spinner")
+
         self.button_driver_revert = Gtk.Button(label=_("Re_vert"), use_underline=True)
         self.button_driver_revert.connect("clicked", self.on_driver_changes_revert)
         self.button_driver_apply = Gtk.Button(label=_("_Apply Changes"), use_underline=True)
@@ -63,6 +82,8 @@ class Application():
         self.box_driver_action.pack_end(self.button_driver_revert, False, False, 0)
         self.box_driver_action.pack_end(self.button_driver_restart, False, False, 0)
         self.box_driver_action.pack_end(self.button_driver_cancel, False, False, 0)
+
+        self.builder.get_object("error_button").connect("clicked", self.on_error_button)
 
         self.info_bar.set_no_show_all(True)
 
@@ -86,29 +107,31 @@ class Application():
                 self.info_bar.hide()
                 self.update_cache()
 
+
+    def on_error_button(self, button):
+        self.stack.set_visible_child_name("drivers_page")
+        self.spinner.stop()
+
     def update_cache(self):
+        self.stack.set_visible_child_name("refresh_page")
+        self.spinner.start()
         task = packagekit.Task()
         task.refresh_cache_async(True, Gio.Cancellable(), self.on_cache_update_progress, (None, ), self.on_cache_update_finished, (None, ))
 
-    def on_error(self, summary, msg):
-        """ show a error dialog """
-        dialog = Gtk.MessageDialog(parent=self.window_main,
-                                   modal=True,
-                                   message_type=Gtk.MessageType.ERROR,
-                                   buttons=Gtk.ButtonsType.OK,
-                                   text=None)
-        dialog.set_markup("<big><b>%s</b></big>\n\n%s" % (summary, msg))
-        dialog.run()
-        dialog.destroy()
-        return False
+    def on_error(self, msg):
+        self.stack.set_visible_child_name("error_page")
+        self.spinner.stop()
+        self.builder.get_object("error_label").set_label(msg)
 
     def on_cache_update_progress(self, progress, ptype, data=None):
         if ptype == packagekit.ProgressType.PERCENTAGE:
             prog_value = progress.get_property('percentage')
-            #print("cache progress", prog_value)
+            self.builder.get_object("refresh_progressbar").set_fraction(prog_value / 100.0)
+            XApp.set_window_progress(self.window_main, prog_value)
 
     def on_cache_update_finished(self, source, result, data=None):
-        self.show_drivers()
+        XApp.set_window_progress(self.window_main, 0)
+        self.get_drivers_async()
 
     def quit_application(self, widget=None, event=None):
         self.clean_up_media_cdrom()
@@ -210,7 +233,7 @@ class Application():
             results = self.pk_task.generic_finish(result)
         except Exception as e:
             self.on_driver_changes_revert()
-            self.on_error(_("Error while applying changes"), str(e))
+            self.on_error(str(e))
         if not installs_pending:
             self.needs_restart = True
             self.progress_bar.set_visible(False)
@@ -489,9 +512,14 @@ class Application():
                     return re.sub( ".*model name.*:", "", line, 1).strip()
         return _("Processor")
 
-    def show_drivers(self):
+    @_async
+    def get_drivers_async(self):
         self.apt_cache = apt.Cache()
         self.devices = detect.system_device_drivers()
+        self.show_drivers()
+
+    @idle
+    def show_drivers(self):
         self.driver_changes = []
         self.orig_selection = {}
         # HACK: the case where the selection is actually "Do not use"; is a little
@@ -579,19 +607,12 @@ class Application():
                             radio_button.set_sensitive(False)
 
                 self.box_driver_detail.pack_start(device_box, False, False, 6)
+                self.stack.set_visible_child_name("drivers_page")
         else:
+            self.stack.set_visible_child_name("no_drivers_page")
             print("Your computer does not need any additional drivers")
-            device_box = Gtk.Box(spacing=0, orientation=Gtk.Orientation.VERTICAL)
 
-            device_detail = Gtk.Box(spacing=0, orientation=Gtk.Orientation.VERTICAL)
-            device_box.pack_start(device_detail, True, True, 0)
-
-            NO_DRIVERS_MSG = _("Your computer does not need any additional drivers")
-            self.builder.get_object("label_no_drivers").set_text(NO_DRIVERS_MSG)
-            self.builder.get_object("no_drivers_status").set_from_icon_name("object-select-symbolic", 96)
-            device_detail.pack_start(self.builder.get_object("no_drivers"), True, True, 0)
-
-            self.box_driver_detail.pack_start(device_box, True, True, 0)
+        self.spinner.stop()
 
         self.ui_building = False
         self.box_driver_detail.show_all()
