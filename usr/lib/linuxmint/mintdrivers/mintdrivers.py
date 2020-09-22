@@ -90,13 +90,13 @@ class Application():
         task = packagekit.Task()
         task.refresh_cache_async(True, Gio.Cancellable(), self.on_cache_update_progress, (None, ), self.on_cache_update_finished, (None, ))
 
-    def on_error(summary, msg):
+    def on_error(self, summary, msg):
         """ show a error dialog """
         dialog = Gtk.MessageDialog(parent=self.window_main,
-                                   flags=Gtk.DialogFlags.MODAL,
-                                   type=Gtk.MessageType.ERROR,
+                                   modal=True,
+                                   message_type=Gtk.MessageType.ERROR,
                                    buttons=Gtk.ButtonsType.OK,
-                                   message_format=None)
+                                   text=None)
         dialog.set_markup("<big><b>%s</b></big>\n\n%s" % (summary, msg))
         dialog.run()
         dialog.destroy()
@@ -202,7 +202,7 @@ class Application():
         if ptype == packagekit.ProgressType.PERCENTAGE:
             prog_value = progress.get_property('percentage')
             self.progress_bar.set_fraction(prog_value / 100.0)
-            XApp.set_window_progress(self.window_main, progress)
+            XApp.set_window_progress(self.window_main, prog_value)
 
     def on_driver_changes_finish(self, source, result, installs_pending):
         results = None
@@ -334,6 +334,24 @@ class Application():
 
         self.button_driver_revert.set_sensitive(bool(self.driver_changes))
         self.button_driver_apply.set_sensitive(bool(self.driver_changes))
+
+
+    def get_package_id(self, ver):
+        """ Return the PackageKit package id """
+        assert isinstance(ver, apt.package.Version)
+        return "%s;%s;%s;" % (ver.package.shortname, ver.version, ver.package.architecture())
+
+    @staticmethod
+    def get_dependencies(apt_cache, package_name, pattern=None):
+        """ Get the package dependencies, which can be filtered out by a pattern """
+        dependencies = []
+        for or_group in apt_cache[package_name].candidate.dependencies:
+          for dep in or_group:
+            if dep.rawtype in ["Depends", "PreDepends"]:
+              dependencies.append(dep.name)
+        if pattern:
+          dependencies = [ x for x in dependencies if x.find(pattern) != -1 ]
+        return dependencies
 
     def gather_device_data(self, device):
         '''Get various device data used to build the GUI.
