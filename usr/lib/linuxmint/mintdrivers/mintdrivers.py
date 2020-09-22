@@ -229,13 +229,15 @@ class Application():
 
     def on_driver_changes_finish(self, source, result, installs_pending):
         results = None
+        errors = False
         try:
             results = self.pk_task.generic_finish(result)
         except Exception as e:
             self.on_driver_changes_revert()
             self.on_error(str(e))
+            errors = True
         if not installs_pending:
-            self.needs_restart = True
+            self.needs_restart = (not errors)
             self.progress_bar.set_visible(False)
             self.clear_changes()
             self.apt_cache = apt.Cache()
