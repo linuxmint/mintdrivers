@@ -17,73 +17,45 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="transition_duration">100</property>
-        <property name="transition_type">crossfade</property>
+        <property name="transition_type">slide-left-right</property>
         <child>
           <object class="GtkBox" id="refresh_page">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="valign">center</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="border_width">12</property>
             <property name="orientation">vertical</property>
-            <property name="spacing">12</property>
             <child>
-              <object class="GtkProgressBar" id="refresh_progressbar">
+              <object class="GtkSpinner" id="spinner">
+                <property name="height_request">50</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">50</property>
-                <property name="margin_right">50</property>
-                <property name="margin_bottom">10</property>
+                <property name="active">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="pack_type">end</property>
-                <property name="position">2</property>
+                <property name="fill">True</property>
+                <property name="padding">12</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="valign">center</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">10</property>
-                <child>
-                  <object class="GtkSpinner" id="spinner">
-                    <property name="height_request">50</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="active">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="valign">start</property>
-                    <property name="label" translatable="yes">Looking for hardware drivers...</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                      <attribute name="size" value="12500"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
+                <property name="label" translatable="yes">Looking for hardware drivers...</property>
+                <property name="wrap">True</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                  <attribute name="size" value="11000"/>
+                </attributes>
               </object>
               <packing>
-                <property name="expand">True</property>
+                <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">3</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>
@@ -270,23 +242,24 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="padding">12</property>
-                <property name="position">1</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Your computer does not need any additional drivers</property>
+                <property name="label" translatable="yes">Your computer does not need any additional drivers.</property>
                 <property name="wrap">True</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
+                  <attribute name="size" value="11000"/>
                 </attributes>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>

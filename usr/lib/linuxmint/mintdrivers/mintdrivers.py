@@ -124,10 +124,7 @@ class Application():
         self.builder.get_object("error_label").set_label(msg)
 
     def on_cache_update_progress(self, progress, ptype, data=None):
-        if ptype == packagekit.ProgressType.PERCENTAGE:
-            prog_value = progress.get_property('percentage')
-            self.builder.get_object("refresh_progressbar").set_fraction(prog_value / 100.0)
-            XApp.set_window_progress(self.window_main, prog_value)
+        pass
 
     def on_cache_update_finished(self, source, result, data=None):
         XApp.set_window_progress(self.window_main, 0)
