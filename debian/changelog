@@ -1,3 +1,27 @@
+mintdrivers (1.4.9) ulyana; urgency=medium
+
+  [ Clement Lefebvre ]
+  * Start moving to pkit
+  * Fix small bugs
+
+  [ Michael Webster ]
+  * Set needs_restart flag so the restart button is displayed after an operation.
+
+  [ Clement Lefebvre ]
+  * Make user interface great again
+  * Allow app to be run in user mode
+
+  [ Michael Webster ]
+  * Use systemctl to reboot, and use crossfade for the GtkStack.
+  * Make refresh view a bit more consistent with some other apps.
+
+  [ Clement Lefebvre ]
+  * UI Tuning
+  * l10n: Update translations
+  * l10n: Update files
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue, 29 Sep 2020 12:25:25 +0100
+
 mintdrivers (1.4.8) ulyana; urgency=medium
 
   * Ignore NVIDIA server drivers
