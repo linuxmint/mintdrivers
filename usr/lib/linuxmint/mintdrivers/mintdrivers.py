@@ -530,6 +530,7 @@ class Application():
         self.nonfree_drivers = 0
         self.ui_building = True
         self.dynamic_device_status = {}
+        drivers_found = False
         if len(self.devices) != 0:
             for device in sorted(self.devices.keys()):
                 (overall_status, icon, drivers) = self.gather_device_data(self.devices[device])
@@ -567,6 +568,7 @@ class Application():
                 if drivers["manually_installed"]:
                     print("Ignoring device: %s (manually_installed)" % device_name)
                     continue
+                drivers_found = True
                 widget = Gtk.Label(label=device_name)
                 widget.set_halign(Gtk.Align.START)
                 device_detail.pack_start(widget, True, False, 0)
@@ -607,7 +609,8 @@ class Application():
 
                 self.box_driver_detail.pack_start(device_box, False, False, 6)
                 self.stack.set_visible_child_name("drivers_page")
-        else:
+
+        if not drivers_found:
             self.stack.set_visible_child_name("no_drivers_page")
             print("Your computer does not need any additional drivers")
 
