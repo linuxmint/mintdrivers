@@ -1,3 +1,9 @@
+mintdrivers (1.5.0) ulyana; urgency=medium
+
+  * Fix case where drivers are found but none are suitable
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 05 Nov 2020 11:37:46 +0000
+
 mintdrivers (1.4.9) ulyana; urgency=medium
 
   [ Clement Lefebvre ]
