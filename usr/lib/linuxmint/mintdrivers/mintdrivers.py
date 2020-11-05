@@ -632,11 +632,11 @@ class Application():
         '''Update the current label and icon, computing the new device status'''
 
         for device in self.devices:
-            (overall_status, icon, drivers) = self.gather_device_data(self.devices[device])
-            (driver_status, widget) = self.dynamic_device_status[device]
-
-            driver_status.set_from_icon_name(icon, Gtk.IconSize.MENU)
-            widget.set_label("<small>{}</small>".format(overall_status))
+            if device in self.dynamic_device_status.keys():
+                (overall_status, icon, drivers) = self.gather_device_data(self.devices[device])
+                (driver_status, widget) = self.dynamic_device_status[device]
+                driver_status.set_from_icon_name(icon, Gtk.IconSize.MENU)
+                widget.set_label("<small>{}</small>".format(overall_status))
 
     def set_driver_action_status(self):
         # Update the label in case we end up having some kind of proprietary driver in use.
