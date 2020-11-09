@@ -1,3 +1,9 @@
+mintdrivers (1.5.2) ulyana; urgency=medium
+
+  * Fix #60
+
+ -- Clement Lefebvre <root@linuxmint.com>  Mon, 09 Nov 2020 14:15:26 +0000
+
 mintdrivers (1.5.1) ulyana; urgency=medium
 
   * Fix error after driver change when a device is skipped
