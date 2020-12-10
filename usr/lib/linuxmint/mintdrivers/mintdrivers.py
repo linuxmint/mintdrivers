@@ -15,6 +15,7 @@ gi.require_version("PackageKitGlib", "1.0")
 from gi.repository import GdkPixbuf, Gtk, XApp, Gio, GLib
 from gi.repository import PackageKitGlib as packagekit
 from UbuntuDrivers import detect
+import psutil
 import re
 import urllib
 import threading
@@ -175,20 +176,21 @@ class Application():
             mounted_on_media_cdrom = False
 
             # Find the live media
-            try:
-                live_medias = subprocess.check_output("find /media | grep README.diskdefines", shell=True)
-                live_medias = str(live_medias, encoding='utf8').split("\n")
-                for live_media in live_medias:
-                    if ("README.diskdefines" in live_media):
-                        mount_point = live_media.replace("/README.diskdefines", "") # This is where our live DVD is mounted
+            partitions = psutil.disk_partitions()
+            for p in partitions:
+                try:
+                    if p.fstype == "iso9660":
+                        mount_point = p.mountpoint
+                        print ("Found live media: %s at %s" % (p.device, p.mountpoint))
                         # Add it to apt-cdrom
                         p = subprocess.Popen(["sudo", "apt-cdrom", "-d", mount_point, "-m", "add"], stderr=subprocess.PIPE)
                         (stdout, stderr) = p.communicate()
                         mounted_on_media_cdrom = True
                         if 'E: ' in stderr.decode():
                            mounted_on_media_cdrom = False
-            except Exception as e:
-                print ("Exception while calling apt-cdrom:", e)
+                        break
+                except Exception as e:
+                    print ("Exception while calling apt-cdrom:", e)
 
             if mount_point is None:
                 # Not mounted..
