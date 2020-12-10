@@ -1,3 +1,13 @@
+mintdrivers (1.5.3) ulyssa; urgency=medium
+
+  * Print more information when checking connectivity to repository
+  * Use psutil to find live media
+  * Run mintdrivers as root
+  * l10n: Update translations
+  * l10m: Generate files
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 10 Dec 2020 11:29:12 +0000
+
 mintdrivers (1.5.2) ulyana; urgency=medium
 
   * Fix #60
