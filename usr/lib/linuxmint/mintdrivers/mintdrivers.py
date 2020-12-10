@@ -153,17 +153,22 @@ class Application():
     def check_internet_or_live_dvd(self, widget=None):
 
         try:
-            print ("Checking connectivity or live media...")
+            print ("Checking Internet connectivity...")
 
             # We either get drivers from the Internet of from the liveDVD
             # So check the connection to the Internet or scan for a liveDVD
 
             if self.check_connectivity("http://archive.ubuntu.com"):
             # We can reach the repository, everything's fine
-                print ("Internet connection detected")
+                print ("  --> Internet connection detected.")
                 self.info_bar.hide()
                 self.update_cache()
                 return
+            else:
+                print ("  --> Internet connection is missing.")
+
+
+            print ("Checking access to live media...")
 
             # We can't reach the repository, we need the installation media
             mount_point = None
