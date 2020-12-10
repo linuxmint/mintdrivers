@@ -12,7 +12,7 @@ gettext.install(DOMAIN, PATH)
 
 prefix = "[Desktop Entry]\n"
 
-suffix = """Exec=driver-manager
+suffix = """Exec=pkexec driver-manager
 Icon=mintdrivers
 Terminal=false
 X-MultipleArgs=false
@@ -28,7 +28,7 @@ additionalfiles.generate(DOMAIN, PATH, "usr/share/applications/mintdrivers.deskt
 
 prefix = "[Desktop Entry]\n"
 
-suffix = """Exec=driver-manager
+suffix = """Exec=pkexec driver-manager
 Icon=mintdrivers
 Terminal=false
 Type=Application

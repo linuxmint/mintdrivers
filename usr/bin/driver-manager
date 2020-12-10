@@ -4,4 +4,8 @@ import os
 import subprocess
 import sys
 
+if os.getuid() != 0:
+    print("mintdrivers needs to be run as root.")
+    sys.exit(1)
+
 subprocess.Popen("/usr/lib/linuxmint/mintdrivers/mintdrivers.py")
