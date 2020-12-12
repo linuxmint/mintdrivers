@@ -194,7 +194,10 @@ class Application():
 
             if mount_point is None:
                 # Not mounted..
+                print ("No live media found.")
                 self.info_bar.show()
+                self.stack.set_visible_child_name("drivers_page")
+                self.spinner.stop()
                 return
 
             if mounted_on_media_cdrom == False or not os.path.exists("/media/cdrom/README.diskdefines"):
