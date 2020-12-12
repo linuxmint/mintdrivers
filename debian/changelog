@@ -1,3 +1,9 @@
+mintdrivers (1.5.4) ulyssa; urgency=medium
+
+  * Show drivers page when no media is found.
+
+ -- Clement Lefebvre <root@linuxmint.com>  Sat, 12 Dec 2020 15:37:47 +0000
+
 mintdrivers (1.5.3) ulyssa; urgency=medium
 
   * Print more information when checking connectivity to repository
