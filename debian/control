@@ -14,6 +14,8 @@ Depends: mintsystem (>= 8.4.8),
          python3-aptdaemon.gtk3widgets,
          ubuntu-drivers-common,
          gir1.2-xapp-1.0,
+         gir1.2-packagekitglib-1.0,
+         packagekit,
          ${misc:Depends},
 Description: Driver Manager
  Manage the drivers for your devices.
