@@ -47,6 +47,7 @@ class Application():
     def __init__(self):
 
         self.builder = Gtk.Builder()
+        self.builder.set_translation_domain(APP)
         self.builder.add_from_file("/usr/share/linuxmint/mintdrivers/main.ui")
         self.builder.connect_signals(self)
         for o in self.builder.get_objects():
