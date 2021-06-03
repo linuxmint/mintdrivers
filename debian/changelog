@@ -1,3 +1,13 @@
+mintdrivers (1.5.6) uma; urgency=medium
+
+  [ Clement Lefebvre ]
+  * Add dependency on packagekit
+
+  [ monsta ]
+  * fix loading translations for strings from UI file
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 03 Jun 2021 12:39:06 +0100
+
 mintdrivers (1.5.5) ulyssa; urgency=medium
 
   * l10n: Update translations
