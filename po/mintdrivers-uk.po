@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-09-23 10:34+0100\n"
-"PO-Revision-Date: 2020-09-24 05:47+0000\n"
+"PO-Revision-Date: 2021-05-27 05:20+0000\n"
 "Last-Translator: Mykola Tkach <chistomov@gmail.com>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2021-01-02 14:13+0000\n"
-"X-Generator: Launchpad (build 34b3ffd45c9543b7f7aa5aa313925241e9e7ca3f)\n"
+"X-Launchpad-Export-Date: 2021-06-09 14:17+0000\n"
+"X-Generator: Launchpad (build b45bdbe3a00b6b668fa7f2069bd545c35c41f7f4)\n"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:60 generate_desktop_files:26
 #: generate_desktop_files:41 generate_desktop_files:69
@@ -47,8 +47,8 @@ msgid ""
 "USB stick)."
 msgstr ""
 "Драйвери не можуть бути встановлені.\n"
-"Будь ласка, під’єднайтеся до Інтернету або вставте встановлювальний DVD диск "
-"Linux Mint (чи USB-носій)."
+"Будь ласка, під’єднайтеся до Інтернету чи вставте встановлювальний DVD диск "
+"Linux Mint (або USB-носій)."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:221
 msgid "Applying changes..."
@@ -121,13 +121,13 @@ msgstr ""
 #, python-format
 msgid "%(count)d proprietary driver in use."
 msgid_plural "%(count)d proprietary drivers in use."
-msgstr[0] "Використовується %(count)d пропрієтарний драйвер."
-msgstr[1] "Використовується %(count)d пропрієтарних драйвери."
-msgstr[2] "Використовується %(count)d пропрієтарних драйверів."
+msgstr[0] "Використовується %(count)d власницький драйвер."
+msgstr[1] "Використовується %(count)d власницьких драйвери."
+msgstr[2] "Використовується %(count)d власницьких драйверів."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:660
 msgid "No proprietary drivers are in use."
-msgstr "Пропрієтарні драйвери не використовуються."
+msgstr "Власницькі драйвери не використовуються."
 
 #: generate_desktop_files:26 generate_desktop_files:41
 msgid "Manage the drivers for your devices"

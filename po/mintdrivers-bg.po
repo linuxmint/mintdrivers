@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-09-23 10:34+0100\n"
-"PO-Revision-Date: 2017-11-10 15:21+0000\n"
-"Last-Translator: spacy01 <Unknown>\n"
+"PO-Revision-Date: 2021-02-01 22:19+0000\n"
+"Last-Translator: Evgueni Tzvetanov <Unknown>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2021-01-02 14:13+0000\n"
-"X-Generator: Launchpad (build 34b3ffd45c9543b7f7aa5aa313925241e9e7ca3f)\n"
+"X-Launchpad-Export-Date: 2021-06-09 14:17+0000\n"
+"X-Generator: Launchpad (build b45bdbe3a00b6b668fa7f2069bd545c35c41f7f4)\n"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:60 generate_desktop_files:26
 #: generate_desktop_files:41 generate_desktop_files:69
@@ -133,16 +133,16 @@ msgstr "Управление на драйверите за вашите уст�
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
 msgid "Looking for hardware drivers..."
-msgstr ""
+msgstr "Турсене на хардуерни драйвери..."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:2
 msgid "Your computer does not need any additional drivers."
-msgstr ""
+msgstr "Вашият компютър не се нуждае от допълнителни драйвери"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:3
 msgid "An error occurred"
-msgstr ""
+msgstr "Възникна грешка"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:4
 msgid "OK"
-msgstr ""
+msgstr "ОК"

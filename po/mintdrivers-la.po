@@ -1,22 +1,22 @@
-# Latin translation for linuxmint
-# Copyright (c) 2020 Rosetta Contributors and Canonical Ltd 2020
-# This file is distributed under the same license as the linuxmint package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: linuxmint\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-23 10:34+0100\n"
-"PO-Revision-Date: 2020-11-27 14:27+0000\n"
+"PO-Revision-Date: 2021-04-14 17:57+0000\n"
 "Last-Translator: Davide Novemila <Unknown>\n"
 "Language-Team: Latin <la@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2021-01-02 14:13+0000\n"
-"X-Generator: Launchpad (build 34b3ffd45c9543b7f7aa5aa313925241e9e7ca3f)\n"
+"X-Launchpad-Export-Date: 2021-06-09 14:17+0000\n"
+"X-Generator: Launchpad (build b45bdbe3a00b6b668fa7f2069bd545c35c41f7f4)\n"
+"Language: la\n"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:60 generate_desktop_files:26
 #: generate_desktop_files:41 generate_desktop_files:69
@@ -45,6 +45,8 @@ msgid ""
 "Please connect to the Internet or insert the Linux Mint installation DVD (or "
 "USB stick)."
 msgstr ""
+"Gubernatores institui non possunt.\n"
+"Ad interrete conecte aut Linux Mint DVD (aut clavem USB) insere, queso."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:221
 msgid "Applying changes..."
@@ -52,23 +54,23 @@ msgstr "Mutations recipiens ..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:399
 msgid "This device is using the recommended driver."
-msgstr "Hic apparatus gubernatorem consultum utitur."
+msgstr "Hic apparatus gubernatore consulto utitur."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:400
 msgid "This device is using an alternative driver."
-msgstr "Hic apparatus gubernatorem alterum utitur."
+msgstr "Hic apparatus gubernatore altero utitur."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:401
 msgid "This device is using a manually-installed driver."
-msgstr ""
+msgstr "Hic apparatus e gubernatore manibus instituto operatur."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:402
 msgid "This device is not working."
-msgstr ""
+msgstr "Apparatus non operatur."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:411
 msgid "Continue using a manually installed driver"
-msgstr ""
+msgstr "Gubernatore manibus instituto procede"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:438
 msgid "Version"
@@ -84,7 +86,7 @@ msgstr "codex-apertus"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:446
 msgid "requires a connection to the Internet"
-msgstr ""
+msgstr "ad Interrete conexum quaerit"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:470
 msgid "Do not use the device"
@@ -106,34 +108,35 @@ msgstr "Microprogramma processorii"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:600
 msgid "Do not update the CPU microcode"
-msgstr ""
+msgstr "CPU micro-codicem non emendare"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:641
 msgid "You need to restart the computer to complete the driver changes."
 msgstr ""
+"Computatrum iterum accendendum est ut gubernatoris mutationes perficiantur."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:655
 #, python-format
 msgid "%(count)d proprietary driver in use."
 msgid_plural "%(count)d proprietary drivers in use."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d gubernator proprietarius operatur."
+msgstr[1] "%(count)d gubernatores proprietarii operantur."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:660
 msgid "No proprietary drivers are in use."
-msgstr ""
+msgstr "Gubernator proprietarius nullus operatur."
 
 #: generate_desktop_files:26 generate_desktop_files:41
 msgid "Manage the drivers for your devices"
-msgstr ""
+msgstr "Gubernatores tuorum apparatuum administra"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
 msgid "Looking for hardware drivers..."
-msgstr ""
+msgstr "Gubernatores apparatuum querens ..."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:2
 msgid "Your computer does not need any additional drivers."
-msgstr ""
+msgstr "Computatrum tuum nullos gubernatores additicios requirit."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:3
 msgid "An error occurred"
