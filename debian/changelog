@@ -1,3 +1,10 @@
+mintdrivers (1.5.8) uma; urgency=medium
+
+  * l10n: Update translations
+  * l10n: Generate files
+
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 25 Jun 2021 14:20:08 +0100
+
 mintdrivers (1.5.7) uma; urgency=medium
 
   * l10n: Update translations
