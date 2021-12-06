@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-09-23 10:34+0100\n"
-"PO-Revision-Date: 2021-05-23 20:21+0000\n"
+"PO-Revision-Date: 2021-12-04 16:55+0000\n"
 "Last-Translator: Anton Hryb <Unknown>\n"
 "Language-Team: Belarusian <be@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Launchpad-Export-Date: 2021-06-25 10:37+0000\n"
-"X-Generator: Launchpad (build 40cc6dba4163ba9ca785b26ad91f43c87d70ba4d)\n"
+"X-Launchpad-Export-Date: 2021-12-06 15:01+0000\n"
+"X-Generator: Launchpad (build f92b6e0bb2624f8a9125e3f45b7621c6e230c5ff)\n"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:60 generate_desktop_files:26
 #: generate_desktop_files:41 generate_desktop_files:69
@@ -26,11 +26,11 @@ msgstr "Кіраўнік драйвераў"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67
 msgid "Re_vert"
-msgstr "В_ярнуць"
+msgstr "_Вярнуць"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:69
 msgid "_Apply Changes"
-msgstr "У_жыць змены"
+msgstr "_Ужыць змены"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:71
 msgid "_Cancel"
@@ -56,23 +56,23 @@ msgstr "Ужыванне зменаў..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:399
 msgid "This device is using the recommended driver."
-msgstr "Гэтая прылада выкарыстоўвае рэкамендаваны драйвер."
+msgstr "Гэта прылада выкарыстоўвае рэкамендаваны драйвер."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:400
 msgid "This device is using an alternative driver."
-msgstr "Гэтая прылада выкарыстоўвае альтэрнатыўны драйвер."
+msgstr "Гэта прылада выкарыстоўвае альтэрнатыўны драйвер."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:401
 msgid "This device is using a manually-installed driver."
-msgstr "Гэтая прылада выкарыстоўвае ўласнаручна ўсталяваны драйвер."
+msgstr "Гэта прылада выкарыстоўвае ўласнаручна ўсталяваны драйвер."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:402
 msgid "This device is not working."
-msgstr "Прылада не працуе."
+msgstr "Гэта прылада не працуе."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:411
 msgid "Continue using a manually installed driver"
-msgstr "Працягваць карыстанне ўласнаручна ўсталяваным драйверам"
+msgstr "Працягваць карыстацца ўласнаручна ўсталяваным драйверам"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:438
 msgid "Version"
@@ -92,13 +92,13 @@ msgstr "патрабуецца злучэнне з інтэрнэтам"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:470
 msgid "Do not use the device"
-msgstr "Не выкарыстоўваць гэтую прыладу"
+msgstr "Не выкарыстоўваць прыладу"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:488
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:489
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:557
 msgid "Unknown"
-msgstr "Невядомы"
+msgstr "Невядома"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:512
 msgid "Processor"
@@ -130,7 +130,7 @@ msgstr "Прыпрыетарныя драйверы не выкарыстоўв�
 
 #: generate_desktop_files:26 generate_desktop_files:41
 msgid "Manage the drivers for your devices"
-msgstr "Кіраванне драйверамі вашых прыладаў"
+msgstr "Кіраваць драйверамі для вашых прылад"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
 msgid "Looking for hardware drivers..."

@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-09-23 10:34+0100\n"
-"PO-Revision-Date: 2015-12-23 11:32+0000\n"
-"Last-Translator: Saki <Unknown>\n"
+"PO-Revision-Date: 2021-09-13 14:01+0000\n"
+"Last-Translator: MinhTran <Unknown>\n"
 "Language-Team: Vietnamese <vi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2021-06-25 10:37+0000\n"
-"X-Generator: Launchpad (build 40cc6dba4163ba9ca785b26ad91f43c87d70ba4d)\n"
+"X-Launchpad-Export-Date: 2021-12-06 15:01+0000\n"
+"X-Generator: Launchpad (build f92b6e0bb2624f8a9125e3f45b7621c6e230c5ff)\n"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:60 generate_desktop_files:26
 #: generate_desktop_files:41 generate_desktop_files:69
@@ -100,15 +100,15 @@ msgstr "Không xác định"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:512
 msgid "Processor"
-msgstr ""
+msgstr "CPU"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:539
 msgid "Processor microcode"
-msgstr ""
+msgstr "Bộ vi xử lý"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:600
 msgid "Do not update the CPU microcode"
-msgstr ""
+msgstr "Không cập nhật vi mã CPU"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:641
 msgid "You need to restart the computer to complete the driver changes."
@@ -131,11 +131,11 @@ msgstr "Quản lý trình điều khiển cho các thiết bị của bạn"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
 msgid "Looking for hardware drivers..."
-msgstr ""
+msgstr "Đang tìm kiếm trình điều khiển phần cứng..."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:2
 msgid "Your computer does not need any additional drivers."
-msgstr ""
+msgstr "Máy tính của bạn không cần bất kỳ trình điều khiển bổ sung nào."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:3
 msgid "An error occurred"
