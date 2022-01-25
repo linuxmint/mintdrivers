@@ -145,12 +145,62 @@ class Application():
             print ("removing cdrom repository...")
             os.system("sed -i '/deb cdrom/d' /etc/apt/sources.list")
 
+    def  get_key_str (self, path, key):
+        return (Gio.Settings.new(path)).get_string(key)
+
+    def  get_key_int (self, path, key):
+        return (Gio.Settings.new(path)).get_int(key)
+
+
     def check_connectivity(self, reference):
-        try:
-            urllib.request.urlopen(reference, timeout=10)
-            return True
-        except:
+        SCHEMA_PROXY = 'org.gnome.system.proxy'
+        SCHEMA_HTTP = 'org.gnome.system.proxy.http'
+        SCHEMA_HTTPS = 'org.gnome.system.proxy.https'
+        SCHEMA_FTP = 'org.gnome.system.proxy.ftp'
+        SCHEMA_SOCKS = 'org.gnome.system.proxy.socks'
+
+        KEY_MODE = 'mode'
+        KEY_HOST = 'host'
+        KEY_PORT = 'port'
+
+        if self.get_key_str(SCHEMA_PROXY, KEY_MODE) == 'none':
+            print("Rez %s" % self.get_key_str(SCHEMA_PROXY, KEY_MODE))
+            try:
+                urllib.request.urlopen(reference, timeout=10)
+                return True
+            except:
+                return False
+
+        print("Rez %s" % (self.get_key_str(SCHEMA_PROXY, KEY_MODE) == 'manual'))
+        if self.get_key_str(SCHEMA_PROXY, KEY_MODE) == 'manual':
+            candidate_proxies = 'http://' + self.get_key_str(SCHEMA_HTTP, KEY_HOST) + ':'+ str(self.get_key_int(SCHEMA_HTTP, KEY_PORT))
+            print("Rez %s" % candidate_proxies)
+
+            for proxy_url in candidate_proxies:
+
+                urllib.request.install_opener(urllib.request.build_opener(
+                                              urllib.request.ProxyHandler({"http" : proxy_url}),
+                                              urllib.request.ProxyDigestAuthHandler()
+                                              ))
+
+                print("Got URL using proxy %s" % proxy_url)
+
+                try:
+                    with (urllib.request.urlopen(reference, timeout=10)) as f:
+                        print(f)
+                        if f.getcode() == 200:
+                            print("Got URL using proxy 200 %s" % proxy_url)
+                            return True
+                        else:
+                            print("Got URL using proxy continue %s" % proxy_url)
+                            continue
+                except:
+                    print("False")
+
             return False
+
+        if self.get_key_str(SCHEMA_PROXY, KEY_MODE) == 'auto':
+            print("Rez %s" % self.get_key_str(SCHEMA_PROXY, KEY_MODE))
 
     def check_internet_or_live_dvd(self, widget=None):
 
