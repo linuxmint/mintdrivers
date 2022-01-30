@@ -151,8 +151,12 @@ class Application():
     def  get_key_int (self, path, key):
         return (Gio.Settings.new(path)).get_int(key)
 
+    def  get_key_boolean (self, path, key):
+        return (Gio.Settings.new(path)).get_boolean(key)
+
 
     def check_connectivity(self, reference):
+
         SCHEMA_PROXY = 'org.gnome.system.proxy'
         SCHEMA_HTTP = 'org.gnome.system.proxy.http'
         SCHEMA_HTTPS = 'org.gnome.system.proxy.https'
@@ -162,6 +166,16 @@ class Application():
         KEY_MODE = 'mode'
         KEY_HOST = 'host'
         KEY_PORT = 'port'
+        KEY_USE_AUT = 'use-authentication'
+        KEY_AUTH_PASS = 'authentication-password'
+        KEY_AUTH_User = 'authentication-user'
+        KEY_ENABLED = 'enabled'
+
+        candidate_proxies = ['http://' + self.get_key_str(SCHEMA_HTTP, KEY_HOST) + ':'+ str(self.get_key_int(SCHEMA_HTTP, KEY_PORT)),
+                             'https://' + self.get_key_str(SCHEMA_HTTPS, KEY_HOST) + ':'+ str(self.get_key_int(SCHEMA_HTTPS, KEY_PORT)),
+                             'ftp://' + self.get_key_str(SCHEMA_FTP, KEY_HOST) + ':'+ str(self.get_key_int(SCHEMA_FTP, KEY_PORT)),
+                             'socks://' + self.get_key_str(SCHEMA_SOCKS, KEY_HOST) + ':'+ str(self.get_key_int(SCHEMA_SOCKS, KEY_PORT))
+                            ]
 
         if self.get_key_str(SCHEMA_PROXY, KEY_MODE) == 'none':
             print("Rez %s" % self.get_key_str(SCHEMA_PROXY, KEY_MODE))
@@ -171,19 +185,32 @@ class Application():
             except:
                 return False
 
-        print("Rez %s" % (self.get_key_str(SCHEMA_PROXY, KEY_MODE) == 'manual'))
         if self.get_key_str(SCHEMA_PROXY, KEY_MODE) == 'manual':
-            candidate_proxies = 'http://' + self.get_key_str(SCHEMA_HTTP, KEY_HOST) + ':'+ str(self.get_key_int(SCHEMA_HTTP, KEY_PORT))
             print("Rez %s" % candidate_proxies)
 
             for proxy_url in candidate_proxies:
 
-                urllib.request.install_opener(urllib.request.build_opener(
-                                              urllib.request.ProxyHandler({"http" : proxy_url}),
-                                              urllib.request.ProxyDigestAuthHandler()
-                                              ))
+                if proxy_url[0:proxy_url.find(":")] == 'http':
+                    print("Find "+proxy_url[0:proxy_url.find(":")])
+                    if self.get_key_boolean(SCHEMA_HTTP, KEY_USE_AUT):
+                        urllib.request.install_opener(urllib.request.build_opener(
+                                                        urllib.request.ProxyHandler({"\""+proxy_url[0:proxy_url.find(":")]+"\"" : proxy_url}),
+                                                        urllib.request.ProxyDigestAuthHandler(
+                                                            urllib.request.HTTPPasswordMgrWithPriorAuth().add_password(None, 'host', 'username', 'password',is_authenticated=True)
+                                                     )))
+                    else:
+                        print("INIT URL using proxy %s" % proxy_url)
+                        urllib.request.install_opener(urllib.request.build_opener(
+                                                        urllib.request.ProxyHandler({"\""+proxy_url[0:proxy_url.find(":")]+"\"" : proxy_url}),
+                                                        urllib.request.ProxyDigestAuthHandler()
+                                                     ))
 
-                print("Got URL using proxy %s" % proxy_url)
+
+                else:
+                    urllib.request.install_opener(urllib.request.build_opener(
+                                                        urllib.request.ProxyHandler({"\""+proxy_url[0:proxy_url.find(":")]+"\"" : proxy_url}),
+                                                        urllib.request.ProxyDigestAuthHandler()
+                                                     ))
 
                 try:
                     with (urllib.request.urlopen(reference, timeout=10)) as f:
@@ -195,9 +222,10 @@ class Application():
                             print("Got URL using proxy continue %s" % proxy_url)
                             continue
                 except:
+                    print("Except URL using proxy %s" % proxy_url)
                     print("False")
 
-            return False
+                return False
 
         if self.get_key_str(SCHEMA_PROXY, KEY_MODE) == 'auto':
             print("Rez %s" % self.get_key_str(SCHEMA_PROXY, KEY_MODE))
