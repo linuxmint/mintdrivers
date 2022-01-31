@@ -15,6 +15,8 @@ gi.require_version("PackageKitGlib", "1.0")
 from gi.repository import GdkPixbuf, Gtk, XApp, Gio, GLib
 from gi.repository import PackageKitGlib as packagekit
 from UbuntuDrivers import detect
+from pypac import PACSession, get_pac
+from pypac.parser import PACFile
 import psutil
 import re
 import urllib
@@ -170,6 +172,7 @@ class Application():
         KEY_AUTH_PASS = 'authentication-password'
         KEY_AUTH_User = 'authentication-user'
         KEY_ENABLED = 'enabled'
+        KEY_AUTO_CONF_URL = 'autoconfig-url'
 
         candidate_proxies = ['http://' + self.get_key_str(SCHEMA_HTTP, KEY_HOST) + ':'+ str(self.get_key_int(SCHEMA_HTTP, KEY_PORT)),
                              'https://' + self.get_key_str(SCHEMA_HTTPS, KEY_HOST) + ':'+ str(self.get_key_int(SCHEMA_HTTPS, KEY_PORT)),
@@ -182,7 +185,9 @@ class Application():
             try:
                 urllib.request.urlopen(reference, timeout=10)
                 return True
-            except:
+            except Exception as e:
+                print("An error occurred: {}".format(e))
+                self.info_bar.show()
                 return False
 
         if self.get_key_str(SCHEMA_PROXY, KEY_MODE) == 'manual':
@@ -204,14 +209,11 @@ class Application():
                                                         urllib.request.ProxyHandler({"\""+proxy_url[0:proxy_url.find(":")]+"\"" : proxy_url}),
                                                         urllib.request.ProxyDigestAuthHandler()
                                                      ))
-
-
                 else:
                     urllib.request.install_opener(urllib.request.build_opener(
                                                         urllib.request.ProxyHandler({"\""+proxy_url[0:proxy_url.find(":")]+"\"" : proxy_url}),
                                                         urllib.request.ProxyDigestAuthHandler()
                                                      ))
-
                 try:
                     with (urllib.request.urlopen(reference, timeout=10)) as f:
                         print(f)
@@ -221,14 +223,35 @@ class Application():
                         else:
                             print("Got URL using proxy continue %s" % proxy_url)
                             continue
-                except:
+                except Exception as e:
                     print("Except URL using proxy %s" % proxy_url)
                     print("False")
+
+                    print("An error occurred: {}".format(e))
+                    self.info_bar.show()
 
                 return False
 
         if self.get_key_str(SCHEMA_PROXY, KEY_MODE) == 'auto':
             print("Rez %s" % self.get_key_str(SCHEMA_PROXY, KEY_MODE))
+            if self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL).find("http") != -1:
+                #Opening PAC file from URL
+                try:
+                    pac = get_pac(url=self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL))
+                    session = PACSession(pac)
+                except Exception as e:
+                    print("An error occurred: {}".format(e))
+                    self.info_bar.show()
+            else:
+                # Opening a PAC file from a file
+                try:
+                    with open(self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL)) as f:
+                        pac = PACFile(f.read())
+                    session = PACSession(pac)
+                except Exception as e:
+                    print("An error occurred: {}".format(e))
+                    self.info_bar.show()
+
 
     def check_internet_or_live_dvd(self, widget=None):
 
