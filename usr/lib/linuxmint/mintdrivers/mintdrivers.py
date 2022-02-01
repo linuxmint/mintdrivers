@@ -17,6 +17,7 @@ from gi.repository import PackageKitGlib as packagekit
 from UbuntuDrivers import detect
 from pypac import PACSession, get_pac
 from pypac.parser import PACFile
+import requests
 import psutil
 import re
 import urllib
@@ -156,6 +157,8 @@ class Application():
     def  get_key_boolean (self, path, key):
         return (Gio.Settings.new(path)).get_boolean(key)
 
+    def failover_criteria(response):
+        return response.status_code == requests.codes.proxy_authentication_required
 
     def check_connectivity(self, reference):
 
@@ -179,37 +182,60 @@ class Application():
                              'ftp://' + self.get_key_str(SCHEMA_FTP, KEY_HOST) + ':'+ str(self.get_key_int(SCHEMA_FTP, KEY_PORT)),
                              'socks://' + self.get_key_str(SCHEMA_SOCKS, KEY_HOST) + ':'+ str(self.get_key_int(SCHEMA_SOCKS, KEY_PORT))
                             ]
-
+        #Initialization of the proxy server, the "NONE" method.
         if self.get_key_str(SCHEMA_PROXY, KEY_MODE) == 'none':
-            print("Rez %s" % self.get_key_str(SCHEMA_PROXY, KEY_MODE))
+            print("Method {0}".format(self.get_key_str(SCHEMA_PROXY, KEY_MODE)))
             try:
                 urllib.request.urlopen(reference, timeout=10)
                 return True
             except Exception as e:
-                print("An error occurred: {}".format(e))
+                print("Method {0} An error occurred: {1}".format(self.get_key_str(SCHEMA_PROXY, KEY_MODE),e))
                 self.info_bar.show()
                 return False
 
+        #Initialization of the proxy server, the "MANUAL" method.
         if self.get_key_str(SCHEMA_PROXY, KEY_MODE) == 'manual':
-            print("Rez %s" % candidate_proxies)
+
+            print("Method {0}. Proxy server candidate all URL {1}".format(self.get_key_str(SCHEMA_PROXY, KEY_MODE),
+                                                                            candidate_proxies))
 
             for proxy_url in candidate_proxies:
 
                 if proxy_url[0:proxy_url.find(":")] == 'http':
-                    print("Find "+proxy_url[0:proxy_url.find(":")])
+
+                    print("Method {0}. Use protocol proxy server \"{1}\" URL {2}".format(self.get_key_str(SCHEMA_PROXY, KEY_MODE),
+                                                                                        proxy_url[0:proxy_url.find(":")],
+                                                                                        proxy_url))
+
                     if self.get_key_boolean(SCHEMA_HTTP, KEY_USE_AUT):
+
+                        print("Method {0}. Use {1} proxy server use-authentication \"{2}\" URL {3}".format(self.get_key_str(SCHEMA_PROXY, KEY_MODE),
+                                                                                                            proxy_url[0:proxy_url.find(":")],
+                                                                                                            self.get_key_boolean(SCHEMA_HTTP, KEY_USE_AUT),
+                                                                                                            proxy_url))
+
                         urllib.request.install_opener(urllib.request.build_opener(
                                                         urllib.request.ProxyHandler({"\""+proxy_url[0:proxy_url.find(":")]+"\"" : proxy_url}),
                                                         urllib.request.ProxyDigestAuthHandler(
                                                             urllib.request.HTTPPasswordMgrWithPriorAuth().add_password(None, 'host', 'username', 'password',is_authenticated=True)
                                                      )))
                     else:
-                        print("INIT URL using proxy %s" % proxy_url)
+
+                        print("Method {0}. Use {1}, proxy server use-authentication \"{2}\" URL {3}".format(self.get_key_str(SCHEMA_PROXY, KEY_MODE),
+                                                                                                            proxy_url[0:proxy_url.find(":")],
+                                                                                                            self.get_key_boolean(SCHEMA_HTTP, KEY_USE_AUT),
+                                                                                                            proxy_url))
+
                         urllib.request.install_opener(urllib.request.build_opener(
                                                         urllib.request.ProxyHandler({"\""+proxy_url[0:proxy_url.find(":")]+"\"" : proxy_url}),
                                                         urllib.request.ProxyDigestAuthHandler()
                                                      ))
                 else:
+
+                    print("Method {0}. Use {1} proxy server. URL {2}".format(self.get_key_str(SCHEMA_PROXY, KEY_MODE),
+                                                                                proxy_url[0:proxy_url.find(":")],
+                                                                                proxy_url))
+
                     urllib.request.install_opener(urllib.request.build_opener(
                                                         urllib.request.ProxyHandler({"\""+proxy_url[0:proxy_url.find(":")]+"\"" : proxy_url}),
                                                         urllib.request.ProxyDigestAuthHandler()
@@ -218,29 +244,36 @@ class Application():
                     with (urllib.request.urlopen(reference, timeout=10)) as f:
                         print(f)
                         if f.getcode() == 200:
-                            print("Got URL using proxy 200 %s" % proxy_url)
+                            print("The session is installed with a proxy server, code {0}, status OK! {1}".format(f.getcode(), proxy_url))
                             return True
                         else:
-                            print("Got URL using proxy continue %s" % proxy_url)
+                            print("The session is not established with the proxy server, code {0}, the search for a new proxy continues! {1}".format(f.getcode(), proxy_url))
                             continue
                 except Exception as e:
-                    print("Except URL using proxy %s" % proxy_url)
-                    print("False")
-
-                    print("An error occurred: {}".format(e))
+                    print("An error occurred: {0}. The exception was caused by the URL of the proxy server URL {1}".format(e,proxy_url))
                     self.info_bar.show()
 
                 return False
 
+        #Initialization of the proxy server, the "AUTO" method.
         if self.get_key_str(SCHEMA_PROXY, KEY_MODE) == 'auto':
             print("Rez %s" % self.get_key_str(SCHEMA_PROXY, KEY_MODE))
             if self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL).find("http") != -1:
-                #Opening PAC file from URL
+                # Opening PAC file from URL
                 try:
                     pac = get_pac(url=self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL))
+                    #session = PACSession(pac, response_proxy_fail_filter=failover_criteria)
                     session = PACSession(pac)
+
+                    if session.get(reference) :
+                        print("The session is installed with a proxy server, code {0}, status OK! {1}".format(session.get(reference), self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL)))
+                        return True
+                    else:
+                        print("The session is not installed with a proxy server, code {0}, the status is Bad! {1}".format(session.get(reference), self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL)))
+                        return False
+
                 except Exception as e:
-                    print("An error occurred: {}".format(e))
+                    print("An error occurred: {0} PAC file {1}".format(e, self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL)))
                     self.info_bar.show()
             else:
                 # Opening a PAC file from a file
@@ -248,8 +281,16 @@ class Application():
                     with open(self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL)) as f:
                         pac = PACFile(f.read())
                     session = PACSession(pac)
+
+                    if session.get(reference) :
+                        print("The session is installed with a proxy server, code {0}, status OK! {1}".format(session.get(reference), self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL)))
+                        return True
+                    else:
+                        print("The session is not installed with a proxy server, code {0}, the status is Bad! {1}".format(session.get(reference), self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL)))
+                        return False
+
                 except Exception as e:
-                    print("An error occurred: {}".format(e))
+                    print("An error occurred: {0} PAC file {1}".format(e, self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL)))
                     self.info_bar.show()
 
 
