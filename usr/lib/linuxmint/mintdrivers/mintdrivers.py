@@ -173,14 +173,14 @@ class Application():
         KEY_PORT = 'port'
         KEY_USE_AUT = 'use-authentication'
         KEY_AUTH_PASS = 'authentication-password'
-        KEY_AUTH_User = 'authentication-user'
+        KEY_AUTH_USER = 'authentication-user'
         KEY_ENABLED = 'enabled'
         KEY_AUTO_CONF_URL = 'autoconfig-url'
 
-        candidate_proxies = ['http://' + self.get_key_str(SCHEMA_HTTP, KEY_HOST) + ':'+ str(self.get_key_int(SCHEMA_HTTP, KEY_PORT)),
-                             'https://' + self.get_key_str(SCHEMA_HTTPS, KEY_HOST) + ':'+ str(self.get_key_int(SCHEMA_HTTPS, KEY_PORT)),
-                             'ftp://' + self.get_key_str(SCHEMA_FTP, KEY_HOST) + ':'+ str(self.get_key_int(SCHEMA_FTP, KEY_PORT)),
-                             'socks://' + self.get_key_str(SCHEMA_SOCKS, KEY_HOST) + ':'+ str(self.get_key_int(SCHEMA_SOCKS, KEY_PORT))
+        candidate_proxies = ['http://' + self.get_key_str(SCHEMA_HTTP, KEY_HOST) + ':'+ str(self.get_key_int(SCHEMA_HTTP, KEY_PORT))+'/',
+                             'https://' + self.get_key_str(SCHEMA_HTTPS, KEY_HOST) + ':'+ str(self.get_key_int(SCHEMA_HTTPS, KEY_PORT))+'/',
+                             'ftp://' + self.get_key_str(SCHEMA_FTP, KEY_HOST) + ':'+ str(self.get_key_int(SCHEMA_FTP, KEY_PORT))+'/',
+                             'socks://' + self.get_key_str(SCHEMA_SOCKS, KEY_HOST) + ':'+ str(self.get_key_int(SCHEMA_SOCKS, KEY_PORT))+'/'
                             ]
         #Initialization of the proxy server, the "NONE" method.
         if self.get_key_str(SCHEMA_PROXY, KEY_MODE) == 'none':
@@ -197,27 +197,31 @@ class Application():
         if self.get_key_str(SCHEMA_PROXY, KEY_MODE) == 'manual':
 
             print("Method {0}. Proxy server candidate all URL {1}".format(self.get_key_str(SCHEMA_PROXY, KEY_MODE),
-                                                                            candidate_proxies))
+                                                                          candidate_proxies))
 
             for proxy_url in candidate_proxies:
 
                 if proxy_url[0:proxy_url.find(":")] == 'http':
 
                     print("Method {0}. Use protocol proxy server \"{1}\" URL {2}".format(self.get_key_str(SCHEMA_PROXY, KEY_MODE),
-                                                                                        proxy_url[0:proxy_url.find(":")],
-                                                                                        proxy_url))
+                                                                                         proxy_url[0:proxy_url.find(":")],
+                                                                                         proxy_url))
 
                     if self.get_key_boolean(SCHEMA_HTTP, KEY_USE_AUT):
 
                         print("Method {0}. Use {1} proxy server use-authentication \"{2}\" URL {3}".format(self.get_key_str(SCHEMA_PROXY, KEY_MODE),
-                                                                                                            proxy_url[0:proxy_url.find(":")],
-                                                                                                            self.get_key_boolean(SCHEMA_HTTP, KEY_USE_AUT),
-                                                                                                            proxy_url))
+                                                                                                           proxy_url[0:proxy_url.find(":")],
+                                                                                                           self.get_key_boolean(SCHEMA_HTTP, KEY_USE_AUT),
+                                                                                                           proxy_url))
 
                         urllib.request.install_opener(urllib.request.build_opener(
-                                                        urllib.request.ProxyHandler({"\""+proxy_url[0:proxy_url.find(":")]+"\"" : proxy_url}),
+                                                        urllib.request.ProxyHandler({'{0}'.format(proxy_url[0:proxy_url.find(":")]): proxy_url}),
                                                         urllib.request.ProxyDigestAuthHandler(
-                                                            urllib.request.HTTPPasswordMgrWithPriorAuth().add_password(None, 'host', 'username', 'password',is_authenticated=True)
+                                                            urllib.request.HTTPPasswordMgrWithPriorAuth().add_password(None,
+                                                                                                                       proxy_url,
+                                                                                                                       self.get_key_str(SCHEMA_HTTP,KEY_AUTH_USER),
+                                                                                                                       self.get_key_str(SCHEMA_HTTP,KEY_AUTH_PASS),
+                                                                                                                       is_authenticated=True)
                                                      )))
                     else:
 
@@ -225,9 +229,9 @@ class Application():
                                                                                                             proxy_url[0:proxy_url.find(":")],
                                                                                                             self.get_key_boolean(SCHEMA_HTTP, KEY_USE_AUT),
                                                                                                             proxy_url))
-
+                        print('{0}'.format(proxy_url[0:proxy_url.find(":")]))
                         urllib.request.install_opener(urllib.request.build_opener(
-                                                        urllib.request.ProxyHandler({"\""+proxy_url[0:proxy_url.find(":")]+"\"" : proxy_url}),
+                                                        urllib.request.ProxyHandler({'{0}'.format(proxy_url[0:proxy_url.find(":")]): proxy_url}),
                                                         urllib.request.ProxyDigestAuthHandler()
                                                      ))
                 else:
@@ -237,7 +241,7 @@ class Application():
                                                                                 proxy_url))
 
                     urllib.request.install_opener(urllib.request.build_opener(
-                                                        urllib.request.ProxyHandler({"\""+proxy_url[0:proxy_url.find(":")]+"\"" : proxy_url}),
+                                                        urllib.request.ProxyHandler({'{0}'.format(proxy_url[0:proxy_url.find(":")]): proxy_url}),
                                                         urllib.request.ProxyDigestAuthHandler()
                                                      ))
                 try:
