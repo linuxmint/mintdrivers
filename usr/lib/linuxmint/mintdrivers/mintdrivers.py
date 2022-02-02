@@ -148,26 +148,31 @@ class Application():
             print ("removing cdrom repository...")
             os.system("sed -i '/deb cdrom/d' /etc/apt/sources.list")
 
+    #Get a key from dconf of type string
     def  get_key_str (self, path, key):
         return (Gio.Settings.new(path)).get_string(key)
 
+    #Get a key from dconf of type integer
     def  get_key_int (self, path, key):
         return (Gio.Settings.new(path)).get_int(key)
 
+    #Get a key from dconf of type bollean
     def  get_key_boolean (self, path, key):
         return (Gio.Settings.new(path)).get_boolean(key)
 
+    #Checking the failure to open a proxy server session, a PAC file.
     def failover_criteria(response):
         return response.status_code == requests.codes.proxy_authentication_required
 
     def check_connectivity(self, reference):
-
+        #Сonstant open path schema
         SCHEMA_PROXY = 'org.gnome.system.proxy'
         SCHEMA_HTTP = 'org.gnome.system.proxy.http'
         SCHEMA_HTTPS = 'org.gnome.system.proxy.https'
         SCHEMA_FTP = 'org.gnome.system.proxy.ftp'
         SCHEMA_SOCKS = 'org.gnome.system.proxy.socks'
 
+        #Сonstant property
         KEY_MODE = 'mode'
         KEY_HOST = 'host'
         KEY_PORT = 'port'
@@ -177,11 +182,13 @@ class Application():
         KEY_ENABLED = 'enabled'
         KEY_AUTO_CONF_URL = 'autoconfig-url'
 
-        candidate_proxies = ['http://' + self.get_key_str(SCHEMA_HTTP, KEY_HOST) + ':'+ str(self.get_key_int(SCHEMA_HTTP, KEY_PORT))+'/',
-                             'https://' + self.get_key_str(SCHEMA_HTTPS, KEY_HOST) + ':'+ str(self.get_key_int(SCHEMA_HTTPS, KEY_PORT))+'/',
-                             'ftp://' + self.get_key_str(SCHEMA_FTP, KEY_HOST) + ':'+ str(self.get_key_int(SCHEMA_FTP, KEY_PORT))+'/',
-                             'socks://' + self.get_key_str(SCHEMA_SOCKS, KEY_HOST) + ':'+ str(self.get_key_int(SCHEMA_SOCKS, KEY_PORT))+'/'
+        #Initializing the dictionary of candidates to the proxy server
+        candidate_proxies = ['http://{0}:{1}'.format(self.get_key_str(SCHEMA_HTTP, KEY_HOST), self.get_key_int(SCHEMA_HTTP, KEY_PORT)),
+                             'https://{0}:{1}'.format(self.get_key_str(SCHEMA_HTTPS, KEY_HOST), self.get_key_int(SCHEMA_HTTPS, KEY_PORT)),
+                             'ftp://{0}:{1}'.format(self.get_key_str(SCHEMA_FTP, KEY_HOST), self.get_key_int(SCHEMA_FTP, KEY_PORT)),
+                             'socks://{0}:{1}'.format(self.get_key_str(SCHEMA_SOCKS, KEY_HOST), self.get_key_int(SCHEMA_SOCKS, KEY_PORT))
                             ]
+
         #Initialization of the proxy server, the "NONE" method.
         if self.get_key_str(SCHEMA_PROXY, KEY_MODE) == 'none':
             print("Method {0}".format(self.get_key_str(SCHEMA_PROXY, KEY_MODE)))
@@ -255,17 +262,22 @@ class Application():
                             continue
                 except Exception as e:
                     print("An error occurred: {0}. The exception was caused by the URL of the proxy server URL {1}".format(e,proxy_url))
+                    continue
                     self.info_bar.show()
 
                 return False
 
         #Initialization of the proxy server, the "AUTO" method.
         if self.get_key_str(SCHEMA_PROXY, KEY_MODE) == 'auto':
-            print("Rez %s" % self.get_key_str(SCHEMA_PROXY, KEY_MODE))
+            print("Method {0}. URL PAC file {1}".format(self.get_key_str(SCHEMA_PROXY, KEY_MODE),
+                                                                          self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL)))
+
             if self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL).find("http") != -1:
+                print("Method {0}. HTTP".format(self.get_key_str(SCHEMA_PROXY, KEY_MODE)))
                 # Opening PAC file from URL
                 try:
-                    pac = get_pac(url=self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL))
+                    pac = get_pac(url=self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL), allowed_content_types=['application/x-ns-proxy-autoconfig'])
+                    #pac = get_pac(url=self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL), allowed_content_types=['text/plain'])
                     #session = PACSession(pac, response_proxy_fail_filter=failover_criteria)
                     session = PACSession(pac)
 
@@ -279,23 +291,25 @@ class Application():
                 except Exception as e:
                     print("An error occurred: {0} PAC file {1}".format(e, self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL)))
                     self.info_bar.show()
+
+                return False
             else:
+                print("Method {0}. File".format(self.get_key_str(SCHEMA_PROXY, KEY_MODE)))
                 # Opening a PAC file from a file
                 try:
-                    with open(self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL)) as f:
-                        pac = PACFile(f.read())
-                    session = PACSession(pac)
-
-                    if session.get(reference) :
-                        print("The session is installed with a proxy server, code {0}, status OK! {1}".format(session.get(reference), self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL)))
-                        return True
-                    else:
-                        print("The session is not installed with a proxy server, code {0}, the status is Bad! {1}".format(session.get(reference), self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL)))
-                        return False
+                    with PACSession( PACFile( open(self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL)).read() )) as session :
+                        if session.get(reference) :
+                            print("The session is installed with a proxy server, code {0}, status OK! {1}".format(session.get(reference), self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL)))
+                            return True
+                        else:
+                            print("The session is not installed with a proxy server, code {0}, the status is Bad! {1}".format(session.get(reference), self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL)))
+                            return False
 
                 except Exception as e:
                     print("An error occurred: {0} PAC file {1}".format(e, self.get_key_str(SCHEMA_PROXY, KEY_AUTO_CONF_URL)))
                     self.info_bar.show()
+
+            return False
 
 
     def check_internet_or_live_dvd(self, widget=None):
