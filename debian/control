@@ -10,6 +10,7 @@ Architecture: all
 Depends: mintsystem (>= 8.4.8),
          python3 (>= 3.3),
          python3-gi,
+         python3-psutil,
          python3-aptdaemon,
          python3-aptdaemon.gtk3widgets,
          ubuntu-drivers-common,
