@@ -47,6 +47,9 @@ I used Unity and Unreal Gaming/Engine and it was just so convoluted trying to na
 for Unreal Gaming and download and install all the free software extensions they had available into my project. Took over like a day and a half to finish downloading.
 I also was looking into html coding on the website https://w3schools.com. Again, very convoluted in learning all of these lines of code.
 Also I tried hacking into cell phones with ADB and Android studios with SDK install.
+
+## VERY IMPORTANT! Make sure all certs are up to date on their encryption methods. Have to look at the expiration dates, the algorithm they're using, not RSA SHA-1 or below. Also the names of these certs are sometimes very confusing and hard to judge if they're valid or not. And how is anyone to know exactly what certs are needed or not needed for their device. I tried researching certificates needed/verification online, so convoluted. It's time to change to standards that are easy to understand.
+
 Also per Google's contest to dare the world to hack into their system. I used an Alexa Echo Dot 3 and connected that to my computer using Linux, and connected
 my computer to my original Xbox with a data cable and I believe I connected alexa to my computer with an auxilary cable. I then told alexa to enable some skills
 like twerminal or powershell or something to that effect and advised her as herself to access Google Chrome. I then informed her to access Amazon.com and tap
