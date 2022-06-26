@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-09-23 10:34+0100\n"
-"PO-Revision-Date: 2017-11-13 05:12+0000\n"
-"Last-Translator: AlephAlpha <alephalpha911@gmail.com>\n"
+"PO-Revision-Date: 2022-04-23 09:09+0000\n"
+"Last-Translator: Luke Luo <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2021-12-31 12:21+0000\n"
-"X-Generator: Launchpad (build adb364d6a74a28e7b95d51cd30446ec16160de6c)\n"
+"X-Launchpad-Export-Date: 2022-06-26 11:23+0000\n"
+"X-Generator: Launchpad (build 51a2e4fa2e9b8e45f00904ad7f53546f45ac48a5)\n"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:60 generate_desktop_files:26
 #: generate_desktop_files:41 generate_desktop_files:69
@@ -130,16 +130,16 @@ msgstr "管理您的设备驱动程序"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
 msgid "Looking for hardware drivers..."
-msgstr ""
+msgstr "正在查找硬件驱动程序..."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:2
 msgid "Your computer does not need any additional drivers."
-msgstr ""
+msgstr "您的电脑不需要附加驱动。"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:3
 msgid "An error occurred"
-msgstr ""
+msgstr "发生了一个错误"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:4
 msgid "OK"
-msgstr ""
+msgstr "确定"
