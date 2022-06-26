@@ -37,7 +37,7 @@
 <message xml:lang="ga">Bainisteoir Tiománaí</message>
 <message xml:lang="gd">Manaidsear nan draibhearan</message>
 <message xml:lang="gl">Administrador do controlador</message>
-<message xml:lang="he">מנהל הֶנֵּעַ הֶתְקֵן</message>
+<message xml:lang="he">מנהל ההתקנים</message>
 <message xml:lang="hi">ड्राइवर प्रबंधक</message>
 <message xml:lang="hr">Upravitelj upravljačkih programa</message>
 <message xml:lang="hu">Illesztőprogram-kezelő</message>
@@ -89,7 +89,7 @@
 <message xml:lang="tr">Sürücü Yöneticisi</message>
 <message xml:lang="uk">Керування драйверами</message>
 <message xml:lang="ur">ڈرائیور منتظم</message>
-<message xml:lang="uz">Драйверлар менежери</message>
+<message xml:lang="uz">Drayver menejeri</message>
 <message xml:lang="vi">Quản lý Trình điều khiển</message>
 <message xml:lang="zh_CN">驱动管理器</message>
 <message xml:lang="zh_HK">驅動程式管理員</message>
