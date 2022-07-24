@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-09-23 10:34+0100\n"
-"PO-Revision-Date: 2020-09-25 22:33+0000\n"
+"PO-Revision-Date: 2022-07-18 18:56+0000\n"
 "Last-Translator: Kimmo Kujansuu <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2022-06-26 11:23+0000\n"
-"X-Generator: Launchpad (build 51a2e4fa2e9b8e45f00904ad7f53546f45ac48a5)\n"
+"X-Launchpad-Export-Date: 2022-07-24 09:37+0000\n"
+"X-Generator: Launchpad (build 025a39fd866a641b6ae33074cda0d02a2c712d38)\n"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:60 generate_desktop_files:26
 #: generate_desktop_files:41 generate_desktop_files:69
@@ -46,8 +46,7 @@ msgid ""
 "USB stick)."
 msgstr ""
 "Ajureita ei voida asentaa.\n"
-"Yhdistä verkkoon tai aseta koneeseen Linux Mintin asennusmedia (DVD tai USB-"
-"muisti)."
+"Yhdistä verkkoon tai aseta Linux Mintin asennusmedia (DVD tai USB)."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:221
 msgid "Applying changes..."
@@ -109,11 +108,11 @@ msgstr "Prosessorin mikrokoodi"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:600
 msgid "Do not update the CPU microcode"
-msgstr "Älä asenna CPU:n mikrokoodia"
+msgstr "Älä päivitä CPU:n mikrokoodia"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:641
 msgid "You need to restart the computer to complete the driver changes."
-msgstr "Käynnistä tietokone uudelleen, jotta ajurimuutos tulee voimaan."
+msgstr "Käynnistä tietokone uudelleen, jotta muutokset tulevat voimaan."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:655
 #, python-format
@@ -132,11 +131,11 @@ msgstr "Hallitse laitteidesi ajureita"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
 msgid "Looking for hardware drivers..."
-msgstr "Etsitään laiteohjaimia..."
+msgstr "Etsitään laitteisto-ajureita..."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:2
 msgid "Your computer does not need any additional drivers."
-msgstr "Tietokone ei tarvitse lisäohjaimia."
+msgstr "Tietokoneesi ei tarvitse lisäajureita."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:3
 msgid "An error occurred"

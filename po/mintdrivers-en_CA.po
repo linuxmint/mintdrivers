@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-09-23 10:34+0100\n"
-"PO-Revision-Date: 2014-08-08 06:38+0000\n"
-"Last-Translator: mzs.112000 <mzs.112000@gmail.com>\n"
+"PO-Revision-Date: 2022-07-12 10:09+0000\n"
+"Last-Translator: Patryk Lurka <Unknown>\n"
 "Language-Team: English (Canada) <en_CA@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2022-06-26 11:23+0000\n"
-"X-Generator: Launchpad (build 51a2e4fa2e9b8e45f00904ad7f53546f45ac48a5)\n"
+"X-Launchpad-Export-Date: 2022-07-24 09:37+0000\n"
+"X-Generator: Launchpad (build 025a39fd866a641b6ae33074cda0d02a2c712d38)\n"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:60 generate_desktop_files:26
 #: generate_desktop_files:41 generate_desktop_files:69
@@ -83,11 +83,11 @@ msgstr "recommended"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:443
 msgid "open-source"
-msgstr ""
+msgstr "open-source"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:446
 msgid "requires a connection to the Internet"
-msgstr ""
+msgstr "requires a connection to the Internet"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:470
 msgid "Do not use the device"
@@ -101,15 +101,15 @@ msgstr "Unknown"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:512
 msgid "Processor"
-msgstr ""
+msgstr "Processor"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:539
 msgid "Processor microcode"
-msgstr ""
+msgstr "Processor microcode"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:600
 msgid "Do not update the CPU microcode"
-msgstr ""
+msgstr "Do not update the CPU microcode"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:641
 msgid "You need to restart the computer to complete the driver changes."
@@ -132,16 +132,16 @@ msgstr "Manage the drivers for your devices"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
 msgid "Looking for hardware drivers..."
-msgstr ""
+msgstr "Looking for hardware drivers..."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:2
 msgid "Your computer does not need any additional drivers."
-msgstr ""
+msgstr "Your computer does not need any additional drivers."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:3
 msgid "An error occurred"
-msgstr ""
+msgstr "An error occurred"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:4
 msgid "OK"
-msgstr ""
+msgstr "OK"
