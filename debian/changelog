@@ -1,3 +1,9 @@
+mintdrivers (1.6.3) vanessa; urgency=medium
+
+  * l10n: Update translations
+
+ -- Clement Lefebvre <root@linuxmint.com>  Sun, 24 Jul 2022 12:17:37 +0200
+
 mintdrivers (1.6.2) vanessa; urgency=medium
 
   * l10n: Update translations
