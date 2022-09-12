@@ -592,7 +592,7 @@ class Application():
                 option_group = None
                 # define the order of introspection
                 for section in ('recommended', 'alternative', 'manually_installed', 'no_driver'):
-                    for driver in sorted(drivers[section], key=lambda x: self.sort_string(drivers[section], x)):
+                    for driver in sorted(drivers[section], key=lambda x: self.sort_string(drivers[section], x), reverse=True):
                         if str(driver).startswith("nvidia-driver") and str(driver).endswith("-server"):
                             print("Ignoring server NVIDIA driver: ", driver)
                             continue
@@ -632,7 +632,7 @@ class Application():
         self.set_driver_action_status()
 
     def sort_string(self, drivers, x):
-        value = drivers[x]['description']
+        value = x
         try:
             value = "%s %s" % (not drivers[x]['free'], value)
         except:
