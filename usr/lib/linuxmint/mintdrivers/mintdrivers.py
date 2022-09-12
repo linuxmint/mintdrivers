@@ -221,7 +221,6 @@ class Application():
             self.info_bar.show()
 
     def on_driver_changes_progress(self, progress, ptype, data=None):
-        #print(progress)
         self.button_driver_revert.set_visible(False)
         self.button_driver_apply.set_visible(False)
         self.button_driver_restart.set_visible(False)
@@ -229,7 +228,18 @@ class Application():
         self.progress_bar.set_visible(True)
         self.progress_bar.set_visible(True)
 
-        self.label_driver_action.set_label(_("Applying changes..."))
+        if progress.get_status() == packagekit.StatusEnum.DOWNLOAD:
+            self.label_driver_action.set_label(_("Downloading drivers..."))
+        elif progress.get_status() == packagekit.StatusEnum.INSTALL:
+            self.label_driver_action.set_label(_("Installing drivers..."))
+        elif progress.get_status() == packagekit.StatusEnum.REMOVE:
+            self.label_driver_action.set_label(_("Removing drivers..."))
+        elif progress.get_status() == packagekit.StatusEnum.CANCEL:
+            self.label_driver_action.set_label(_("Cancelling..."))
+        elif progress.get_status() == packagekit.StatusEnum.LOADING_CACHE:
+            self.label_driver_action.set_label(_("Loading cache..."))
+        else:
+            self.label_driver_action.set_label("")
         if ptype == packagekit.ProgressType.PERCENTAGE:
             prog_value = progress.get_property('percentage')
             self.progress_bar.set_fraction(prog_value / 100.0)
