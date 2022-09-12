@@ -445,9 +445,15 @@ class Application():
             try:
                 pkg = self.apt_cache[pkg_driver_name]
                 installed = pkg.is_installed
+                if installed:
+                    version = pkg.installed.version
+                    summary = pkg.installed.summary
+                else:
+                    version = pkg.candidate.version
+                    summary = pkg.candidate.summary
                 description_line1 = "<b>%s</b>" % pkg.shortname
-                description_line2 = "<small>%s</small> %s" % (_("Version"), pkg.candidate.version)
-                description_line3 = "<small>%s</small>" % pkg.candidate.summary
+                description_line2 = "<small>%s</small> %s" % (_("Version"), version)
+                description_line3 = "<small>%s</small>" % summary
                 if driver_status == 'recommended':
                     description_line1 = "%s <b><small><span foreground='#58822B'>(%s)</span></small></b>" % (description_line1, _("recommended"))
                 if current_driver['free'] and pkg.shortname != "bcmwl-kernel-source" and (not pkg.shortname.startswith("nvidia-")):
