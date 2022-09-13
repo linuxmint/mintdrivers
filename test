@@ -2,4 +2,4 @@
 
 sudo rm -rf /usr/lib/linuxmint/mintDrivers
 sudo cp -R usr /
-sudo mintdrivers
+mintdrivers
