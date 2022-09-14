@@ -63,9 +63,6 @@ class Application():
 
         self.window_main.connect("delete_event", self.quit_application)
 
-        self.stack = self.builder.get_object("stack")
-        self.spinner = self.builder.get_object("spinner")
-
         self.button_driver_revert = Gtk.Button(label=_("Re_vert"), use_underline=True)
         self.button_driver_revert.connect("clicked", self.on_driver_changes_revert)
         self.button_driver_apply = Gtk.Button(label=_("_Apply Changes"), use_underline=True)
@@ -86,8 +83,8 @@ class Application():
         self.box_driver_action.pack_end(self.button_driver_cancel, False, False, 0)
 
         self.builder.get_object("error_button").connect("clicked", self.on_error_button)
-
-        self.info_bar.set_no_show_all(True)
+        self.builder.get_object("button_mount_media").connect("clicked", self.mount_live_media)
+        self.builder.get_object("button_offline").connect("clicked", self.check_internet_or_live_media)
 
         self.progress_bar = Gtk.ProgressBar(valign=Gtk.Align.CENTER)
         self.box_driver_action.pack_end(self.progress_bar, True, True, 0)
@@ -96,54 +93,51 @@ class Application():
         self.needs_restart = False
         self.live_mode = False
 
+        self.show_page("refresh_page")
+
         with open('/proc/cmdline') as f:
             cmdline = f.read()
-            if ((not "boot=casper" in cmdline) and (not "boot=live" in cmdline)):
-                print ("Post-install mode detected")
-                self.info_bar_label.set_text(_("Drivers cannot be installed.\nPlease connect to the Internet or insert the Linux Mint installation DVD (or USB stick)."))
-                self.check_internet_or_live_dvd()
-                self.button_info_bar.connect("clicked", self.check_internet_or_live_dvd)
-            else:
+            if (("boot=casper" in cmdline) or ("boot=live" in cmdline)):
                 print ("Live mode detected")
                 self.live_mode = True
-                self.info_bar.hide()
                 self.update_cache()
+            else:
+                self.check_internet_or_live_media()
 
+    def show_page(self, page):
+        if page == "refresh_page":
+            self.builder.get_object("spinner").start()
+        else:
+            self.builder.get_object("spinner").stop()
+        self.builder.get_object("stack").set_visible_child_name(page)
 
     def on_error_button(self, button):
-        self.stack.set_visible_child_name("drivers_page")
-        self.spinner.stop()
+        self.show_page("drivers_page")
 
     def update_cache(self):
-        self.stack.set_visible_child_name("refresh_page")
-        self.spinner.start()
+        print("Updating cache")
+        self.show_page("refresh_page")
         task = packagekit.Task()
         task.refresh_cache_async(True, Gio.Cancellable(), self.on_cache_update_progress, (None, ), self.on_cache_update_finished, (None, ))
 
     def on_error(self, msg):
-        self.stack.set_visible_child_name("error_page")
-        self.spinner.stop()
+        self.show_page("error_page")
         self.builder.get_object("error_label").set_label(msg)
 
     def on_cache_update_progress(self, progress, ptype, data=None):
         pass
 
     def on_cache_update_finished(self, source, result, data=None):
+        print("Cache updated")
         XApp.set_window_progress(self.window_main, 0)
         self.get_drivers_async()
 
     def quit_application(self, widget=None, event=None):
-        self.clean_up_media_cdrom()
+        self.cleanup_live_media()
         Gtk.main_quit()
 
-    def clean_up_media_cdrom(self):
-        if os.path.exists("/media/cdrom"):
-            print ("unmounting /media/cdrom...")
-            os.system("umount /media/cdrom")
-            print ("removing /media/cdrom...")
-            os.system("rm -rf /media/cdrom")
-            print ("removing cdrom repository...")
-            os.system("sed -i '/deb cdrom/d' /etc/apt/sources.list")
+    def cleanup_live_media(self):
+        subprocess.call(["sudo", "mintdrivers-remove-live-media"])
 
     def check_connectivity(self, reference):
         try:
@@ -152,73 +146,47 @@ class Application():
         except:
             return False
 
-    def check_internet_or_live_dvd(self, widget=None):
-
+    def check_internet_or_live_media(self, widget=None):
+        self.show_page("refresh_page")
+        print ("Checking Internet connectivity...")
         try:
-            print ("Checking Internet connectivity...")
+            urllib.request.urlopen("http://archive.ubuntu.com", timeout=10)
+            # We're online
+            print ("  --> Computer is online")
+            self.update_cache()
+            return
+        except:
+            print ("  --> Computer is offline")
 
-            # We either get drivers from the Internet of from the liveDVD
-            # So check the connection to the Internet or scan for a liveDVD
+        # We're offline, let's look for a live media
+        print ("Checking for a live media...")
+        mount_point = None
+        partitions = psutil.disk_partitions()
+        for p in partitions:
+            if p.fstype == "iso9660":
+                mount_point = p.mountpoint
+                print ("  --> Found: %s at %s" % (p.device, p.mountpoint))
+                break
 
-            if self.check_connectivity("http://archive.ubuntu.com"):
-            # We can reach the repository, everything's fine
-                print ("  --> Internet connection detected.")
-                self.info_bar.hide()
-                self.update_cache()
-                return
-            else:
-                print ("  --> Internet connection is missing.")
+        if mount_point == None:
+            # Offline and no live media, show the offline page
+            print ("  --> None found.")
+            self.show_page("offline_page")
+            return
 
+        # We're offline but an ISO was detected
+        # Let's make sure it's mounted as a repository
+        if os.path.exists("/media/mintdrivers/README.diskdefines"):
+            print ("  --> Mounted in /media/mintdrivers")
+            self.update_cache()
+        else:
+            print ("  --> Not mounted in /media/mintdrivers")
+            self.show_page("media_page")
 
-            print ("Checking access to live media...")
-
-            # We can't reach the repository, we need the installation media
-            mount_point = None
-            mounted_on_media_cdrom = False
-
-            # Find the live media
-            partitions = psutil.disk_partitions()
-            for p in partitions:
-                try:
-                    if p.fstype == "iso9660":
-                        mount_point = p.mountpoint
-                        print ("Found live media: %s at %s" % (p.device, p.mountpoint))
-                        # Add it to apt-cdrom
-                        p = subprocess.Popen(["sudo", "apt-cdrom", "-d", mount_point, "-m", "add"], stderr=subprocess.PIPE)
-                        (stdout, stderr) = p.communicate()
-                        mounted_on_media_cdrom = True
-                        if 'E: ' in stderr.decode():
-                           mounted_on_media_cdrom = False
-                        break
-                except Exception as e:
-                    print ("Exception while calling apt-cdrom:", e)
-
-            if mount_point is None:
-                # Not mounted..
-                print ("No live media found.")
-                self.info_bar.show()
-                self.stack.set_visible_child_name("drivers_page")
-                self.spinner.stop()
-                return
-
-            if mounted_on_media_cdrom == False or not os.path.exists("/media/cdrom/README.diskdefines"):
-                # Mounted, but not in the right place...
-                print ("Binding mount %s to /media/cdrom" % mount_point)
-                self.clean_up_media_cdrom()
-                os.system("mkdir -p /media/cdrom")
-                p = subprocess.Popen(["mount", "--bind", mount_point, "/media/cdrom"], stderr=subprocess.PIPE)
-                stderr = p.communicate()
-
-            # It should now be mounted to /media/cdrom, else something went wrong..
-            if os.path.exists("/media/cdrom/README.diskdefines"):
-                print ("Live media detected")
-                self.info_bar.hide()
-                self.update_cache()
-            else:
-                self.info_bar.show()
-        except Exception as e:
-            print("An error occurred: {}".format(e))
-            self.info_bar.show()
+    def mount_live_media(self, button):
+        print("Mounting live media")
+        subprocess.call(["/usr/bin/pkexec", "mintdrivers-add-live-media"])
+        self.check_internet_or_live_media()
 
     def on_driver_changes_progress(self, progress, ptype, data=None):
         self.button_driver_revert.set_visible(False)
@@ -337,7 +305,7 @@ class Application():
         self.clear_changes()
 
     def on_driver_restart_clicked(self, button_restart):
-        self.clean_up_media_cdrom()
+        self.cleanup_live_media()
         subprocess.call(['systemctl', 'reboot'])
 
     def clear_changes(self):
@@ -635,13 +603,12 @@ class Application():
                             radio_button.set_sensitive(False)
 
                 self.box_driver_detail.pack_start(device_box, False, False, 6)
-                self.stack.set_visible_child_name("drivers_page")
 
-        if not drivers_found:
-            self.stack.set_visible_child_name("no_drivers_page")
+        if drivers_found:
+            self.show_page("drivers_page")
+        else:
+            self.show_page("no_drivers_page")
             print("Your computer does not need any additional drivers")
-
-        self.spinner.stop()
 
         self.ui_building = False
         self.box_driver_detail.show_all()
