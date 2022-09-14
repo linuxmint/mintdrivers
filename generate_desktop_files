@@ -23,7 +23,7 @@ X-KDE-SubstituteUID=true
 NotShowIn=KDE;
 """
 
-additionalfiles.generate(DOMAIN, PATH, "usr/share/applications/mintdrivers.desktop", prefix, _("Driver Manager"), _("Manage the drivers for your devices"), suffix)
+additionalfiles.generate(DOMAIN, PATH, "usr/share/applications/mintdrivers.desktop", prefix, _("Driver Manager"), _("Additional and proprietary drivers"), suffix)
 
 
 prefix = "[Desktop Entry]\n"
@@ -38,7 +38,7 @@ X-KDE-StartupNotify=false
 OnlyShowIn=KDE;
 """
 
-additionalfiles.generate(DOMAIN, PATH, "usr/share/applications/kde4/mintdrivers.desktop", prefix, _("Driver Manager"), _("Manage the drivers for your devices"), suffix, genericName=_("Manage the drivers for your devices"))
+additionalfiles.generate(DOMAIN, PATH, "usr/share/applications/kde4/mintdrivers.desktop", prefix, _("Driver Manager"), _("Additional and proprietary drivers"), suffix, genericName=_("Manage the drivers for your devices"))
 
 prefix = """<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE policyconfig PUBLIC
@@ -58,12 +58,10 @@ suffix = """
       <allow_inactive>no</allow_inactive>
       <allow_active>auth_admin_keep</allow_active>
     </defaults>
-    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/mintdrivers</annotate>
-    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/driver-manager</annotate>
-    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/mintdrivers-add-live-media</annotate>
   </action>
 
 </policyconfig>
 """
 
-additionalfiles.generate_polkit_policy(DOMAIN, PATH, "usr/share/polkit-1/actions/com.linuxmint.mintdrivers.policy", prefix, _("Driver Manager"), suffix)
+additionalfiles.generate_polkit_policy(DOMAIN, PATH, "usr/share/polkit-1/actions/com.linuxmint.mintdrivers.policy", prefix, _("Mount installation media"), suffix)

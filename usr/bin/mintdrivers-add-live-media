@@ -1,0 +1,41 @@
+#!/usr/bin/python3
+
+import os
+import psutil
+import subprocess
+import sys
+
+if os.getuid() != 0:
+    print("mintdrivers-add-live-media needs to be run as root.")
+    sys.exit(1)
+
+# Find the live media
+live_partition = None
+print ("Checking for a live media...")
+partitions = psutil.disk_partitions()
+for partition in partitions:
+    if partition.fstype == "iso9660":
+        live_partition = partition
+        print ("  --> Found: %s at %s" % (partition.device, partition.mountpoint))
+        break
+if live_partition == None:
+    print ("  --> No media found")
+    sys.exit(0)
+
+# Bind it to /media/mintdrivers
+os.system("mintdrivers-remove-live-media")
+os.system("mkdir -p /media/mintdrivers")
+subprocess.call(["mount", live_partition.device, "/media/mintdrivers"], stderr=subprocess.PIPE)
+
+if os.path.exists("/media/mintdrivers/README.diskdefines"):
+    # Add /media/mintdrivers as an APT source
+    with open("/etc/apt/sources.list.d/mintdrivers.list", "w") as source_file:
+        print("deb [trusted=yes arch=amd64] file:///media/mintdrivers jammy main", file=source_file)
+
+    # APT doesn't always pick up newly created files in /etc/apt/sources.list.d
+    # packagekit's refresh_cache_async (in mintdrivers.py) doesn't help..
+    # We call apt-get update here to force APT to detect our new source file
+    os.system("apt-get -y update")
+
+    print()
+    print("Live media successfully added.")
