@@ -273,9 +273,6 @@ class Application():
         self.cancellable = Gio.Cancellable()
         try:
             if removals:
-                installs_pending = False
-                if installs:
-                    installs_pending = True
                 self.pk_task.remove_packages_async(removals,
                             False,  # allow deps
                             True,  # autoremove
