@@ -224,7 +224,7 @@ class Application():
             self.progress_bar.set_fraction(prog_value / 100.0)
             XApp.set_window_progress(self.window_main, prog_value)
 
-    def on_driver_changes_finish(self, source, result, installs_pending):
+    def on_driver_changes_finish(self, source, result, installs):
         results = None
         errors = False
         try:
@@ -233,7 +233,9 @@ class Application():
             self.on_driver_changes_revert()
             self.on_error(str(e))
             errors = True
-        if not installs_pending:
+            return
+
+        if installs == None:
             self.needs_restart = (not errors)
             self.progress_bar.set_visible(False)
             self.clear_changes()
@@ -244,7 +246,15 @@ class Application():
             self.button_driver_apply.set_visible(True)
             self.button_driver_cancel.set_visible(False)
             self.scrolled_window_drivers.set_sensitive(True)
-        XApp.set_window_progress(self.window_main, 0)
+            XApp.set_window_progress(self.window_main, 0)
+        else:
+            self.pk_task.install_packages_async(installs,
+                    self.cancellable,  # cancellable
+                    self.on_driver_changes_progress,
+                    (None, ),  # progress data
+                    self.on_driver_changes_finish,  # GAsyncReadyCallback
+                    None  # callback data
+             )
 
     def on_driver_changes_apply(self, button):
         self.pk_task = packagekit.Task()
@@ -268,9 +278,6 @@ class Application():
         self.cancellable = Gio.Cancellable()
         try:
             if removals:
-                installs_pending = False
-                if installs:
-                    installs_pending = True
                 self.pk_task.remove_packages_async(removals,
                             False,  # allow deps
                             True,  # autoremove
@@ -278,15 +285,15 @@ class Application():
                             self.on_driver_changes_progress,
                             (None, ),  # progress data
                             self.on_driver_changes_finish,  # callback ready
-                            installs_pending  # callback data
+                            installs  # callback data
                  )
-            if installs:
+            elif installs:
                 self.pk_task.install_packages_async(installs,
                         self.cancellable,  # cancellable
                         self.on_driver_changes_progress,
                         (None, ),  # progress data
                         self.on_driver_changes_finish,  # GAsyncReadyCallback
-                        False  # ready data
+                        None  # callback data
                  )
 
             self.button_driver_revert.set_sensitive(False)
