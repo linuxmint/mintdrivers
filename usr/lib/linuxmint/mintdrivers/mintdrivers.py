@@ -83,7 +83,7 @@ class Application():
         self.box_driver_action.pack_end(self.button_driver_cancel, False, False, 0)
 
         self.builder.get_object("error_button").connect("clicked", self.on_error_button)
-        self.builder.get_object("button_mount_media").connect("clicked", self.mount_live_media)
+        self.builder.get_object("button_mount_media").connect("clicked", self.on_mount_media_button)
         self.builder.get_object("button_offline").connect("clicked", self.check_internet_or_live_media)
 
         self.progress_bar = Gtk.ProgressBar(valign=Gtk.Align.CENTER)
@@ -146,6 +146,7 @@ class Application():
         except:
             return False
 
+    @idle
     def check_internet_or_live_media(self, widget=None):
         self.show_page("refresh_page")
         print ("Checking Internet connectivity...")
@@ -183,8 +184,13 @@ class Application():
             print ("  --> Not mounted in /media/mintdrivers")
             self.show_page("media_page")
 
-    def mount_live_media(self, button):
+    def on_mount_media_button(self, button):
         print("Mounting live media")
+        self.show_page("refresh_page")
+        self.mount_live_media()
+
+    @_async
+    def mount_live_media(self):
         subprocess.call(["/usr/bin/pkexec", "mintdrivers-add-live-media"])
         self.check_internet_or_live_media()
 

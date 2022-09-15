@@ -33,10 +33,9 @@ if os.path.exists("/media/mintdrivers/README.diskdefines"):
         print("deb [trusted=yes arch=amd64] file:///media/mintdrivers jammy main", file=source_file)
 
     # APT doesn't always pick up newly created files in /etc/apt/sources.list.d
-    # packagekit's refresh_cache_async doesn't help..
-    # apt-get update works but it's pretty slow..
-    # pkcon refresh works and acts fast when offline, so it's ideal.
-    # We call it here to force APT to detect our new source file
-    subprocess.call(["pkcon", "refresh"])
+    # packagekit's refresh_cache_async (in mintdrivers.py) doesn't help..
+    # We call apt-get update here to force APT to detect our new source file
+    os.system("apt-get -y update")
+
     print()
     print("Live media successfully added.")
