@@ -46,6 +46,11 @@ class Application():
 
     def __init__(self):
 
+        self.test_mode = False
+        if len(sys.argv) > 1 and sys.argv[1] == "test":
+            self.test_mode = True
+            print("Test mode detected, adding a dummy device.")
+
         self.builder = Gtk.Builder()
         self.builder.set_translation_domain(APP)
         self.builder.add_from_file("/usr/share/linuxmint/mintdrivers/main.ui")
@@ -542,6 +547,16 @@ class Application():
     def get_drivers_async(self):
         self.apt_cache = apt.Cache()
         self.devices = detect.system_device_drivers()
+        if self.test_mode:
+            dummy_device = {
+                'modalias': '',
+                'vendor': 'Linux Mint', 'model': 'Dummy Test Device',
+                'drivers': {
+                    'mint-dev-pkg': {'free': False, 'from_distro': True, 'recommended': True},
+                    'mint-dev-pkg-debconf': {'free': False, 'from_distro': True, 'recommended': False},
+                    'linux-generic': {'free': True, 'builtin': True, 'from_distro': True, 'recommended': False}}
+                }
+            self.devices['dummy'] = dummy_device
         self.show_drivers()
 
     @idle
