@@ -1,3 +1,18 @@
+mintdrivers (1.6.4) vera; urgency=medium
+
+  * Sort drivers by pkg name (reverse order)
+  * Show the correct version for installed drivers
+  * Improve progress label
+  * Allow app to be run in user mode
+  * Add a test mode with a dummy device
+  * Implement offline/user mode
+  * Fix async calls when both installs and removals are needed
+  * Fix case where install array is empty
+  * Purge removed drivers if possible
+  * l10n: Update POT
+
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 16 Sep 2022 13:17:36 +0100
+
 mintdrivers (1.6.3) vanessa; urgency=medium
 
   * l10n: Update translations
