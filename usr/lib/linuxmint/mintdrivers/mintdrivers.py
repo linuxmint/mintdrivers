@@ -46,6 +46,11 @@ class Application():
 
     def __init__(self):
 
+        self.test_mode = False
+        if len(sys.argv) > 1 and sys.argv[1] == "test":
+            self.test_mode = True
+            print("Test mode detected, adding a dummy device.")
+
         self.builder = Gtk.Builder()
         self.builder.set_translation_domain(APP)
         self.builder.add_from_file("/usr/share/linuxmint/mintdrivers/main.ui")

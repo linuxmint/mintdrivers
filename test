@@ -2,4 +2,6 @@
 
 sudo rm -rf /usr/lib/linuxmint/mintDrivers
 sudo cp -R usr /
-mintdrivers
+
+/usr/lib/linuxmint/mintdrivers/mintdrivers.py test
+
