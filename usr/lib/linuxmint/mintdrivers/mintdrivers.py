@@ -528,6 +528,16 @@ class Application():
     def get_drivers_async(self):
         self.apt_cache = apt.Cache()
         self.devices = detect.system_device_drivers()
+        if self.test_mode:
+            dummy_device = {
+                'modalias': '',
+                'vendor': 'Linux Mint', 'model': 'Dummy Test Device',
+                'drivers': {
+                    'mint-dev-pkg': {'free': False, 'from_distro': True, 'recommended': True},
+                    'mint-dev-pkg-debconf': {'free': False, 'from_distro': True, 'recommended': False},
+                    'linux-generic': {'free': True, 'builtin': True, 'from_distro': True, 'recommended': False}}
+                }
+            self.devices['dummy'] = dummy_device
         self.show_drivers()
 
     @idle
