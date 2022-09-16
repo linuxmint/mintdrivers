@@ -279,16 +279,30 @@ class Application():
         self.cancellable = Gio.Cancellable()
         try:
             if len(removals) > 0:
-                print("Removing", removals)
-                self.pk_task.remove_packages_async(removals,
-                            False,  # allow deps
-                            True,  # autoremove
-                            self.cancellable,  # cancellable
-                            self.on_driver_changes_progress,
-                            (None, ),  # progress data
-                            self.on_driver_changes_finish,  # callback ready
-                            installs  # callback data
-                 )
+                try:
+                    # Try to purge (Mint specific version of packagekit)
+                    print("Purging", removals)
+                    self.pk_task.purge_packages_async(removals,
+                                False,  # allow deps
+                                True,  # autoremove
+                                self.cancellable,  # cancellable
+                                self.on_driver_changes_progress,
+                                (None, ),  # progress data
+                                self.on_driver_changes_finish,  # callback ready
+                                installs  # callback data
+                     )
+                except:
+                    # If purging isn't supported, just remove
+                    print("Couldn't purge! Removing", removals)
+                    self.pk_task.remove_packages_async(removals,
+                                False,  # allow deps
+                                True,  # autoremove
+                                self.cancellable,  # cancellable
+                                self.on_driver_changes_progress,
+                                (None, ),  # progress data
+                                self.on_driver_changes_finish,  # callback ready
+                                installs  # callback data
+                     )
             elif len(installs) > 0:
                 print("Installing", installs)
                 self.pk_task.install_packages_async(installs,
