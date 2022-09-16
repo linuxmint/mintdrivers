@@ -235,7 +235,7 @@ class Application():
             errors = True
             return
 
-        if installs == None:
+        if installs == None or len(installs) == 0:
             self.needs_restart = (not errors)
             self.progress_bar.set_visible(False)
             self.clear_changes()
@@ -248,6 +248,7 @@ class Application():
             self.scrolled_window_drivers.set_sensitive(True)
             XApp.set_window_progress(self.window_main, 0)
         else:
+            print("Installing", installs)
             self.pk_task.install_packages_async(installs,
                     self.cancellable,  # cancellable
                     self.on_driver_changes_progress,
@@ -277,7 +278,8 @@ class Application():
 
         self.cancellable = Gio.Cancellable()
         try:
-            if removals:
+            if len(removals) > 0:
+                print("Removing", removals)
                 self.pk_task.remove_packages_async(removals,
                             False,  # allow deps
                             True,  # autoremove
@@ -287,7 +289,8 @@ class Application():
                             self.on_driver_changes_finish,  # callback ready
                             installs  # callback data
                  )
-            elif installs:
+            elif len(installs) > 0:
+                print("Installing", installs)
                 self.pk_task.install_packages_async(installs,
                         self.cancellable,  # cancellable
                         self.on_driver_changes_progress,
