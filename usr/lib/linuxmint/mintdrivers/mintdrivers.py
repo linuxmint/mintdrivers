@@ -42,7 +42,7 @@ gettext.bindtextdomain(APP, LOCALE_DIR)
 gettext.textdomain(APP)
 _ = gettext.gettext
 
-class Application():
+class Application:
 
     def __init__(self):
 
@@ -102,7 +102,7 @@ class Application():
 
         with open('/proc/cmdline') as f:
             cmdline = f.read()
-            if (("boot=casper" in cmdline) or ("boot=live" in cmdline)):
+            if ("boot=casper" in cmdline) or ("boot=live" in cmdline):
                 print ("Live mode detected")
                 self.live_mode = True
                 self.update_cache()
@@ -512,7 +512,7 @@ class Application():
                 if returned_drivers[section][keys]['selected']:
                     (overall_status, icon) = possible_overall_status[section]
 
-        return (overall_status, icon, returned_drivers)
+        return overall_status, icon, returned_drivers
 
     def get_device_icon(self, device):
         vendor = device.get('vendor', _('Unknown'))
@@ -532,7 +532,7 @@ class Application():
         elif "amd64-microcode" in device['drivers']:
             icon = "amd"
 
-        return (GdkPixbuf.Pixbuf.new_from_file_at_size("/usr/share/linuxmint/mintdrivers/icons/%s.svg" % icon, 48, -1))
+        return GdkPixbuf.Pixbuf.new_from_file_at_size("/usr/share/linuxmint/mintdrivers/icons/%s.svg" % icon, 48, -1)
 
     def get_cpu_name(self):
         with open("/proc/cpuinfo") as cpuinfo:
