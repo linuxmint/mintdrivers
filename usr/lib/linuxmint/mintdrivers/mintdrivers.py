@@ -401,7 +401,7 @@ class Application():
         return dependencies
 
     def gather_device_data(self, device):
-        '''Get various device data used to build the GUI.
+        """Get various device data used to build the GUI.
 
           return a tuple of (overall_status string, icon, drivers dict).
           the drivers dict is using this form:
@@ -417,7 +417,7 @@ class Application():
 
              Please note that either manually_installed and no_driver are set to None if not applicable
              (no_driver isn't present if there are builtins)
-        '''
+        """
 
         possible_overall_status = {
             'recommended': (_("This device is using the recommended driver."), "recommended-driver"),
@@ -668,7 +668,7 @@ class Application():
         return value
 
     def update_label_and_icons_from_status(self):
-        '''Update the current label and icon, computing the new device status'''
+        """Update the current label and icon, computing the new device status"""
 
         for device in self.devices:
             if device in self.dynamic_device_status.keys():
