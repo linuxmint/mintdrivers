@@ -18,7 +18,7 @@ for partition in partitions:
         live_partition = partition
         print ("  --> Found: %s at %s" % (partition.device, partition.mountpoint))
         break
-if live_partition == None:
+if live_partition is None:
     print ("  --> No media found")
     sys.exit(0)
 

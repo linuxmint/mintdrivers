@@ -174,7 +174,7 @@ class Application():
                 print ("  --> Found: %s at %s" % (p.device, p.mountpoint))
                 break
 
-        if mount_point == None:
+        if mount_point is None:
             # Offline and no live media, show the offline page
             print ("  --> None found.")
             self.show_page("offline_page")
@@ -235,7 +235,7 @@ class Application():
             errors = True
             return
 
-        if installs == None or len(installs) == 0:
+        if installs is None or len(installs) == 0:
             self.needs_restart = (not errors)
             self.progress_bar.set_visible(False)
             self.clear_changes()
