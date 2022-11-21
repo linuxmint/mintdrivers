@@ -1,3 +1,17 @@
+mintdrivers (1.6.5) vera; urgency=medium
+
+  [ hdulme ]
+  * replace equality None check with identity None check
+  * better docstrings
+
+  [ monsta ]
+  * remove aptdaemon dependencies (#81)
+
+  [ hduelme ]
+  * remove redundant parentheses (#78)
+
+ -- Clement Lefebvre <root@linuxmint.com>  Mon, 21 Nov 2022 13:24:41 +0000
+
 mintdrivers (1.6.4) vera; urgency=medium
 
   * Sort drivers by pkg name (reverse order)
