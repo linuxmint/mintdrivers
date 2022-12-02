@@ -1,3 +1,10 @@
+mintdrivers (1.6.6) vanessa; urgency=medium
+
+  * l10n: Update translations
+  * l10n: Update files
+
+ -- Clement Lefebvre <root@linuxmint.com>  Fri, 02 Dec 2022 17:28:30 +0000
+
 mintdrivers (1.6.5) vera; urgency=medium
 
   [ hdulme ]
