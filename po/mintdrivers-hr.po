@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-09-23 10:34+0100\n"
-"PO-Revision-Date: 2020-09-23 13:16+0000\n"
+"POT-Creation-Date: 2022-09-16 10:45+0100\n"
+"PO-Revision-Date: 2022-09-21 18:48+0000\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <hr@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,109 +16,115 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2022-07-24 09:37+0000\n"
-"X-Generator: Launchpad (build 025a39fd866a641b6ae33074cda0d02a2c712d38)\n"
+"X-Launchpad-Export-Date: 2022-12-02 13:28+0000\n"
+"X-Generator: Launchpad (build 51cef3d08dff1e227b5ada709bd67280c567d4be)\n"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:60 generate_desktop_files:26
-#: generate_desktop_files:41 generate_desktop_files:69
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67 generate_desktop_files:26
+#: generate_desktop_files:41 usr/share/linuxmint/mintdrivers/main.ui.h:12
 msgid "Driver Manager"
 msgstr "Upravitelj upravljačkih programa"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:71
 msgid "Re_vert"
 msgstr "Vr_ati"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:69
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:73
 msgid "_Apply Changes"
 msgstr "_Primijeni promjene"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:71
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:75
 msgid "_Cancel"
 msgstr "_Odustani"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:73
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:77
 msgid "_Restart..."
 msgstr "_Ponovno pokreni..."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:101
-msgid ""
-"Drivers cannot be installed.\n"
-"Please connect to the Internet or insert the Linux Mint installation DVD (or "
-"USB stick)."
-msgstr ""
-"Upravljački programi ne mogu biti instalirani.\n"
-"Povežite se na Internet ili umetnite Linux Mint instalacijski DVD ili USB "
-"uređaj."
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:211
+msgid "Downloading drivers..."
+msgstr "Preuzimanje upravljačkih programa..."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:221
-msgid "Applying changes..."
-msgstr "Primjenjivanje promjena..."
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:213
+msgid "Installing drivers..."
+msgstr "Instalacija upravljačkih programa..."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:399
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:215
+msgid "Removing drivers..."
+msgstr "Uklanjanje upravljačkih programa..."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:217
+msgid "Cancelling..."
+msgstr "Odustajanje..."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:219
+msgid "Loading cache..."
+msgstr "Učitavanje predmemorije..."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:423
 msgid "This device is using the recommended driver."
 msgstr "Ovaj uređaj koristi preporučeni upravljački program."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:400
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:424
 msgid "This device is using an alternative driver."
 msgstr "Ovaj uređaj koristi alternativni upravljački program."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:401
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:425
 msgid "This device is using a manually-installed driver."
 msgstr "Ovaj uređaj koristi ručno instalirani upravljački program."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:402
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:426
 msgid "This device is not working."
 msgstr "Ovaj uređaj ne radi."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:411
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:435
 msgid "Continue using a manually installed driver"
 msgstr "Nastavi koristiti ručno instalirani upravljački program"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:438
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:468
 msgid "Version"
 msgstr "Inačica"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:441
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:471
 msgid "recommended"
 msgstr "preporučeno"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:443
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:473
 msgid "open-source"
 msgstr "otvoreni-kôd"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:446
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:476
 msgid "requires a connection to the Internet"
 msgstr "zahtijeva pristup Internetu"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:470
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:500
 msgid "Do not use the device"
 msgstr "Nemoj koristiti uređaj"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:488
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:489
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:557
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:518
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:519
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:598
 msgid "Unknown"
 msgstr "Nepoznato"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:512
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:542
 msgid "Processor"
 msgstr "Procesor"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:539
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:580
 msgid "Processor microcode"
 msgstr "Mikrokôd procesora"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:600
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:642
 msgid "Do not update the CPU microcode"
 msgstr "Ne nadopunjuj CPU mikrokôd"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:641
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:683
 msgid "You need to restart the computer to complete the driver changes."
 msgstr ""
 "Morate ponovno pokrenuti računalo za završetak promjena upravljačkog "
 "programa."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:655
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:697
 #, python-format
 msgid "%(count)d proprietary driver in use."
 msgid_plural "%(count)d proprietary drivers in use."
@@ -126,26 +132,64 @@ msgstr[0] "%(count)d vlasnički upravljački program u upotrebi."
 msgstr[1] "%(count)d vlasnička upravljačka programa u upotrebi."
 msgstr[2] "%(count)d vlasničkih upravljačkih programa u upotrebi."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:660
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:702
 msgid "No proprietary drivers are in use."
 msgstr "Nema vlasničkih upravljačkih programa u upotrebi."
 
 #: generate_desktop_files:26 generate_desktop_files:41
+#: usr/share/linuxmint/mintdrivers/main.ui.h:13
+msgid "Additional and proprietary drivers"
+msgstr "Dodatni i vlasnički upravljački programi"
+
+#: generate_desktop_files:41
 msgid "Manage the drivers for your devices"
 msgstr "Prilagodite upravljačke programe za svoje uređaje"
 
+#: generate_desktop_files:67 usr/share/linuxmint/mintdrivers/main.ui.h:11
+msgid "Mount installation media"
+msgstr "Montiraj instalacijski medij"
+
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
-msgid "Looking for hardware drivers..."
-msgstr "Pretraživanje upravljačkih programa hardvera..."
+msgid "Looking for drivers"
+msgstr "Pretraživanje upravljačkih programa"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:2
+msgid "Please wait..."
+msgstr "Malo pričekajte..."
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:3
+msgid "No drivers needed"
+msgstr "Upravljački programi nisu potrebni"
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:4
 msgid "Your computer does not need any additional drivers."
 msgstr "Vašem računalu nisu potrebni dodatni upravljački programi."
 
-#: usr/share/linuxmint/mintdrivers/main.ui.h:3
+#: usr/share/linuxmint/mintdrivers/main.ui.h:5
 msgid "An error occurred"
 msgstr "Pojavila se greška"
 
-#: usr/share/linuxmint/mintdrivers/main.ui.h:4
+#: usr/share/linuxmint/mintdrivers/main.ui.h:6
 msgid "OK"
 msgstr "U redu"
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:7
+msgid "You appear to be offline"
+msgstr "Izgleda da nemate pristup internetu"
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:8
+msgid ""
+"Connect to the Internet or insert the Linux Mint installation disc (or USB "
+"stick)."
+msgstr ""
+"Povežite se s internetom ili umetnite Linux Mint instalacijski disk (ili USB "
+"instalacijski medij)"
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:9
+msgid "Installation media detected"
+msgstr "Instalacijski medij otkriven"
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:10
+msgid "Press the button below to mount it as a software repository."
+msgstr ""
+"Pritisnite na tipku ispod kako bi ga montirali kao softverski repozitorij."

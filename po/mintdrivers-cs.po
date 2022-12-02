@@ -7,115 +7,121 @@ msgid ""
 msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-09-23 10:34+0100\n"
-"PO-Revision-Date: 2020-10-19 09:46+0000\n"
-"Last-Translator: Pavel Borecki <Unknown>\n"
+"POT-Creation-Date: 2022-09-16 10:45+0100\n"
+"PO-Revision-Date: 2022-11-18 12:10+0000\n"
+"Last-Translator: Marek Hladík <mhladik@seznam.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2022-07-24 09:37+0000\n"
-"X-Generator: Launchpad (build 025a39fd866a641b6ae33074cda0d02a2c712d38)\n"
+"X-Launchpad-Export-Date: 2022-12-02 13:28+0000\n"
+"X-Generator: Launchpad (build 51cef3d08dff1e227b5ada709bd67280c567d4be)\n"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:60 generate_desktop_files:26
-#: generate_desktop_files:41 generate_desktop_files:69
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67 generate_desktop_files:26
+#: generate_desktop_files:41 usr/share/linuxmint/mintdrivers/main.ui.h:12
 msgid "Driver Manager"
 msgstr "Správa ovladačů"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:71
 msgid "Re_vert"
 msgstr "_Vrátit"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:69
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:73
 msgid "_Apply Changes"
 msgstr "Upl_atnit změny"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:71
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:75
 msgid "_Cancel"
 msgstr "_Storno"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:73
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:77
 msgid "_Restart..."
 msgstr "_Restartovat…"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:101
-msgid ""
-"Drivers cannot be installed.\n"
-"Please connect to the Internet or insert the Linux Mint installation DVD (or "
-"USB stick)."
-msgstr ""
-"Ovladače nemohou být nainstalovány.\n"
-"Nejprve se připojte se k Internetu nebo vložte instalační DVD (nebo USB "
-"flash disk) Linux Mint."
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:211
+msgid "Downloading drivers..."
+msgstr "Stahování ovladačů…"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:221
-msgid "Applying changes..."
-msgstr "Provádějí se změny…"
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:213
+msgid "Installing drivers..."
+msgstr "Instalace ovladačů…"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:399
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:215
+msgid "Removing drivers..."
+msgstr "Odebírání ovladačů…"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:217
+msgid "Cancelling..."
+msgstr "Ruší se…"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:219
+msgid "Loading cache..."
+msgstr "Nahrávání vyrovnávací paměti…"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:423
 msgid "This device is using the recommended driver."
 msgstr "Pro toto zařízení je nyní používán doporučený ovladač."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:400
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:424
 msgid "This device is using an alternative driver."
 msgstr "Pro toto zařízení je nyní používán alternativní ovladač."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:401
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:425
 msgid "This device is using a manually-installed driver."
 msgstr "Pro toto zařízení je nyní používán ručně nainstalovaný ovladač."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:402
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:426
 msgid "This device is not working."
 msgstr "Toto zařízení není zprovozněné."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:411
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:435
 msgid "Continue using a manually installed driver"
 msgstr "Používat ručně nainstalovaný ovladač i nadále."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:438
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:468
 msgid "Version"
 msgstr "Verze"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:441
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:471
 msgid "recommended"
 msgstr "doporučené"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:443
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:473
 msgid "open-source"
 msgstr "ovladač s otevřeným zdrojovým kódem"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:446
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:476
 msgid "requires a connection to the Internet"
 msgstr "vyžaduje připojení k Internetu"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:470
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:500
 msgid "Do not use the device"
 msgstr "Nepoužívat toto zařízení"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:488
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:489
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:557
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:518
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:519
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:598
 msgid "Unknown"
 msgstr "Neznámý"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:512
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:542
 msgid "Processor"
 msgstr "Procesor"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:539
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:580
 msgid "Processor microcode"
 msgstr "Mikrokód procesoru"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:600
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:642
 msgid "Do not update the CPU microcode"
 msgstr "Neaktualizovat mikrokód procesoru"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:641
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:683
 msgid "You need to restart the computer to complete the driver changes."
 msgstr "Pro dokončení změn ovladačů je třeba restartovat počítač."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:655
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:697
 #, python-format
 msgid "%(count)d proprietary driver in use."
 msgid_plural "%(count)d proprietary drivers in use."
@@ -123,26 +129,63 @@ msgstr[0] "Je používán %(count)d nesvobodný ovladač."
 msgstr[1] "Jsou používány %(count)d nesvobodné ovladače."
 msgstr[2] "Je používáno %(count)d nesvobodných ovladačů."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:660
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:702
 msgid "No proprietary drivers are in use."
 msgstr "Nejsou používány žádné nesvobodné ovladače."
 
 #: generate_desktop_files:26 generate_desktop_files:41
+#: usr/share/linuxmint/mintdrivers/main.ui.h:13
+msgid "Additional and proprietary drivers"
+msgstr "Dodatečné a proprietární ovladače"
+
+#: generate_desktop_files:41
 msgid "Manage the drivers for your devices"
 msgstr "Spravovat ovladače vašich zařízení"
 
+#: generate_desktop_files:67 usr/share/linuxmint/mintdrivers/main.ui.h:11
+msgid "Mount installation media"
+msgstr "Připojení instalačního média"
+
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
-msgid "Looking for hardware drivers..."
-msgstr "Hledání ovladačů hardware…"
+msgid "Looking for drivers"
+msgstr "Hledání ovladačů"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:2
+msgid "Please wait..."
+msgstr "Čekejte prosím…"
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:3
+msgid "No drivers needed"
+msgstr "Nejsou potřeba žádné ovladače"
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:4
 msgid "Your computer does not need any additional drivers."
 msgstr "Váš počítač nepotřebuje žádné dodatečné ovladače."
 
-#: usr/share/linuxmint/mintdrivers/main.ui.h:3
+#: usr/share/linuxmint/mintdrivers/main.ui.h:5
 msgid "An error occurred"
 msgstr "Došlo k chybě"
 
-#: usr/share/linuxmint/mintdrivers/main.ui.h:4
+#: usr/share/linuxmint/mintdrivers/main.ui.h:6
 msgid "OK"
 msgstr "OK"
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:7
+msgid "You appear to be offline"
+msgstr "Zdá se, že není připojení"
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:8
+msgid ""
+"Connect to the Internet or insert the Linux Mint installation disc (or USB "
+"stick)."
+msgstr ""
+"Připojte se k internetu nebo vložte instalační disk Linux Mint (nebo USB "
+"flash disk)."
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:9
+msgid "Installation media detected"
+msgstr "Bylo detekováno instalační médium"
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:10
+msgid "Press the button below to mount it as a software repository."
+msgstr "Stisknutím tlačítka níže jej připojte jako softwarové úložiště."

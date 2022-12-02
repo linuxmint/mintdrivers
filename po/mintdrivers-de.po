@@ -7,142 +7,186 @@ msgid ""
 msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-09-23 10:34+0100\n"
-"PO-Revision-Date: 2021-07-10 14:18+0000\n"
-"Last-Translator: Julian <Unknown>\n"
+"POT-Creation-Date: 2022-09-16 10:45+0100\n"
+"PO-Revision-Date: 2022-09-19 12:41+0000\n"
+"Last-Translator: Tobias Bannert <tobannert@gmail.com>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2022-07-24 09:37+0000\n"
-"X-Generator: Launchpad (build 025a39fd866a641b6ae33074cda0d02a2c712d38)\n"
+"X-Launchpad-Export-Date: 2022-12-02 13:28+0000\n"
+"X-Generator: Launchpad (build 51cef3d08dff1e227b5ada709bd67280c567d4be)\n"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:60 generate_desktop_files:26
-#: generate_desktop_files:41 generate_desktop_files:69
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67 generate_desktop_files:26
+#: generate_desktop_files:41 usr/share/linuxmint/mintdrivers/main.ui.h:12
 msgid "Driver Manager"
 msgstr "Treiberverwaltung"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:71
 msgid "Re_vert"
 msgstr "_Zurücksetzen"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:69
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:73
 msgid "_Apply Changes"
 msgstr "_Änderungen anwenden"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:71
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:75
 msgid "_Cancel"
 msgstr "_Abbrechen"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:73
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:77
 msgid "_Restart..."
 msgstr "_Neustarten …"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:101
-msgid ""
-"Drivers cannot be installed.\n"
-"Please connect to the Internet or insert the Linux Mint installation DVD (or "
-"USB stick)."
-msgstr ""
-"Treiber konnten nicht installiert werden.\n"
-"Bitte stellen Sie eine Verbindung mit dem Internet her oder legen Sie die "
-"Installations-DVD (oder USB-Stick) von »Linux Mint« ein."
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:211
+msgid "Downloading drivers..."
+msgstr "Treiber werden heruntergeladen …"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:221
-msgid "Applying changes..."
-msgstr "Änderungen werden angewendet …"
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:213
+msgid "Installing drivers..."
+msgstr "Treiber werden installiert …"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:399
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:215
+msgid "Removing drivers..."
+msgstr "Treiber werden entfernt …"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:217
+msgid "Cancelling..."
+msgstr "Wird abgebrochen …"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:219
+msgid "Loading cache..."
+msgstr "Zwischenspeicher wird geladen …"
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:423
 msgid "This device is using the recommended driver."
 msgstr "Dieses Gerät benutzt den empfohlenen Treiber."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:400
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:424
 msgid "This device is using an alternative driver."
 msgstr "Dieses Gerät benutzt einen alternativen Treiber."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:401
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:425
 msgid "This device is using a manually-installed driver."
 msgstr "Dieses Gerät verwendet einen manuell installierten Treiber."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:402
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:426
 msgid "This device is not working."
 msgstr "Dieses Gerät funktioniert nicht."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:411
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:435
 msgid "Continue using a manually installed driver"
 msgstr "Weiterhin einen manuell installierten Treiber verwenden"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:438
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:468
 msgid "Version"
 msgstr "Version"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:441
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:471
 msgid "recommended"
 msgstr "empfohlen"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:443
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:473
 msgid "open-source"
 msgstr "quelloffen"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:446
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:476
 msgid "requires a connection to the Internet"
 msgstr "benötigt eine Verbindung zum Internet"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:470
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:500
 msgid "Do not use the device"
 msgstr "Dieses Gerät nicht verwenden"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:488
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:489
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:557
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:518
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:519
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:598
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:512
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:542
 msgid "Processor"
 msgstr "Prozessor"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:539
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:580
 msgid "Processor microcode"
 msgstr "Prozessormikrocode"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:600
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:642
 msgid "Do not update the CPU microcode"
 msgstr "Nicht den Prozessormikrocode aktualisieren"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:641
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:683
 msgid "You need to restart the computer to complete the driver changes."
 msgstr ""
 "Sie müssen den Rechner neu starten, um die Treiberänderungen abzuschließen."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:655
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:697
 #, python-format
 msgid "%(count)d proprietary driver in use."
 msgid_plural "%(count)d proprietary drivers in use."
 msgstr[0] "%(count)d proprietärer Treiber in Verwendung."
 msgstr[1] "%(count)d proprietäre Treiber in Verwendung."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:660
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:702
 msgid "No proprietary drivers are in use."
 msgstr "Es werden keine proprietären Treiber verwendet."
 
 #: generate_desktop_files:26 generate_desktop_files:41
+#: usr/share/linuxmint/mintdrivers/main.ui.h:13
+msgid "Additional and proprietary drivers"
+msgstr "Zusätzliche und proprietäre Treiber"
+
+#: generate_desktop_files:41
 msgid "Manage the drivers for your devices"
 msgstr "Die Treiber für Ihre Geräte verwalten"
 
+#: generate_desktop_files:67 usr/share/linuxmint/mintdrivers/main.ui.h:11
+msgid "Mount installation media"
+msgstr "Insatllationsmedium einhängen"
+
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
-msgid "Looking for hardware drivers..."
-msgstr "Nach Gerätetreibern wird gesucht …"
+msgid "Looking for drivers"
+msgstr "Nach Treibern wird gesucht"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:2
+msgid "Please wait..."
+msgstr "Bitte warten …"
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:3
+msgid "No drivers needed"
+msgstr "Keine Treiber benötigt"
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:4
 msgid "Your computer does not need any additional drivers."
 msgstr "Ihr Rechner benötigt keine zusätzlichen Treiber."
 
-#: usr/share/linuxmint/mintdrivers/main.ui.h:3
+#: usr/share/linuxmint/mintdrivers/main.ui.h:5
 msgid "An error occurred"
 msgstr "Ein Fehler ist aufgetreten"
 
-#: usr/share/linuxmint/mintdrivers/main.ui.h:4
+#: usr/share/linuxmint/mintdrivers/main.ui.h:6
 msgid "OK"
 msgstr "OK"
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:7
+msgid "You appear to be offline"
+msgstr "Sie sind anscheinend nicht im Netz"
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:8
+msgid ""
+"Connect to the Internet or insert the Linux Mint installation disc (or USB "
+"stick)."
+msgstr ""
+"Verbinden Sie sich mit dem Internet oder legen Sie die Linux-Mint-"
+"Installations-CD (oder den USB-Stick) ein."
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:9
+msgid "Installation media detected"
+msgstr "Installationsmedien erkannt"
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:10
+msgid "Press the button below to mount it as a software repository."
+msgstr ""
+"Klicken Sie auf den Knopf unten, um es als Anwendungspaketquelle einzuhängen."

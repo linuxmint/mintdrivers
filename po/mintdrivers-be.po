@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-09-23 10:34+0100\n"
-"PO-Revision-Date: 2021-12-04 16:55+0000\n"
+"POT-Creation-Date: 2022-09-16 10:45+0100\n"
+"PO-Revision-Date: 2022-10-20 18:19+0000\n"
 "Last-Translator: Anton Hryb <Unknown>\n"
 "Language-Team: Belarusian <be@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,107 +16,113 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Launchpad-Export-Date: 2022-07-24 09:37+0000\n"
-"X-Generator: Launchpad (build 025a39fd866a641b6ae33074cda0d02a2c712d38)\n"
+"X-Launchpad-Export-Date: 2022-12-02 13:28+0000\n"
+"X-Generator: Launchpad (build 51cef3d08dff1e227b5ada709bd67280c567d4be)\n"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:60 generate_desktop_files:26
-#: generate_desktop_files:41 generate_desktop_files:69
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67 generate_desktop_files:26
+#: generate_desktop_files:41 usr/share/linuxmint/mintdrivers/main.ui.h:12
 msgid "Driver Manager"
 msgstr "Кіраўнік драйвераў"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:71
 msgid "Re_vert"
 msgstr "_Вярнуць"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:69
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:73
 msgid "_Apply Changes"
 msgstr "_Ужыць змены"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:71
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:75
 msgid "_Cancel"
 msgstr "_Скасаваць"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:73
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:77
 msgid "_Restart..."
 msgstr "_Перазапуск..."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:101
-msgid ""
-"Drivers cannot be installed.\n"
-"Please connect to the Internet or insert the Linux Mint installation DVD (or "
-"USB stick)."
-msgstr ""
-"Драйверы не могуць быць усталяваны.\n"
-"Злучыцеся з інтэрнэтам або ўстаўце ўсталёўнік Linux Mint (DVD- або USB-"
-"носьбіт)."
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:211
+msgid "Downloading drivers..."
+msgstr "Спампоўка драйвераў..."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:221
-msgid "Applying changes..."
-msgstr "Ужыванне зменаў..."
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:213
+msgid "Installing drivers..."
+msgstr "Усталяванне драйвераў..."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:399
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:215
+msgid "Removing drivers..."
+msgstr "Выдаленне драйвераў..."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:217
+msgid "Cancelling..."
+msgstr "Скасаванне..."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:219
+msgid "Loading cache..."
+msgstr "Загрузка кэша..."
+
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:423
 msgid "This device is using the recommended driver."
 msgstr "Гэта прылада выкарыстоўвае рэкамендаваны драйвер."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:400
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:424
 msgid "This device is using an alternative driver."
 msgstr "Гэта прылада выкарыстоўвае альтэрнатыўны драйвер."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:401
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:425
 msgid "This device is using a manually-installed driver."
 msgstr "Гэта прылада выкарыстоўвае ўласнаручна ўсталяваны драйвер."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:402
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:426
 msgid "This device is not working."
 msgstr "Гэта прылада не працуе."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:411
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:435
 msgid "Continue using a manually installed driver"
 msgstr "Працягваць карыстацца ўласнаручна ўсталяваным драйверам"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:438
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:468
 msgid "Version"
 msgstr "Версія"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:441
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:471
 msgid "recommended"
 msgstr "рэкамендуецца"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:443
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:473
 msgid "open-source"
 msgstr "open-source"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:446
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:476
 msgid "requires a connection to the Internet"
 msgstr "патрабуецца злучэнне з інтэрнэтам"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:470
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:500
 msgid "Do not use the device"
 msgstr "Не выкарыстоўваць прыладу"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:488
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:489
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:557
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:518
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:519
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:598
 msgid "Unknown"
 msgstr "Невядома"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:512
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:542
 msgid "Processor"
 msgstr "Працэсар"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:539
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:580
 msgid "Processor microcode"
 msgstr "Мікракод працэсара"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:600
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:642
 msgid "Do not update the CPU microcode"
 msgstr "Не абнаўляць мікракод працэсара"
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:641
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:683
 msgid "You need to restart the computer to complete the driver changes."
 msgstr "Трэба перазапусціць камп'ютар, каб ужыць змены ў драйверах."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:655
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:697
 #, python-format
 msgid "%(count)d proprietary driver in use."
 msgid_plural "%(count)d proprietary drivers in use."
@@ -124,26 +130,63 @@ msgstr[0] "%(count)d прыпрыетарны драйвер выкарысто�
 msgstr[1] "%(count)d прыпрыетарныя драйверы выкарыстоўваюцца."
 msgstr[2] "%(count)d прыпрыетарных драйвераў выкарыстоўваецца."
 
-#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:660
+#: usr/lib/linuxmint/mintdrivers/mintdrivers.py:702
 msgid "No proprietary drivers are in use."
 msgstr "Прыпрыетарныя драйверы не выкарыстоўваюцца."
 
 #: generate_desktop_files:26 generate_desktop_files:41
+#: usr/share/linuxmint/mintdrivers/main.ui.h:13
+msgid "Additional and proprietary drivers"
+msgstr "Дадатковыя і прапрыетарныя драйверы"
+
+#: generate_desktop_files:41
 msgid "Manage the drivers for your devices"
 msgstr "Кіраваць драйверамі для вашых прылад"
 
+#: generate_desktop_files:67 usr/share/linuxmint/mintdrivers/main.ui.h:11
+msgid "Mount installation media"
+msgstr "Прымантаваць загрузачны дыск"
+
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
-msgid "Looking for hardware drivers..."
-msgstr "Пошук драйвераў для абсталявання..."
+msgid "Looking for drivers"
+msgstr "Пошук драйвераў"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:2
+msgid "Please wait..."
+msgstr "Пачакайце..."
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:3
+msgid "No drivers needed"
+msgstr "Драйверы непатрэбны"
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:4
 msgid "Your computer does not need any additional drivers."
 msgstr "Вашаму камп'ютару непатрэбны дадатковыя драйверы."
 
-#: usr/share/linuxmint/mintdrivers/main.ui.h:3
+#: usr/share/linuxmint/mintdrivers/main.ui.h:5
 msgid "An error occurred"
 msgstr "Адбылася памылка"
 
-#: usr/share/linuxmint/mintdrivers/main.ui.h:4
+#: usr/share/linuxmint/mintdrivers/main.ui.h:6
 msgid "OK"
 msgstr "Добра"
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:7
+msgid "You appear to be offline"
+msgstr "Вы па-за сеткай"
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:8
+msgid ""
+"Connect to the Internet or insert the Linux Mint installation disc (or USB "
+"stick)."
+msgstr ""
+"Падлучыцеся да інтэрнэта або далучыце ўсталёвачны дыск (ці флэшку) Linux "
+"Mint."
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:9
+msgid "Installation media detected"
+msgstr "Знойдзены ўсталёвачны дыск"
+
+#: usr/share/linuxmint/mintdrivers/main.ui.h:10
+msgid "Press the button below to mount it as a software repository."
+msgstr "Націсніце кнопку ніжэй каб прымантаваць яго як рэпазіторый."
