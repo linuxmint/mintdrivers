@@ -454,13 +454,26 @@ class Application:
         except KeyError:
             pass
 
+        # -open nvidia drivers are recommended now over normal ones. Go thru the list and get the version of the recommended one,
+        # then we can flag the non-'open' one instead.
+        new_recommended = None
+        for pkg_driver_name in device['drivers']:
+            current_driver = device['drivers'][pkg_driver_name]
+            try:
+                if current_driver['recommended'] and current_driver['from_distro']:
+                    driver_status = 'recommended'
+                    if pkg_driver_name.endswith("-open"):
+                        new_recommended = pkg_driver_name.replace("-open", "")
+            except KeyError:
+                pass
+
         for pkg_driver_name in device['drivers']:
             current_driver = device['drivers'][pkg_driver_name]
 
             # get general status
             driver_status = 'alternative'
             try:
-                if current_driver['recommended'] and current_driver['from_distro']:
+                if (current_driver['recommended'] and current_driver['from_distro']) or pkg_driver_name == new_recommended:
                     driver_status = 'recommended'
             except KeyError:
                 pass
@@ -640,8 +653,8 @@ class Application:
                 # define the order of introspection
                 for section in ('recommended', 'alternative', 'manually_installed', 'no_driver'):
                     for driver in sorted(drivers[section], key=lambda x: self.sort_string(drivers[section], x), reverse=True):
-                        if str(driver).startswith("nvidia-driver") and str(driver).endswith("-server"):
-                            print("Ignoring server NVIDIA driver: ", driver)
+                        if str(driver).startswith("nvidia-driver") and str(driver).endswith(("-server", "-open")):
+                            print("Ignoring server or open NVIDIA driver: ", driver)
                             continue
                         radio_button = Gtk.RadioButton.new(None)
                         label = Gtk.Label()
