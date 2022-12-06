@@ -125,9 +125,24 @@ class Application:
         task = packagekit.Task()
         task.refresh_cache_async(True, Gio.Cancellable(), self.on_cache_update_progress, (None, ), self.on_cache_update_finished, (None, ))
 
-    def on_error(self, msg):
+    def on_error(self, error):
+        # Returns False if the error was from cancelling or failing to authenticate.
+        # This will bring the ui back to pre-apply state. Returning True will reset
+        # entirely.
+
+        # it thinks it's a PkClientError but it's really PkErrorEnum
+        # the GError code is set to 0xFF + code
+        real_code = error.code
+        if error.code >= 0xFF:
+            real_code = error.code - 0xFF
+
+            if real_code == packagekit.ErrorEnum.NOT_AUTHORIZED:
+                # Silently ignore auth failures or cancellation.
+                return False
+
         self.show_page("error_page")
-        self.builder.get_object("error_label").set_label(msg)
+        self.builder.get_object("error_label").set_label(error.message)
+        return True
 
     def on_cache_update_progress(self, progress, ptype, data=None):
         pass
@@ -229,16 +244,19 @@ class Application:
         errors = False
         try:
             results = self.pk_task.generic_finish(result)
-        except Exception as e:
-            self.on_driver_changes_revert()
-            self.on_error(str(e))
+        except GLib.Error as e:
             errors = True
-            return
+            if self.on_error(e):
+                # real failure
+                self.on_driver_changes_revert()
+                self.clear_changes()
+            else:
+                self.button_driver_revert.set_sensitive(bool(self.driver_changes))
+                self.button_driver_apply.set_sensitive(bool(self.driver_changes))
 
-        if installs is None or len(installs) == 0:
+        if installs is None or len(installs) == 0 or errors:
             self.needs_restart = (not errors)
             self.progress_bar.set_visible(False)
-            self.clear_changes()
             self.apt_cache = apt.Cache()
             self.set_driver_action_status()
             self.update_label_and_icons_from_status()
