@@ -1,3 +1,14 @@
+mintdrivers (1.6.7) vera; urgency=medium
+
+  [ hduelme ]
+  * remove unused imports os and sys (#82)
+
+  [ Michael Webster ]
+  * Handle cancel/authentication errors differently than real ones.
+  * Don't display 'open' nvidia drivers.
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue, 06 Dec 2022 18:19:12 +0000
+
 mintdrivers (1.6.6) vanessa; urgency=medium
 
   * l10n: Update translations
