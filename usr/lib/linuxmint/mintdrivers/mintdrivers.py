@@ -130,9 +130,8 @@ class Application:
         # This will bring the ui back to pre-apply state. Returning True will reset
         # entirely.
 
-        # it thinks it's a PkClientError but it's really PkErrorEnum
+        # it thinks it's a PkClientError, but it's really PkErrorEnum
         # the GError code is set to 0xFF + code
-        real_code = error.code
         if error.code >= 0xFF:
             real_code = error.code - 0xFF
 
