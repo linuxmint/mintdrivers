@@ -239,10 +239,9 @@ class Application:
             XApp.set_window_progress(self.window_main, prog_value)
 
     def on_driver_changes_finish(self, source, result, installs):
-        results = None
         errors = False
         try:
-            results = self.pk_task.generic_finish(result)
+            self.pk_task.generic_finish(result)
         except GLib.Error as e:
             errors = True
             if self.on_error(e):
