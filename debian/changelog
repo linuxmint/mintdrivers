@@ -1,3 +1,11 @@
+mintdrivers (1.6.9) victoria; urgency=medium
+
+  [ hduelme ]
+  * remove unused assignment to real_code (#86)
+  * remove unused variable results (#87)
+
+ -- Clement Lefebvre <root@linuxmint.com>  Wed, 31 May 2023 11:38:37 +0100
+
 mintdrivers (1.6.8) vera; urgency=medium
 
   * l10n: Update translations
