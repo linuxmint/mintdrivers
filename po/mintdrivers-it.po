@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2022-09-16 10:45+0100\n"
-"PO-Revision-Date: 2022-09-20 21:01+0000\n"
-"Last-Translator: Dragone2 <Unknown>\n"
+"PO-Revision-Date: 2022-12-25 14:29+0000\n"
+"Last-Translator: Fs00 <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2022-12-16 11:46+0000\n"
-"X-Generator: Launchpad (build 31c78762a8046acf7ab47372e5d588ebb3759d2e)\n"
+"X-Launchpad-Export-Date: 2023-06-08 10:19+0000\n"
+"X-Generator: Launchpad (build 620cd5280e3a973662e263ebf9346837ed657a46)\n"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67 generate_desktop_files:26
 #: generate_desktop_files:41 usr/share/linuxmint/mintdrivers/main.ui.h:12
@@ -148,7 +148,7 @@ msgstr "Montare il supporto di installazione"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
 msgid "Looking for drivers"
-msgstr "Cercando i driver"
+msgstr "Ricerca dei driver in corso"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:2
 msgid "Please wait..."

@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2022-09-16 10:45+0100\n"
-"PO-Revision-Date: 2022-09-18 11:25+0000\n"
-"Last-Translator: Dmitriy Kiryanov <Unknown>\n"
+"PO-Revision-Date: 2023-01-05 11:29+0000\n"
+"Last-Translator: Темак <artemkotlubai@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2022-12-16 11:46+0000\n"
-"X-Generator: Launchpad (build 31c78762a8046acf7ab47372e5d588ebb3759d2e)\n"
+"X-Launchpad-Export-Date: 2023-06-08 10:19+0000\n"
+"X-Generator: Launchpad (build 620cd5280e3a973662e263ebf9346837ed657a46)\n"
 "Language: ru\n"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67 generate_desktop_files:26
@@ -39,7 +39,7 @@ msgstr "_Отмена"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:77
 msgid "_Restart..."
-msgstr "_Перезапустить..."
+msgstr "_Перезапуск..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:211
 msgid "Downloading drivers..."
@@ -59,15 +59,15 @@ msgstr "Отмена..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:219
 msgid "Loading cache..."
-msgstr "Загрузка кеша..."
+msgstr "Загрузка кэша..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:423
 msgid "This device is using the recommended driver."
-msgstr "Это устройство использует рекомендованный драйвер."
+msgstr "Это устройство использует желательный драйвер."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:424
 msgid "This device is using an alternative driver."
-msgstr "Это устройство использует альтернативный драйвер."
+msgstr "Это устройство использует другой драйвер."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:425
 msgid "This device is using a manually-installed driver."
@@ -87,7 +87,7 @@ msgstr "Версия"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:471
 msgid "recommended"
-msgstr "рекомендованный"
+msgstr "желательный"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:473
 msgid "open-source"
@@ -95,7 +95,7 @@ msgstr "Открытый исходный код"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:476
 msgid "requires a connection to the Internet"
-msgstr "требуется подключение к Интернету"
+msgstr "требуется подключение к сети"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:500
 msgid "Do not use the device"
@@ -128,18 +128,18 @@ msgstr ""
 #, python-format
 msgid "%(count)d proprietary driver in use."
 msgid_plural "%(count)d proprietary drivers in use."
-msgstr[0] "Используется %(count)d проприетарный драйвер."
-msgstr[1] "Используется %(count)d проприетарных драйвера."
-msgstr[2] "Используется %(count)d проприетарных драйверов."
+msgstr[0] "Используется %(count)d закрытый драйвер."
+msgstr[1] "Используется %(count)d закрытых драйвера."
+msgstr[2] "Используется %(count)d закрытых драйверов."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:702
 msgid "No proprietary drivers are in use."
-msgstr "Проприетарные драйверы не используются."
+msgstr "Закрытые драйверы не используются."
 
 #: generate_desktop_files:26 generate_desktop_files:41
 #: usr/share/linuxmint/mintdrivers/main.ui.h:13
 msgid "Additional and proprietary drivers"
-msgstr "Дополнительные и проприетарные драйверы"
+msgstr "Дополнительные и закрытые драйверы"
 
 #: generate_desktop_files:41
 msgid "Manage the drivers for your devices"
@@ -147,7 +147,7 @@ msgstr "Управление драйверами для устройств"
 
 #: generate_desktop_files:67 usr/share/linuxmint/mintdrivers/main.ui.h:11
 msgid "Mount installation media"
-msgstr "Смонтировать установочный носитель"
+msgstr "Подсоединить установочный носитель"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
 msgid "Looking for drivers"
@@ -182,7 +182,7 @@ msgid ""
 "Connect to the Internet or insert the Linux Mint installation disc (or USB "
 "stick)."
 msgstr ""
-"Подключитесь к Интернету или вставьте установочный диск Linux Mint (или USB-"
+"Подключитесь к сети или вставьте установочный диск Linux Mint (или USB-"
 "накопитель)."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:9
@@ -192,5 +192,5 @@ msgstr "Обнаружен установочный носитель"
 #: usr/share/linuxmint/mintdrivers/main.ui.h:10
 msgid "Press the button below to mount it as a software repository."
 msgstr ""
-"Нажмите кнопку ниже, чтобы смонтировать его как репозиторий программного "
+"Нажмите на кнопку ниже, чтобы подсоединить его как хранилище программного "
 "обеспечения."

@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2022-09-16 10:45+0100\n"
-"PO-Revision-Date: 2016-03-05 11:16+0000\n"
-"Last-Translator: ahrar ghayyem <ahrar.ghayyem@gmail.com>\n"
+"PO-Revision-Date: 2023-03-20 14:28+0000\n"
+"Last-Translator: Mr.Ravi <Unknown>\n"
 "Language-Team: Persian <fa@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2022-12-16 11:46+0000\n"
-"X-Generator: Launchpad (build 31c78762a8046acf7ab47372e5d588ebb3759d2e)\n"
+"X-Launchpad-Export-Date: 2023-06-08 10:19+0000\n"
+"X-Generator: Launchpad (build 620cd5280e3a973662e263ebf9346837ed657a46)\n"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67 generate_desktop_files:26
 #: generate_desktop_files:41 usr/share/linuxmint/mintdrivers/main.ui.h:12
@@ -41,23 +41,23 @@ msgstr "_راه اندازی مجدد"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:211
 msgid "Downloading drivers..."
-msgstr ""
+msgstr "درحال بارگیری درایور ها..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:213
 msgid "Installing drivers..."
-msgstr ""
+msgstr "درحال نصب درایور ها..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:215
 msgid "Removing drivers..."
-msgstr ""
+msgstr "درحال حذف درایور ها..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:217
 msgid "Cancelling..."
-msgstr ""
+msgstr "درحال لغو..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:219
 msgid "Loading cache..."
-msgstr ""
+msgstr "درحال بارگذاری کش..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:423
 msgid "This device is using the recommended driver."
@@ -89,11 +89,11 @@ msgstr "پیشنهاد شده"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:473
 msgid "open-source"
-msgstr ""
+msgstr "متن-باز"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:476
 msgid "requires a connection to the Internet"
-msgstr ""
+msgstr "نیازمند اتصال به اینترنت"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:500
 msgid "Do not use the device"
@@ -103,87 +103,85 @@ msgstr "از دستگاه استفاده نکن"
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:519
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:598
 msgid "Unknown"
-msgstr "نشناخته"
+msgstr "ناشناخته"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:542
 msgid "Processor"
-msgstr ""
+msgstr "پردازنده"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:580
 msgid "Processor microcode"
-msgstr ""
+msgstr "میکروکدِ پردازنده"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:642
 msgid "Do not update the CPU microcode"
-msgstr ""
+msgstr "میکروکدِ پردازنده را بروزرسانی نکنید"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:683
 msgid "You need to restart the computer to complete the driver changes."
-msgstr ""
-"شما نیاز به راه اندازی مجدد رایانه خود را دارید تا تغییرات راه انداز را کامل "
-"کنید."
+msgstr "برای تکمیل تغییرات درایور ها باید سیستم را راه اندازی مجدد کنید"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:697
 #, python-format
 msgid "%(count)d proprietary driver in use."
 msgid_plural "%(count)d proprietary drivers in use."
-msgstr[0] "%(count)d گرداننده اختصاصی در حال استفاده است."
+msgstr[0] "%(count)d درایور اختصاصی مورد استفاده است."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:702
 msgid "No proprietary drivers are in use."
-msgstr "هیچ گرداننده اختصاصی در حال استفاده نیست."
+msgstr "هیچ درایور اختصاصی مورد استفاده نیست."
 
 #: generate_desktop_files:26 generate_desktop_files:41
 #: usr/share/linuxmint/mintdrivers/main.ui.h:13
 msgid "Additional and proprietary drivers"
-msgstr ""
+msgstr "درایور های اضافی و اختصاصی"
 
 #: generate_desktop_files:41
 msgid "Manage the drivers for your devices"
-msgstr "گرداننده های دستگاه خود را مدیریت کنید"
+msgstr "درایور های دستگاه خود را مدیریت کنید."
 
 #: generate_desktop_files:67 usr/share/linuxmint/mintdrivers/main.ui.h:11
 msgid "Mount installation media"
-msgstr ""
+msgstr "سوارکردن رسانه نصب."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
 msgid "Looking for drivers"
-msgstr ""
+msgstr "در جست‌وجو درایور ها"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:2
 msgid "Please wait..."
-msgstr ""
+msgstr "لطفا صبر کنید..."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:3
 msgid "No drivers needed"
-msgstr ""
+msgstr "درایوری نیاز نیست"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:4
 msgid "Your computer does not need any additional drivers."
-msgstr ""
+msgstr "رایانه شما نیاز به هیچ درایور اضافی ندارد."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:5
 msgid "An error occurred"
-msgstr ""
+msgstr "خطایی رخ داد"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:6
 msgid "OK"
-msgstr ""
+msgstr "تأیید"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:7
 msgid "You appear to be offline"
-msgstr ""
+msgstr "بنظر میاید آفلاین هستید"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:8
 msgid ""
 "Connect to the Internet or insert the Linux Mint installation disc (or USB "
 "stick)."
-msgstr ""
+msgstr "به اینترنت وصل شوید یا دیسک(یا USB) نصب Linux Mint را وارد کنید."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:9
 msgid "Installation media detected"
-msgstr ""
+msgstr "رسانه نصب شناسایی شد."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:10
 msgid "Press the button below to mount it as a software repository."
-msgstr ""
+msgstr "برای سوار کردن به عنوان مخزن نرم‌افزار دکمه زیر را بفشارید."
