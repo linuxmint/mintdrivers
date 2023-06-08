@@ -21,6 +21,7 @@
 <message xml:lang="es">Montar medio de instalación</message>
 <message xml:lang="et">Paigaldusmeediumi haakimine</message>
 <message xml:lang="eu">Muntatu instalazio-euskarria</message>
+<message xml:lang="fa">سوارکردن رسانه نصب.</message>
 <message xml:lang="fi">Liitä asennusmedia</message>
 <message xml:lang="fr">Monter le périphérique d'installation</message>
 <message xml:lang="fr_CA">Montage du média d'installation</message>
@@ -28,13 +29,18 @@
 <message xml:lang="hr">Montiraj instalacijski medij</message>
 <message xml:lang="hu">A telepítési adathordozó felcsatolása</message>
 <message xml:lang="ia">Montar medios de installation</message>
+<message xml:lang="is">Tengja uppsetningamiðil</message>
 <message xml:lang="it">Montare il supporto di installazione</message>
+<message xml:lang="ka">დასაყენებელი მედიის მიმაგრება</message>
+<message xml:lang="ko">설치 미디어 탑재</message>
+<message xml:lang="la">Media intructionis collige</message>
 <message xml:lang="lt">Montuoti įdiegimo laikmeną</message>
 <message xml:lang="nl">Installatiemedium koppelen</message>
 <message xml:lang="pl">Zamontuj nośnik instalacyjny</message>
 <message xml:lang="pt">Montar meio de instalação</message>
 <message xml:lang="pt_BR">Montar uma mídia de instalação</message>
-<message xml:lang="ru">Смонтировать установочный носитель</message>
+<message xml:lang="ro">Montează dispozitivul de instalare</message>
+<message xml:lang="ru">Подсоединить установочный носитель</message>
 <message xml:lang="sk">Pripojte inštalačné médium</message>
 <message xml:lang="sl">Priklopi nosilec namestitve</message>
 <message xml:lang="sr">Прикачи инсталациони медиј</message>
