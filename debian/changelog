@@ -1,3 +1,10 @@
+mintdrivers (1.7.1) virginia; urgency=medium
+
+  * l10n: Update translations
+  * l10n: Update files
+
+ -- Clement Lefebvre <root@linuxmint.com>  Sun, 03 Dec 2023 15:02:10 +0000
+
 mintdrivers (1.7.0) victoria; urgency=medium
 
   * l10n: Update translations
