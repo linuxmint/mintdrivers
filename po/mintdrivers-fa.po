@@ -8,20 +8,21 @@ msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2022-09-16 10:45+0100\n"
-"PO-Revision-Date: 2023-03-20 14:28+0000\n"
+"PO-Revision-Date: 2023-09-27 14:57+0000\n"
 "Last-Translator: Mr.Ravi <Unknown>\n"
 "Language-Team: Persian <fa@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2023-06-08 10:19+0000\n"
-"X-Generator: Launchpad (build 620cd5280e3a973662e263ebf9346837ed657a46)\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Launchpad-Export-Date: 2023-12-03 13:31+0000\n"
+"X-Generator: Launchpad (build 886068b1e1d10de444fbd53b0c7d3f6d4fb3e658)\n"
+"Language: fa\n"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67 generate_desktop_files:26
 #: generate_desktop_files:41 usr/share/linuxmint/mintdrivers/main.ui.h:12
 msgid "Driver Manager"
-msgstr "مدیریت گرداننده"
+msgstr "مدیریت درایور"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:71
 msgid "Re_vert"
@@ -37,7 +38,7 @@ msgstr "_لغو"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:77
 msgid "_Restart..."
-msgstr "_راه اندازی مجدد"
+msgstr "_راه‌اندازی مجدد..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:211
 msgid "Downloading drivers..."
@@ -57,19 +58,19 @@ msgstr "درحال لغو..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:219
 msgid "Loading cache..."
-msgstr "درحال بارگذاری کش..."
+msgstr "درحال بارگذاری حافظه موقت..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:423
 msgid "This device is using the recommended driver."
-msgstr "این دستگاه از راه انداز پیشنهاد شده استفاده میکند."
+msgstr "این دستگاه از درایور پیشنهاد شده استفاده میکند."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:424
 msgid "This device is using an alternative driver."
-msgstr "این دستگاه از راه انداز جایگزین استفاده میکند."
+msgstr "این دستگاه از درایور جایگزین استفاده میکند."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:425
 msgid "This device is using a manually-installed driver."
-msgstr "این دستگاه از راه انداز نصب-دستی استفاده میکند."
+msgstr "این دستگاه از یک درایور نصب‌شده-دستی استفاده میکند."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:426
 msgid "This device is not working."
@@ -77,7 +78,7 @@ msgstr "این دستگاه کار نمیکند."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:435
 msgid "Continue using a manually installed driver"
-msgstr "به استفاده از دستگاه دستی نصب شده ادامه بده"
+msgstr "ادامه دادن به استفاده از درایور نصب شده به صورت دستی"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:468
 msgid "Version"
@@ -119,30 +120,31 @@ msgstr "میکروکدِ پردازنده را بروزرسانی نکنید"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:683
 msgid "You need to restart the computer to complete the driver changes."
-msgstr "برای تکمیل تغییرات درایور ها باید سیستم را راه اندازی مجدد کنید"
+msgstr "برای تکمیل تغییرات درایور ها باید سیستم را راه‌اندازی مجدد کنید."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:697
 #, python-format
 msgid "%(count)d proprietary driver in use."
 msgid_plural "%(count)d proprietary drivers in use."
-msgstr[0] "%(count)d درایور اختصاصی مورد استفاده است."
+msgstr[0] "%(count)d درایور انحصاری مورد استفاده است."
+msgstr[1] "%(count)d درایور انحصاری مورد استفاده است."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:702
 msgid "No proprietary drivers are in use."
-msgstr "هیچ درایور اختصاصی مورد استفاده نیست."
+msgstr "هیچ درایور انحصاری مورد استفاده نیست."
 
 #: generate_desktop_files:26 generate_desktop_files:41
 #: usr/share/linuxmint/mintdrivers/main.ui.h:13
 msgid "Additional and proprietary drivers"
-msgstr "درایور های اضافی و اختصاصی"
+msgstr "درایور های اضافی و انحصاری"
 
 #: generate_desktop_files:41
 msgid "Manage the drivers for your devices"
-msgstr "درایور های دستگاه خود را مدیریت کنید."
+msgstr "درایور های دستگاه خود را مدیریت کنید"
 
 #: generate_desktop_files:67 usr/share/linuxmint/mintdrivers/main.ui.h:11
 msgid "Mount installation media"
-msgstr "سوارکردن رسانه نصب."
+msgstr "سوارکردن رسانه نصب"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
 msgid "Looking for drivers"
@@ -180,7 +182,7 @@ msgstr "به اینترنت وصل شوید یا دیسک(یا USB) نصب Linux
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:9
 msgid "Installation media detected"
-msgstr "رسانه نصب شناسایی شد."
+msgstr "رسانه نصب شناسایی شد"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:10
 msgid "Press the button below to mount it as a software repository."
