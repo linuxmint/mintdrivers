@@ -8,20 +8,20 @@ msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2022-09-16 10:45+0100\n"
-"PO-Revision-Date: 2022-09-24 08:52+0000\n"
-"Last-Translator: karm <melo@carmu.com>\n"
+"PO-Revision-Date: 2023-12-29 19:51+0000\n"
+"Last-Translator: famese <Unknown>\n"
 "Language-Team: Interlingua <ia@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2023-12-03 13:31+0000\n"
-"X-Generator: Launchpad (build 886068b1e1d10de444fbd53b0c7d3f6d4fb3e658)\n"
+"X-Launchpad-Export-Date: 2024-01-04 14:55+0000\n"
+"X-Generator: Launchpad (build e1eeab5b20e19239bd7d5f36676f7a52988db88b)\n"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67 generate_desktop_files:26
 #: generate_desktop_files:41 usr/share/linuxmint/mintdrivers/main.ui.h:12
 msgid "Driver Manager"
-msgstr "Gestor de driver"
+msgstr "Gestor de controlator"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:71
 msgid "Re_vert"
@@ -41,15 +41,15 @@ msgstr "_Reinitiar..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:211
 msgid "Downloading drivers..."
-msgstr "Discargante drivers..."
+msgstr "Discargante controlatores..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:213
 msgid "Installing drivers..."
-msgstr "Installante drivers..."
+msgstr "Installante controlatores..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:215
 msgid "Removing drivers..."
-msgstr "Removente drivers..."
+msgstr "Removente controlatores..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:217
 msgid "Cancelling..."
@@ -61,23 +61,23 @@ msgstr "Cargante cache..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:423
 msgid "This device is using the recommended driver."
-msgstr "Iste dispositivo es usante le driver recommendate."
+msgstr "Iste dispositivo usa le controlator recommendate."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:424
 msgid "This device is using an alternative driver."
-msgstr "Iste dispositivo es usante un driver alternative."
+msgstr "Iste dispositivo usa un controlator alternative."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:425
 msgid "This device is using a manually-installed driver."
-msgstr "Iste dispositivo es usante un driver installate manualmente."
+msgstr "Iste dispositivo es usante un controlator installate manualmente."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:426
 msgid "This device is not working."
-msgstr "Iste dispositivo non es functionante."
+msgstr "Iste dispositivo non functiona."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:435
 msgid "Continue using a manually installed driver"
-msgstr "Continuar usante un driver installate manualmente"
+msgstr "Continuar usante un controlator installate manualmente"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:468
 msgid "Version"
@@ -111,36 +111,37 @@ msgstr "Processor"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:580
 msgid "Processor microcode"
-msgstr "Micro-codice del processor"
+msgstr "Microcodice del processor"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:642
 msgid "Do not update the CPU microcode"
-msgstr "Non actualisar le micro-codice del processor"
+msgstr "Non actualisar le microcodice del processor"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:683
 msgid "You need to restart the computer to complete the driver changes."
 msgstr ""
-"Tu necessita reinitiar le computer pro completar le cambios del drivers."
+"Tu necessita reinitiar le computer pro completar le cambios del "
+"controlatores."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:697
 #, python-format
 msgid "%(count)d proprietary driver in use."
 msgid_plural "%(count)d proprietary drivers in use."
-msgstr[0] "%(count)d driver proprietari in uso."
-msgstr[1] "%(count)d driveres proprietari in uso."
+msgstr[0] "%(count)d controlator proprietari in uso."
+msgstr[1] "%(count)d controlatores proprietari in uso."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:702
 msgid "No proprietary drivers are in use."
-msgstr "Nulle driver proprietari es in uso."
+msgstr "Nulle controlator proprietari es in uso."
 
 #: generate_desktop_files:26 generate_desktop_files:41
 #: usr/share/linuxmint/mintdrivers/main.ui.h:13
 msgid "Additional and proprietary drivers"
-msgstr "Drivers additional e proprietari"
+msgstr "Controlatores additional e proprietari"
 
 #: generate_desktop_files:41
 msgid "Manage the drivers for your devices"
-msgstr "Gerer le drivers de tu dispositivos"
+msgstr "Gerer le controlatores de tu dispositivos"
 
 #: generate_desktop_files:67 usr/share/linuxmint/mintdrivers/main.ui.h:11
 msgid "Mount installation media"
@@ -148,7 +149,7 @@ msgstr "Montar medios de installation"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
 msgid "Looking for drivers"
-msgstr "Cercante drivers"
+msgstr "Cercante controlatores"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:2
 msgid "Please wait..."
@@ -156,15 +157,15 @@ msgstr "Attende per favor..."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:3
 msgid "No drivers needed"
-msgstr "Nulle drivers necesse"
+msgstr "Nulle controlator necesse"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:4
 msgid "Your computer does not need any additional drivers."
-msgstr "Tu computer non besonia de altere drivers."
+msgstr "Tu computer non besonia de altere controlatores."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:5
 msgid "An error occurred"
-msgstr "Un error ha occurrite"
+msgstr "Un error occurreva"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:6
 msgid "OK"
@@ -179,7 +180,7 @@ msgid ""
 "Connect to the Internet or insert the Linux Mint installation disc (or USB "
 "stick)."
 msgstr ""
-"Connecte te a internet o insere le disco (o drive USB) de installation de "
+"Connecte te a internet o insere le disco (o clave USB) de installation de "
 "Linux Mint."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:9
