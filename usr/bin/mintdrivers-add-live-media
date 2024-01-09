@@ -27,7 +27,7 @@ os.system("mintdrivers-remove-live-media")
 os.system("mkdir -p /media/mintdrivers")
 subprocess.call(["mount", live_partition.device, "/media/mintdrivers"], stderr=subprocess.PIPE)
 
-if os.path.exists("/media/mintdrivers/README.diskdefines"):
+if os.path.exists("/media/mintdrivers/.disk/info"):
     # Add /media/mintdrivers as an APT source
     with open("/etc/apt/sources.list.d/mintdrivers.list", "w") as source_file:
         print("deb [trusted=yes arch=amd64] file:///media/mintdrivers jammy main", file=source_file)

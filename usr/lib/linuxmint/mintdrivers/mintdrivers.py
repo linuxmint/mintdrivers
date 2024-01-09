@@ -196,7 +196,7 @@ class Application:
 
         # We're offline but an ISO was detected
         # Let's make sure it's mounted as a repository
-        if os.path.exists("/media/mintdrivers/README.diskdefines"):
+        if os.path.exists("/media/mintdrivers/.disk/info"):
             print ("  --> Mounted in /media/mintdrivers")
             self.update_cache()
         else:
