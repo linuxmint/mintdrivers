@@ -1,3 +1,9 @@
+mintdrivers (1.7.3) virginia; urgency=medium
+
+  * add-live-media: Use .disk/info to ID the live media
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue, 09 Jan 2024 12:51:15 +0000
+
 mintdrivers (1.7.2) virginia; urgency=medium
 
   * l10n: Update translations
