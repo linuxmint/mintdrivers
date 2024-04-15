@@ -96,6 +96,7 @@ class Application:
         self.progress_bar.set_visible(False)
 
         self.needs_restart = False
+        self.needs_broadcom_reload = False
         self.live_mode = False
 
         self.show_page("refresh_page")
@@ -253,6 +254,9 @@ class Application:
                 self.button_driver_apply.set_sensitive(bool(self.driver_changes))
 
         if installs is None or len(installs) == 0 or errors:
+            if self.needs_broadcom_reload:
+                print("Reloading Broadcom modules")
+                subprocess.Popen(['mintdrivers-load-broadcom-modules'])
             self.needs_restart = (not errors)
             self.progress_bar.set_visible(False)
             self.apt_cache = apt.Cache()
@@ -291,6 +295,8 @@ class Application:
                             removals.append(self.get_package_id(dep_pkg.installed))
             else:
                 installs.append(self.get_package_id(pkg.candidate))
+                if pkg.shortname == "broadcom-sta-dkms":
+                    self.needs_broadcom_reload = True
 
         self.cancellable = Gio.Cancellable()
         try:

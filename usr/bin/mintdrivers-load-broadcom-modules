@@ -1,0 +1,23 @@
+#!/usr/bin/python3
+
+import subprocess
+
+MODULES_TO_REMOVE = ["b43", "b43legacy", "b44", "bcma", "brcm80211", "brcmsmac ssb", "wl"]
+MODULES_TO_ADD = ["wl"]
+
+# Remove unwanted modules
+output = subprocess.check_output("lsmod", text=True)
+for line in output.split("\n"):
+    elements = line.split()
+    if len(elements) == 3:
+        module, size, used_by = elements
+        if module in MODULES_TO_REMOVE:
+            print (f"Removing module: '{module}'")
+            subprocess.call(["modprobe", "-r", module])
+
+# Add modules
+for module in MODULES_TO_ADD:
+    print(f"Adding module: '{module}'")
+    subprocess.call(["modprobe", module])
+
+
