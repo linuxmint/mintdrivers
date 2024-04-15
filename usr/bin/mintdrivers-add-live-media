@@ -27,10 +27,21 @@ os.system("mintdrivers-remove-live-media")
 os.system("mkdir -p /media/mintdrivers")
 subprocess.call(["mount", live_partition.device, "/media/mintdrivers"], stderr=subprocess.PIPE)
 
-if os.path.exists("/media/mintdrivers/.disk/info"):
+curdir = os.getcwd()
+os.chdir("/media/mintdrivers")
+if os.path.exists(".disk/info") and os.path.exists("dists"):
     # Add /media/mintdrivers as an APT source
     with open("/etc/apt/sources.list.d/mintdrivers.list", "w") as source_file:
-        print("deb [trusted=yes arch=amd64] file:///media/mintdrivers jammy main", file=source_file)
+        # Detect release and components
+        os.chdir("dists")
+        for release in os.listdir("."):
+            if os.path.exists(os.path.join(release, "Release")):
+                print(f"Detected release {release}")
+                os.chdir(release)
+                for component in os.listdir("."):
+                    if os.path.exists(os.path.join(component, "binary-amd64", "Packages")):
+                        print(f"Detected component {component}")
+                        print(f"deb [trusted=yes arch=amd64] file:///media/mintdrivers {release} {component}", file=source_file)
 
     # APT doesn't always pick up newly created files in /etc/apt/sources.list.d
     # packagekit's refresh_cache_async (in mintdrivers.py) doesn't help..
@@ -39,3 +50,5 @@ if os.path.exists("/media/mintdrivers/.disk/info"):
 
     print()
     print("Live media successfully added.")
+
+os.chdir(curdir)
