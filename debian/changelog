@@ -1,3 +1,11 @@
+mintdrivers (1.7.4) wilma; urgency=medium
+
+  * mintdrivers-add-live-media: Don't hardcode release/components
+  * broadcom: Refer to the new pkg name
+  * broadcom: Reload modules after installation
+
+ -- Clement Lefebvre <root@linuxmint.com>  Mon, 15 Apr 2024 15:57:19 +0100
+
 mintdrivers (1.7.3) virginia; urgency=medium
 
   * add-live-media: Use .disk/info to ID the live media
