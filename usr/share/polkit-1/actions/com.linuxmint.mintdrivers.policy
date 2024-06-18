@@ -52,6 +52,8 @@
 <message xml:lang="tr">Kurulum ortamını takın</message>
 <message xml:lang="uk">Змонтувати інсталяційний носій</message>
 <message xml:lang="uz">O‘rnatish diskini ulash</message>
+<message xml:lang="vi">Gắn phương tiện cài đặt</message>
+<message xml:lang="zh_TW">掛載安裝媒體</message>
 
     <icon_name>mintdrivers</icon_name>
     <defaults>
