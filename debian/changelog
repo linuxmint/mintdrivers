@@ -1,3 +1,10 @@
+mintdrivers (1.7.7) wilma; urgency=medium
+
+  * l10n: Update translations
+  * l10n: Update files
+
+ -- Clement Lefebvre <root@linuxmint.com>  Sun, 21 Jul 2024 10:33:59 +0100
+
 mintdrivers (1.7.6) wilma; urgency=medium
 
   * l10n: Update translations
