@@ -8,6 +8,7 @@
   <vendor_url>https://linuxmint.com/</vendor_url>
   <action id="com.linuxmint.mintdrivers">
 <message>Mount installation media</message>
+<message xml:lang="ast">Montar discu d'instalación</message>
 <message xml:lang="be">Прымантаваць загрузачны дыск</message>
 <message xml:lang="bg">Монтирайте инсталационен носител</message>
 <message xml:lang="ca">Munta el suport d'instal·lació</message>
@@ -53,6 +54,7 @@
 <message xml:lang="uk">Змонтувати інсталяційний носій</message>
 <message xml:lang="uz">O‘rnatish diskini ulash</message>
 <message xml:lang="vi">Gắn phương tiện cài đặt</message>
+<message xml:lang="zh_CN">挂载安装介质</message>
 <message xml:lang="zh_TW">掛載安裝媒體</message>
 
     <icon_name>mintdrivers</icon_name>
