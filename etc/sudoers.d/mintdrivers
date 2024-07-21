@@ -1,3 +1,4 @@
 # Allow any user to remove the live media from the APT sources.
 
 ALL ALL = NOPASSWD:/usr/bin/mintdrivers-remove-live-media
+ALL ALL = NOPASSWD:/usr/bin/mintdrivers-load-broadcom-modules

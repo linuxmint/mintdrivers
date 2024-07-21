@@ -256,7 +256,7 @@ class Application:
         if installs is None or len(installs) == 0 or errors:
             if self.needs_broadcom_reload:
                 print("Reloading Broadcom modules")
-                subprocess.Popen(['mintdrivers-load-broadcom-modules'])
+                subprocess.call(["sudo", "mintdrivers-load-broadcom-modules"])
             self.needs_restart = (not errors)
             self.progress_bar.set_visible(False)
             self.apt_cache = apt.Cache()
