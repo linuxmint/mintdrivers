@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2022-09-16 10:45+0100\n"
-"PO-Revision-Date: 2023-08-17 19:43+0000\n"
-"Last-Translator: Biowep <biowep@gmail.com>\n"
+"PO-Revision-Date: 2024-07-13 18:40+0000\n"
+"Last-Translator: lang-it <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2024-06-18 17:53+0000\n"
+"X-Launchpad-Export-Date: 2024-07-21 08:59+0000\n"
 "X-Generator: Launchpad (build bbfa2351d9d6a9ddfe262109428f7bf5516e65d1)\n"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67 generate_desktop_files:26
@@ -41,7 +41,7 @@ msgstr "_Riavvia..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:211
 msgid "Downloading drivers..."
-msgstr "Download dei driver..."
+msgstr "Scaricamento dei driver..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:213
 msgid "Installing drivers..."
@@ -53,7 +53,7 @@ msgstr "Rimozione dei driver..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:217
 msgid "Cancelling..."
-msgstr "Annullamento..."
+msgstr "Annullamento in corso..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:219
 msgid "Loading cache..."
@@ -140,7 +140,7 @@ msgstr "Driver aggiuntivi e proprietari"
 
 #: generate_desktop_files:41
 msgid "Manage the drivers for your devices"
-msgstr "Gestisci i driver per i tuoi dispositivi"
+msgstr "Gestisci i driver dei tuoi dispositivi"
 
 #: generate_desktop_files:67 usr/share/linuxmint/mintdrivers/main.ui.h:11
 msgid "Mount installation media"
@@ -172,15 +172,15 @@ msgstr "OK"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:7
 msgid "You appear to be offline"
-msgstr "Sembra che tu sia offline"
+msgstr "Sembra che tu non sia connesso"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:8
 msgid ""
 "Connect to the Internet or insert the Linux Mint installation disc (or USB "
 "stick)."
 msgstr ""
-"Collegati a Internet o inserisci il disco di installazione di Linux Mint (o "
-"chiavetta USB)."
+"Collegati a Internet oppure inserisci il disco o la chiavetta USB di "
+"installazione di Linux Mint."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:9
 msgid "Installation media detected"
