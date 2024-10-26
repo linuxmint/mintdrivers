@@ -41,15 +41,15 @@ msgstr "_Reiniciar..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:211
 msgid "Downloading drivers..."
-msgstr "Baixando drives..."
+msgstr "Baixando drivers..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:213
 msgid "Installing drivers..."
-msgstr "Instalando drives..."
+msgstr "Instalando drivers..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:215
 msgid "Removing drivers..."
-msgstr "Removendo drives..."
+msgstr "Removendo drivers..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:217
 msgid "Cancelling..."
@@ -136,11 +136,11 @@ msgstr "Nenhum driver proprietário em uso."
 #: generate_desktop_files:26 generate_desktop_files:41
 #: usr/share/linuxmint/mintdrivers/main.ui.h:13
 msgid "Additional and proprietary drivers"
-msgstr "Drives adicionais e proprietários"
+msgstr "Drivers adicionais e proprietários"
 
 #: generate_desktop_files:41
 msgid "Manage the drivers for your devices"
-msgstr "Gerencie os drives dos seus dispositivos"
+msgstr "Gerencie os drivers dos seus dispositivos"
 
 #: generate_desktop_files:67 usr/share/linuxmint/mintdrivers/main.ui.h:11
 msgid "Mount installation media"
@@ -148,7 +148,7 @@ msgstr "Montar uma mídia de instalação"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
 msgid "Looking for drivers"
-msgstr "Procurando por drives"
+msgstr "Procurando por drivers"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:2
 msgid "Please wait..."
