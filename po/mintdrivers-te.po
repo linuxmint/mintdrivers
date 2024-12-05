@@ -8,181 +8,185 @@ msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2022-09-16 10:45+0100\n"
-"PO-Revision-Date: 2013-11-29 21:19+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2024-09-18 01:30+0000\n"
+"Last-Translator: Aryan Karamtoth <Unknown>\n"
 "Language-Team: Telugu <te@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2024-07-21 08:59+0000\n"
-"X-Generator: Launchpad (build bbfa2351d9d6a9ddfe262109428f7bf5516e65d1)\n"
+"X-Launchpad-Export-Date: 2024-12-05 10:14+0000\n"
+"X-Generator: Launchpad (build 1519c6efe8e9bd78e6c5ebf2eb5bcb040b95ad32)\n"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67 generate_desktop_files:26
 #: generate_desktop_files:41 usr/share/linuxmint/mintdrivers/main.ui.h:12
 msgid "Driver Manager"
-msgstr ""
+msgstr "డ్రైవర్ మేనేజర్"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:71
 msgid "Re_vert"
-msgstr ""
+msgstr "తిరిగి మార్చు"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:73
 msgid "_Apply Changes"
-msgstr ""
+msgstr "మార్పులు అమలు చెఇ"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:75
 msgid "_Cancel"
-msgstr ""
+msgstr "రద్దు చేయి"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:77
 msgid "_Restart..."
-msgstr ""
+msgstr "పునఃప్రారంభించండి(_R)"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:211
 msgid "Downloading drivers..."
-msgstr ""
+msgstr "డ్రైవర్లను డౌన్‌లోడ్ చేస్తున్నాము..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:213
 msgid "Installing drivers..."
-msgstr ""
+msgstr "డ్రైవర్లను ఇన్‌స్టాల్ చేస్తున్నాము..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:215
 msgid "Removing drivers..."
-msgstr ""
+msgstr "డ్రైవర్లను తొలగిస్తోంది..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:217
 msgid "Cancelling..."
-msgstr ""
+msgstr "రద్దుచేయుచున్నది..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:219
 msgid "Loading cache..."
-msgstr ""
+msgstr "కాష్ లోడ్ అవుతోంది..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:423
 msgid "This device is using the recommended driver."
-msgstr ""
+msgstr "ఈ పరికరం సిఫార్సు చేయబడిన డ్రైవర్ ను ఉపయోగిస్తోంది."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:424
 msgid "This device is using an alternative driver."
-msgstr ""
+msgstr "ఈ పరికరం ఒక ప్రత్యామ్నాయ డ్రైవర్ ను ఉపయోగిస్తోంది."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:425
 msgid "This device is using a manually-installed driver."
-msgstr ""
+msgstr "ఈ పరికరం ఒక మాన్యువల్గా ఇన్స్టాల్ చేయబడిన డ్రైవర్ ను ఉపయోగిస్తోంది."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:426
 msgid "This device is not working."
-msgstr ""
+msgstr "ఈ పరికరం పనిచేయడం లేదు."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:435
 msgid "Continue using a manually installed driver"
-msgstr ""
+msgstr "మాన్యువల్‌గా ఇన్‌స్టాల్ చేయబడిన డ్రైవర్‌ని ఉపయోగించడం కొనసాగించండి"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:468
 msgid "Version"
-msgstr ""
+msgstr "రూపాంతరం"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:471
 msgid "recommended"
-msgstr ""
+msgstr "సిఫారసుచేయబడింది"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:473
 msgid "open-source"
-msgstr ""
+msgstr "ఓపెన్ సోర్స్"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:476
 msgid "requires a connection to the Internet"
-msgstr ""
+msgstr "ఇంటర్నెట్‌కు కనెక్షన్ అవసరం"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:500
 msgid "Do not use the device"
-msgstr ""
+msgstr "ఈ పరికరాన్ని వాడవద్దు"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:518
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:519
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:598
 msgid "Unknown"
-msgstr ""
+msgstr "తెలియనది"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:542
 msgid "Processor"
-msgstr ""
+msgstr "ప్రోసెసర్"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:580
 msgid "Processor microcode"
-msgstr ""
+msgstr "ప్రాసెసర్ మైక్రోకోడ్"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:642
 msgid "Do not update the CPU microcode"
-msgstr ""
+msgstr "CPU మైక్రోకోడ్‌ని నవీకరించవద్దు"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:683
 msgid "You need to restart the computer to complete the driver changes."
 msgstr ""
+"డ్రైవర్ మార్పులను పూర్తి చేయడానికి మీరు కంప్యూటర్‌ను పునఃప్రారంభించాలి."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:697
 #, python-format
 msgid "%(count)d proprietary driver in use."
 msgid_plural "%(count)d proprietary drivers in use."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d యాజమాన్య  డ్రైవర్ ఉపయోగంలో ఉంది."
+msgstr[1] "%(count)d యాజమాన్య డ్రైవర్లు ఉపయోగంలో ఉంది."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:702
 msgid "No proprietary drivers are in use."
-msgstr ""
+msgstr "ప్రొప్రైటరీ డ్రైవర్లు ఉపయోగంలో లేవు ."
 
 #: generate_desktop_files:26 generate_desktop_files:41
 #: usr/share/linuxmint/mintdrivers/main.ui.h:13
 msgid "Additional and proprietary drivers"
-msgstr ""
+msgstr "అదనపు మరియు యాజమాన్య డ్రైవర్లు"
 
 #: generate_desktop_files:41
 msgid "Manage the drivers for your devices"
-msgstr ""
+msgstr "మీ పరికరాల డ్రైవర్లను నిర్వహించండి"
 
 #: generate_desktop_files:67 usr/share/linuxmint/mintdrivers/main.ui.h:11
 msgid "Mount installation media"
-msgstr ""
+msgstr "సంస్థాపనా మాధ్యమాన్ని మౌంట్ చేయండి"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
 msgid "Looking for drivers"
-msgstr ""
+msgstr "డ్రైవర్ల కోసం వెతుకుతున్నాము"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:2
 msgid "Please wait..."
-msgstr ""
+msgstr "దయచేసి వేచివుండండి..."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:3
 msgid "No drivers needed"
-msgstr ""
+msgstr "డ్రైవర్లు అవసరం లేదు"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:4
 msgid "Your computer does not need any additional drivers."
-msgstr ""
+msgstr "మీ కంప్యూటర్‌కు అదనపు డ్రైవర్లు ఏవీ అవసరం లేదు."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:5
 msgid "An error occurred"
-msgstr ""
+msgstr "ఒక దోషం ఎదురైంది"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:6
 msgid "OK"
-msgstr ""
+msgstr "సరే"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:7
 msgid "You appear to be offline"
-msgstr ""
+msgstr "మీరు ఆఫ్‌లైన్‌లో ఉన్నట్లు కనిపిస్తున్నారు"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:8
 msgid ""
 "Connect to the Internet or insert the Linux Mint installation disc (or USB "
 "stick)."
 msgstr ""
+"ఇంటర్నెట్‌కు కనెక్ట్ చేయండి లేదా Linux Mint ఇన్‌స్టాలేషన్ డిస్క్ (లేదా USB "
+"స్టిక్) ఇన్‌సర్ట్ చేయండి."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:9
 msgid "Installation media detected"
-msgstr ""
+msgstr "ఇన్‌స్టాలేషన్ మీడియా కనుగొనబడింది"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:10
 msgid "Press the button below to mount it as a software repository."
 msgstr ""
+"దీన్ని సాఫ్ట్‌వేర్ రిపోజిటరీగా మౌంట్ చేయడానికి దిగువ బటన్‌ను నొక్కండి."
