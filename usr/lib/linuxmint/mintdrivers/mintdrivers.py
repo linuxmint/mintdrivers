@@ -458,26 +458,58 @@ class Application:
         except KeyError:
             pass
 
-        # -open nvidia drivers are recommended now over normal ones. Go thru the list and get the version of the recommended one,
-        # then we can flag the non-'open' one instead.
-        new_recommended = None
-        for pkg_driver_name in device['drivers']:
-            current_driver = device['drivers'][pkg_driver_name]
-            try:
-                if current_driver['recommended'] and current_driver['from_distro']:
-                    driver_status = 'recommended'
-                    if pkg_driver_name.endswith("-open"):
-                        new_recommended = pkg_driver_name.replace("-open", "")
-            except KeyError:
-                pass
+        """
+        - Never show server drivers.
+        - Pre 560: closed source drivers are recommended. Override any recommended -open drivers with the closed
+          source equivalent.
+        - Post 560 (02/13/2025: open-source drivers are recommended by their devs, and closed source drivers may
+          not be available for a given version.
+        """
+        ignored = []
 
         for pkg_driver_name in device['drivers']:
+            if not pkg_driver_name.startswith("nvidia-"):
+                continue
+            if pkg_driver_name in ignored:
+                print("Skipping ignored NVIDIA driver '%s'" % pkg_driver_name)
+                continue
+            if pkg_driver_name.endswith(("-server", "-server-open")):
+                print("Ignoring server NVIDIA driver '%s'" % pkg_driver_name)
+                ignored.append(pkg_driver_name)
+                continue
+
+            try:
+                version = int(re.search(r"nvidia-driver-([0-9]{3}).*", pkg_driver_name).groups()[0])
+                open_preferred = version >= 560
+            except:
+                open_preferred = False
+
+            is_open = pkg_driver_name.endswith("-open")
+            current_driver = device['drivers'][pkg_driver_name]
+            recommended = current_driver.get("recommended", False) and current_driver.get("from_distro", False)
+
+            if is_open:
+                closed_name = pkg_driver_name.replace("-open", "")
+                has_closed = closed_name in device['drivers']
+                if has_closed:
+                    if open_preferred:
+                        print("Ignoring closed NVIDIA driver '%s' as the open one is preferred." % closed_name)
+                        ignored.append(closed_name)
+                    else:
+                        print("Ignoring open NVIDIA driver '%s' as a closed one exists and is preferred." % pkg_driver_name)
+                        if recommended:
+                            device['drivers'][closed_name]["recommended"] = True
+                        ignored.append(pkg_driver_name)
+
+        for pkg_driver_name in device['drivers']:
+            if pkg_driver_name in ignored:
+                continue
             current_driver = device['drivers'][pkg_driver_name]
 
             # get general status
             driver_status = 'alternative'
             try:
-                if (current_driver['recommended'] and current_driver['from_distro']) or pkg_driver_name == new_recommended:
+                if (current_driver['recommended'] and current_driver['from_distro']):
                     driver_status = 'recommended'
             except KeyError:
                 pass
@@ -657,9 +689,6 @@ class Application:
                 # define the order of introspection
                 for section in ('recommended', 'alternative', 'manually_installed', 'no_driver'):
                     for driver in sorted(drivers[section], key=lambda x: self.sort_string(drivers[section], x), reverse=True):
-                        if str(driver).startswith("nvidia-driver") and str(driver).endswith(("-server", "-open")):
-                            print("Ignoring server or open NVIDIA driver: ", driver)
-                            continue
                         radio_button = Gtk.RadioButton.new(None)
                         label = Gtk.Label()
                         label.set_markup(drivers[section][driver]['description'])
