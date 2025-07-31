@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2022-09-16 10:45+0100\n"
-"PO-Revision-Date: 2024-12-07 11:40+0000\n"
+"PO-Revision-Date: 2025-04-24 12:40+0000\n"
 "Last-Translator: Hiiri522 <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2025-01-06 11:56+0000\n"
-"X-Generator: Launchpad (build 6394e03793719e8d73f5a60b5439440e693c92f1)\n"
+"X-Launchpad-Export-Date: 2025-07-31 09:19+0000\n"
+"X-Generator: Launchpad (build 647c49fc7f614412c17a151d8ba4fadd90c06a00)\n"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67 generate_desktop_files:26
 #: generate_desktop_files:41 usr/share/linuxmint/mintdrivers/main.ui.h:12
@@ -61,19 +61,19 @@ msgstr "Ladataan välimuistia..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:423
 msgid "This device is using the recommended driver."
-msgstr "Laite käyttää suositeltua ajuria."
+msgstr "Tämä laite käyttää suositeltua ajuria."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:424
 msgid "This device is using an alternative driver."
-msgstr "Laite käyttää vaihtoehtoista ajuria."
+msgstr "Tämä laite käyttää vaihtoehtoista ajuria."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:425
 msgid "This device is using a manually-installed driver."
-msgstr "Laite käyttää manuaalisesti asennettua ajuria."
+msgstr "Tämä laite käyttää ajuria, joka on asennettu manuaalisesti."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:426
 msgid "This device is not working."
-msgstr "Laite ei toimi."
+msgstr "Tämä laite ei toimi."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:435
 msgid "Continue using a manually installed driver"
@@ -111,15 +111,15 @@ msgstr "Suoritin"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:580
 msgid "Processor microcode"
-msgstr "Prosessorin mikrokoodi"
+msgstr "Suorittimen mikrokoodi"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:642
 msgid "Do not update the CPU microcode"
-msgstr "Älä päivitä CPU:n mikrokoodia"
+msgstr "Älä päivitä suorittimen mikrokoodia"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:683
 msgid "You need to restart the computer to complete the driver changes."
-msgstr "Käynnistä tietokone uudelleen, jotta muutokset tulevat voimaan."
+msgstr "Käynnistä tietokone uudelleen muutosten tulemiseksi voimaan."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:697
 #, python-format
@@ -139,11 +139,11 @@ msgstr "Lisäohjaimet ja valmistajan ajurit"
 
 #: generate_desktop_files:41
 msgid "Manage the drivers for your devices"
-msgstr "Hallitse laitteidesi ajureita"
+msgstr "Hallitse ajureita"
 
 #: generate_desktop_files:67 usr/share/linuxmint/mintdrivers/main.ui.h:11
 msgid "Mount installation media"
-msgstr "Liitä asennusmedia"
+msgstr "Kytke Linux Mintin asennusmedia tietokoneeseen ajurien asentamiseksi"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
 msgid "Looking for drivers"
