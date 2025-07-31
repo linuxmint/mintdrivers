@@ -1,3 +1,10 @@
+mintdrivers (1.8.2) zara; urgency=medium
+
+  * l10n: Update translations
+  * l10n: Update files
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 31 Jul 2025 11:50:55 +0200
+
 mintdrivers (1.8.1) xia; urgency=medium
 
   [ Michael Webster ]
