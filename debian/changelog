@@ -1,3 +1,9 @@
+mintdrivers (1.8.4) zara; urgency=medium
+
+  * Connectivity test: Switch to https
+
+ -- Clement Lefebvre <root@linuxmint.com>  Mon, 01 Sep 2025 18:38:02 +0200
+
 mintdrivers (1.8.3) zara; urgency=medium
 
   * l10n: Update translations
