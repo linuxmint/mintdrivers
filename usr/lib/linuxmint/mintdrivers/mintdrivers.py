@@ -171,7 +171,7 @@ class Application:
         self.show_page("refresh_page")
         print ("Checking Internet connectivity...")
         try:
-            urllib.request.urlopen("http://archive.ubuntu.com", timeout=10)
+            urllib.request.urlopen("https://archive.ubuntu.com", timeout=10)
             # We're online
             print ("  --> Computer is online")
             self.update_cache()
