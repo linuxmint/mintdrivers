@@ -62,6 +62,9 @@ class Application:
             else:
                 print("can not get name for object '%s'" % o)
 
+        if self.is_secure_boot_enabled():
+            self.show_secure_boot_warning()
+
         self.window_main.show()
 
         self.window_main.set_title(_("Driver Manager"))
@@ -116,6 +119,28 @@ class Application:
         else:
             self.builder.get_object("spinner").stop()
         self.builder.get_object("stack").set_visible_child_name(page)
+
+    def show_secure_boot_warning(self):
+        dialog = Gtk.MessageDialog(
+            title=_("Secure Boot Warning"),
+            flags=Gtk.DialogFlags.MODAL,
+            type=Gtk.MessageType.WARNING,
+            buttons=Gtk.ButtonsType.OK,
+            message_format=_("Warning: Secure Boot is enabled on your computer.\n\n"
+                             "Some of the drivers you are about to install may not work until Secure Boot is disabled.\n\n"
+                             "Please refer to your computer's documentation for instructions on how to disable Secure Boot."),
+        )
+        dialog.run()
+        dialog.destroy()
+
+    def is_secure_boot_enabled(self):
+        try:
+            result = subprocess.run(['mokutil', '--sb-state'], capture_output=True, text=True)
+            output = result.stdout.lower()
+            return 'secureboot enabled' in output
+        except Exception as e:
+            print(f"Error checking Secure Boot status: {e}")
+            return False
 
     def on_error_button(self, button):
         self.show_page("drivers_page")
