@@ -127,9 +127,9 @@ class Application:
             type=Gtk.MessageType.WARNING,
             buttons=Gtk.ButtonsType.OK,
             message_format=_("Warning: Secure Boot is enabled on your computer.\n\n"
-                             "Some of the drivers you are about to install may not work until Secure Boot is disabled.\n\n"
-                             "Alternatively, you may be able to self-sign kernel modules and enroll them with a Machine Owner Key (MOK) so they can load while Secure Boot is enabled.\n\n"
-                             "Please refer to your computer's documentation or the mokutil/module signing documentation for instructions."),
+                             "Some drivers or kernel modules that require self-signing may not load while Secure Boot is enabled. "
+                             "This can prevent drivers you install from working until Secure Boot is disabled or the modules are properly signed.\n\n"
+                             "Please refer to your computer's documentation for instructions on disabling Secure Boot or on enrolling module signing keys."),
         )
         dialog.run()
         dialog.destroy()
