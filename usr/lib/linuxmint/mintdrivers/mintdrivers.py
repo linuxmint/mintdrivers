@@ -17,7 +17,7 @@ from gi.repository import PackageKitGlib as packagekit
 from UbuntuDrivers import detect
 import psutil
 import re
-import urllib
+import socket
 import threading
 
 # Used as a decorator to run things in the background
@@ -159,19 +159,12 @@ class Application:
     def cleanup_live_media(self):
         subprocess.call(["sudo", "mintdrivers-remove-live-media"])
 
-    def check_connectivity(self, reference):
-        try:
-            urllib.request.urlopen(reference, timeout=10)
-            return True
-        except:
-            return False
-
     @idle
     def check_internet_or_live_media(self, widget=None):
         self.show_page("refresh_page")
         print ("Checking Internet connectivity...")
         try:
-            urllib.request.urlopen("https://archive.ubuntu.com", timeout=10)
+            socket.create_connection(("8.8.8.8", 53), timeout=10)
             # We're online
             print ("  --> Computer is online")
             self.update_cache()
