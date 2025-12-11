@@ -1,3 +1,17 @@
+mintdrivers (1.8.5) zena; urgency=medium
+
+  [ Clement Lefebvre ]
+  * Switch to XApp symbolic icons
+  * Switch to XSI
+
+  [ rreyn331 ]
+  * Update control (#106)
+
+  [ Clement Lefebvre ]
+  * Connectivity test: Switch to socket
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 11 Dec 2025 15:16:22 +0000
+
 mintdrivers (1.8.4) zara; urgency=medium
 
   * Connectivity test: Switch to https
