@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2022-09-16 10:45+0100\n"
-"PO-Revision-Date: 2025-08-25 14:06+0000\n"
+"PO-Revision-Date: 2025-12-12 13:20+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2025-08-26 15:21+0000\n"
-"X-Generator: Launchpad (build 919009172d854f2b8e4e8262db447f12f11d25eb)\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? 2 "
+": 3);\n"
+"X-Launchpad-Export-Date: 2025-12-12 13:28+0000\n"
+"X-Generator: Launchpad (build 379e22b8475e3402088a4cdb4a6e7936a4d28414)\n"
+"Language: he\n"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67 generate_desktop_files:26
 #: generate_desktop_files:41 usr/share/linuxmint/mintdrivers/main.ui.h:12
@@ -25,7 +27,7 @@ msgstr "מנהל ההתקנים"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:71
 msgid "Re_vert"
-msgstr "שח_זור"
+msgstr "ח_זרה"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:73
 msgid "_Apply Changes"
@@ -41,23 +43,23 @@ msgstr "_אתחול..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:211
 msgid "Downloading drivers..."
-msgstr "מתבצעת הורדה של מנהלי ההתקנים"
+msgstr "מתבצעת הורדת מנהלי התקנים..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:213
 msgid "Installing drivers..."
-msgstr "מתבצעת הורדה של מנהלי ההתקנים..."
+msgstr "מתבצעת התקנת מנהלי התקנים..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:215
 msgid "Removing drivers..."
-msgstr "מתבצעת הסרה של מנהלי ההתקנים..."
+msgstr "מתבצעת הסרת מנהלי התקנים..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:217
 msgid "Cancelling..."
-msgstr "בהליכי ביטול..."
+msgstr "מתבצע ביטול..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:219
 msgid "Loading cache..."
-msgstr "המטמון נטען..."
+msgstr "מתבצעת טעינת מטמון..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:423
 msgid "This device is using the recommended driver."
@@ -69,7 +71,7 @@ msgstr "התקן זה משתמש במנהל התקן חלופי."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:425
 msgid "This device is using a manually-installed driver."
-msgstr "התקן זה משתמש במנהל התקן שהותקן ידנית."
+msgstr "התקן זה משתמש במנהל התקן שהותקן באופן ידני."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:426
 msgid "This device is not working."
@@ -77,7 +79,7 @@ msgstr "התקן זה לא מתפקד."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:435
 msgid "Continue using a manually installed driver"
-msgstr "להמשיך להשתמש במנהל התקן מותאם אישית שהותקן"
+msgstr "להמשיך להשתמש במנהל התקן שהותקן באופן ידני"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:468
 msgid "Version"
@@ -89,11 +91,11 @@ msgstr "מומלץ"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:473
 msgid "open-source"
-msgstr "קוד פתוח"
+msgstr "קוד־פתוח"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:476
 msgid "requires a connection to the Internet"
-msgstr "נדרש חיבור לאינטרנט"
+msgstr "נדרש חיבור לרשת"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:500
 msgid "Do not use the device"
@@ -111,15 +113,15 @@ msgstr "מעבד"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:580
 msgid "Processor microcode"
-msgstr "מיקרוקוד מעבד"
+msgstr "מיקרו־קוד של המעבד"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:642
 msgid "Do not update the CPU microcode"
-msgstr "לא לעדכן את המיקרוקוד של המעבד"
+msgstr "לא לעדכן את המיקרו־קוד של המעבד"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:683
 msgid "You need to restart the computer to complete the driver changes."
-msgstr "נדרש לשתחל את המחשב כדי להשלים שינויים בהנע־ההתקן."
+msgstr "נדרש לאתחל את המחשב כדי להשלים שינויים במנהל ההתקן."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:697
 #, python-format
@@ -135,15 +137,15 @@ msgstr "לא נעשה שימוש במנהלי התקנים קנייניים."
 #: generate_desktop_files:26 generate_desktop_files:41
 #: usr/share/linuxmint/mintdrivers/main.ui.h:13
 msgid "Additional and proprietary drivers"
-msgstr "הנעי־התקן נוספים וקיניניים"
+msgstr "מנהלי התקנים נוספים וקיניניים"
 
 #: generate_desktop_files:41
 msgid "Manage the drivers for your devices"
-msgstr "ניהול מנהלי ההתקנים לחומרת המחשב"
+msgstr "ניהול מנהלי התקנים להתקנים"
 
 #: generate_desktop_files:67 usr/share/linuxmint/mintdrivers/main.ui.h:11
 msgid "Mount installation media"
-msgstr "עגינת אמצעי ההתקנה"
+msgstr "עגינת אמצעי התקנה"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
 msgid "Looking for drivers"
@@ -177,13 +179,12 @@ msgstr "נראה שהמחשב במצב לא מקוון"
 msgid ""
 "Connect to the Internet or insert the Linux Mint installation disc (or USB "
 "stick)."
-msgstr ""
-"נא להתחבר למרשתת או להכניס את תקליטור התקנת לינוקס מינט (או אחסן USB)"
+msgstr "נא להתחבר לרשת או להכניס את תקליטור התקנת לינוקס מינט (או החסן USB)"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:9
 msgid "Installation media detected"
-msgstr "זוהתה מדית התקנה"
+msgstr "זוהה אמצעי התקנה"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:10
 msgid "Press the button below to mount it as a software repository."
-msgstr "נא ללחוץ על הלחצן מטה לעגינה כמאגר תוכנה."
+msgstr "נא ללחוץ על הלחצן למטה לעגינה כמאגר תוכנה."

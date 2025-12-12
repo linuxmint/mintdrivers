@@ -1,16 +1,16 @@
-# Greek translation for linuxmint
-# Copyright (c) 2013 Rosetta Contributors and Canonical Ltd 2013
+# Norwegian Nynorsk translation for linuxmint
+# Copyright (c) 2025 Rosetta Contributors and Canonical Ltd 2025
 # This file is distributed under the same license as the linuxmint package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2022-09-16 10:45+0100\n"
-"PO-Revision-Date: 2023-05-08 13:24+0000\n"
-"Last-Translator: Ourania J. Banti <Unknown>\n"
-"Language-Team: Greek <el@li.org>\n"
+"PO-Revision-Date: 2025-08-29 22:00+0000\n"
+"Last-Translator: Simen Ryland Førde <Unknown>\n"
+"Language-Team: Norwegian Nynorsk <nn@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,173 +21,170 @@ msgstr ""
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67 generate_desktop_files:26
 #: generate_desktop_files:41 usr/share/linuxmint/mintdrivers/main.ui.h:12
 msgid "Driver Manager"
-msgstr "Διαχειριστής οδηγών"
+msgstr "Drivarbehandlar"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:71
 msgid "Re_vert"
-msgstr "Επαναφο_ρά"
+msgstr "_Tilbakestill"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:73
 msgid "_Apply Changes"
-msgstr "Εφαρμογή _Αλλαγών"
+msgstr "_Utfør endringane"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:75
 msgid "_Cancel"
-msgstr "Α_κύρωση"
+msgstr "_Avbryt"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:77
 msgid "_Restart..."
-msgstr "_Επανεκκίνηση..."
+msgstr "_Start på nytt..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:211
 msgid "Downloading drivers..."
-msgstr "Λήψη οδηγών..."
+msgstr "Lastar ned drivarar..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:213
 msgid "Installing drivers..."
-msgstr "Εγκατάσταση οδηγών..."
+msgstr "Installerer drivarar..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:215
 msgid "Removing drivers..."
-msgstr "Αφαίρεση οδηγών..."
+msgstr "Fjernar drivarar..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:217
 msgid "Cancelling..."
-msgstr "Ακύρωση..."
+msgstr "Avbrytast..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:219
 msgid "Loading cache..."
-msgstr "Φόρτωση λανθάνουσας μνήμης..."
+msgstr "Lastar inn mellomlager..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:423
 msgid "This device is using the recommended driver."
-msgstr "Αυτή η συσκευή χρησιμοποιεί το προτεινόμενο πρόγραμμα οδήγησης."
+msgstr "Denne eininga brukar den tilrådde drivaren."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:424
 msgid "This device is using an alternative driver."
-msgstr "Αυτή η συσκευή χρησιμοποιεί ένα εναλλακτικό πρόγραμμα οδήγησης."
+msgstr "Denne eininga brukar ein alternativ drivar."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:425
 msgid "This device is using a manually-installed driver."
-msgstr "Αυτή η συσκευή χρησιμοποιεί ένα χειροκίνητα εγκατεστημένο οδηγό."
+msgstr "Denne eininga brukar ein drivar som er installert manuelt."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:426
 msgid "This device is not working."
-msgstr "Αυτή η συσκευή δε λειτουργεί."
+msgstr "Denne eininga fungerer ikkje."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:435
 msgid "Continue using a manually installed driver"
-msgstr "Συνέχεια χρήσης του χειροκίνητα εγκατεστημένου οδηγού"
+msgstr "Fortsett å bruke ein manuelt installert drivar"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:468
 msgid "Version"
-msgstr "Έκδοση"
+msgstr "Versjon"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:471
 msgid "recommended"
-msgstr "προτείνεται"
+msgstr "anbefalt"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:473
 msgid "open-source"
-msgstr "ανοιχτού-κώδικα"
+msgstr "open kjeldekode"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:476
 msgid "requires a connection to the Internet"
-msgstr "απαιτείται σύνδεση στο Διαδίκτυο"
+msgstr "krev internett-tilkopling"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:500
 msgid "Do not use the device"
-msgstr "Να μη χρησιμοποιείται αυτή η συσκευή"
+msgstr "Ikkje bruk eininga"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:518
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:519
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:598
 msgid "Unknown"
-msgstr "Άγνωστο"
+msgstr "Ukjend"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:542
 msgid "Processor"
-msgstr "Επεξεργαστής"
+msgstr "Prosessor"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:580
 msgid "Processor microcode"
-msgstr "Μικροκώδικας επεξεργαστή"
+msgstr "Prosessor mikrokode"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:642
 msgid "Do not update the CPU microcode"
-msgstr "Μην ανανεώνετε τον μικροκώδικα της CPU"
+msgstr "Ikkje oppdater CPU mikrokode"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:683
 msgid "You need to restart the computer to complete the driver changes."
-msgstr ""
-"Πρέπει να επανεκκινήσετε τον υπολογιστή για να ολοκληρωθούν οι αλλαγές του "
-"οδηγού."
+msgstr "Du må starte maskina på nytt for å fullføre drivarendringane."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:697
 #, python-format
 msgid "%(count)d proprietary driver in use."
 msgid_plural "%(count)d proprietary drivers in use."
-msgstr[0] "%(count)d ιδιοταγής οδηγός σε χρήση."
-msgstr[1] "%(count)d ιδοταγείς οδηγοί σε χρήση."
+msgstr[0] "%(count)d proprietær drivar er i bruk."
+msgstr[1] "%(count)d proprietære drivarar er i bruk."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:702
 msgid "No proprietary drivers are in use."
-msgstr "Δε χρησιμοποιούνται ιδιοταγείς οδηγοί."
+msgstr "Ingen proprietære drivarar er i bruk."
 
 #: generate_desktop_files:26 generate_desktop_files:41
 #: usr/share/linuxmint/mintdrivers/main.ui.h:13
 msgid "Additional and proprietary drivers"
-msgstr "Πρόσθετοι και ιδιόκτητοι οδηγοί"
+msgstr "Ekstra og proprietære drivarar"
 
 #: generate_desktop_files:41
 msgid "Manage the drivers for your devices"
-msgstr "Διαχειριστείτε τους οδηγούς για τις συσκευές σας"
+msgstr "Handter drivarane for einingane dine"
 
 #: generate_desktop_files:67 usr/share/linuxmint/mintdrivers/main.ui.h:11
 msgid "Mount installation media"
-msgstr "Προσαρτήστε μέσο εγκατάστασης"
+msgstr "Monter installasjonsmedium"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
 msgid "Looking for drivers"
-msgstr "Αναζήτηση οδηγών"
+msgstr "Ser etter drivarar"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:2
 msgid "Please wait..."
-msgstr "Παρακαλώ περιμένετε..."
+msgstr "Vent litt..."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:3
 msgid "No drivers needed"
-msgstr "Δε χρειάζονται οδηγοί"
+msgstr "Ingen drivarar er nødvendige"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:4
 msgid "Your computer does not need any additional drivers."
-msgstr "Ο υπολογιστής σας δεν χρειάζεται επιπλέον οδηγούς."
+msgstr "Datamaskina di treng ikkje fleire drivarar."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:5
 msgid "An error occurred"
-msgstr "Προέκυψε ένα σφάλμα"
+msgstr "Ein feil oppstod"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:6
 msgid "OK"
-msgstr "ΟΚ"
+msgstr "OK"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:7
 msgid "You appear to be offline"
-msgstr "Φαίνεται ότι είστε εκτός σύνδεσης"
+msgstr "Du er ikkje tilkopla internett"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:8
 msgid ""
 "Connect to the Internet or insert the Linux Mint installation disc (or USB "
 "stick)."
 msgstr ""
-"Συνδεθείτε στο διαδίκτυο ή τοποθετήστε το δίσκο εγκατάστασης του Linux Mint "
-"(ή το USB stick)."
+"Kople til internett eller set inn installasjonsplata for Linux Mint (eller "
+"ein USB-pinne)."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:9
 msgid "Installation media detected"
-msgstr "Εντοπίστηκε μέσο εγκατάστασης"
+msgstr "Installasjonsmedium oppdaga"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:10
 msgid "Press the button below to mount it as a software repository."
-msgstr ""
-"Πατήστε το κουμπί παρακάτω για να το προσαρτήσετε ως πηγή λογισμικού."
+msgstr "Trykk på knappen nedanfor for å bruke det som ein pakkebrønn."
