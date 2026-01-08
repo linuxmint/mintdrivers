@@ -1,3 +1,10 @@
+mintdrivers (1.8.7) zena; urgency=medium
+
+  * l10n: Update translations
+  * l10n: Update files
+
+ -- Clement Lefebvre <root@linuxmint.com>  Thu, 08 Jan 2026 16:08:07 +0000
+
 mintdrivers (1.8.6) zena; urgency=medium
 
   * l10n: Update translations
