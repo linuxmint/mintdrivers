@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2022-09-16 10:45+0100\n"
-"PO-Revision-Date: 2025-12-12 13:20+0000\n"
+"PO-Revision-Date: 2025-12-21 10:38+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,14 +16,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? 2 "
 ": 3);\n"
-"X-Launchpad-Export-Date: 2025-12-12 13:28+0000\n"
-"X-Generator: Launchpad (build 379e22b8475e3402088a4cdb4a6e7936a4d28414)\n"
+"X-Launchpad-Export-Date: 2026-01-08 15:38+0000\n"
+"X-Generator: Launchpad (build 99c00f518760bdd50fc6e353e7736d2fff8fba4a)\n"
 "Language: he\n"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67 generate_desktop_files:26
 #: generate_desktop_files:41 usr/share/linuxmint/mintdrivers/main.ui.h:12
 msgid "Driver Manager"
-msgstr "מנהל ההתקנים"
+msgstr "מנהל הנעי־התקן"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:71
 msgid "Re_vert"
@@ -39,7 +39,7 @@ msgstr "_ביטול"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:77
 msgid "_Restart..."
-msgstr "_אתחול..."
+msgstr "_שתחול..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:211
 msgid "Downloading drivers..."
@@ -127,21 +127,21 @@ msgstr "נדרש לאתחל את המחשב כדי להשלים שינויים �
 #, python-format
 msgid "%(count)d proprietary driver in use."
 msgid_plural "%(count)d proprietary drivers in use."
-msgstr[0] "הנע התקן קנייני %(count)d בשימוש."
-msgstr[1] "%(count)d הנעי התקן קנייניים בשימוש."
+msgstr[0] "הֶנֵּעַ הֶתְקֵן קנייני %(count)d בשימוש."
+msgstr[1] "%(count)d הֶנֵּעַי הֶתְקֵן קנייניים בשימוש."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:702
 msgid "No proprietary drivers are in use."
-msgstr "לא נעשה שימוש במנהלי התקנים קנייניים."
+msgstr "לא נעשה שימוש בהֶנֵּעַי הֶתְקֵן קנייניים."
 
 #: generate_desktop_files:26 generate_desktop_files:41
 #: usr/share/linuxmint/mintdrivers/main.ui.h:13
 msgid "Additional and proprietary drivers"
-msgstr "מנהלי התקנים נוספים וקיניניים"
+msgstr "מנהלי התקנים נוספים וקנייניים"
 
 #: generate_desktop_files:41
 msgid "Manage the drivers for your devices"
-msgstr "ניהול מנהלי התקנים להתקנים"
+msgstr "ניהול מנהלי התקנים למכשירים שלך"
 
 #: generate_desktop_files:67 usr/share/linuxmint/mintdrivers/main.ui.h:11
 msgid "Mount installation media"
@@ -161,7 +161,7 @@ msgstr "אין צורך במנהלי התקנים"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:4
 msgid "Your computer does not need any additional drivers."
-msgstr "אין למחשב צורך במנהלי התקנים נוספים."
+msgstr "אין למחשבך צורך במנהלי התקנים נוספים."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:5
 msgid "An error occurred"
