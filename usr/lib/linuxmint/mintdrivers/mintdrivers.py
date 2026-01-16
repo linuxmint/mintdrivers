@@ -164,7 +164,7 @@ class Application:
         self.show_page("refresh_page")
         print ("Checking Internet connectivity...")
         try:
-            socket.create_connection(("8.8.8.8", 53), timeout=10)
+            socket.create_connection(("archive.ubuntu.com", 443), timeout=10)
             # We're online
             print ("  --> Computer is online")
             self.update_cache()
