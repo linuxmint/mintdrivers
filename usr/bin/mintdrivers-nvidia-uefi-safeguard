@@ -1,0 +1,54 @@
+#!/bin/sh
+# mintdrivers-nvidia-uefi-safeguard
+#
+# Run after Driver Manager installs a proprietary NVIDIA driver. On a UEFI machine
+# whose nvidia-drm has no fbdev console takeover (the param landed default-on in the
+# 545 branch; the 535 LTSB has no fbdev at all), the driver never evicts the kernel's
+# EFI simple-framebuffer (simpledrm), so a Plasma/GNOME *Wayland* session composites
+# but the panel stays black until a VT switch — a "Linux is broken" first boot.
+#
+# Stage a reversible X11-session fallback for LightDM so the next boot is never black;
+# Wayland stays installed and selectable. No-op unless every risky condition holds, so
+# it is safe to call unconditionally after an NVIDIA install.
+set -eu
+
+# BIOS/CSM has no simple-framebuffer handoff -> nothing to do.
+[ -d /sys/firmware/efi ] || exit 0
+
+# Only LightDM is handled here (Mint default). SDDM/GDM are left untouched.
+[ "$(basename "$(readlink -f /etc/systemd/system/display-manager.service 2>/dev/null)" 2>/dev/null)" \
+    = "lightdm.service" ] || exit 0
+
+# If nvidia-drm provides fbdev console takeover, it evicts simpledrm itself and the
+# Wayland desktop boots lit -> no fallback needed.
+if modinfo nvidia-drm 2>/dev/null | grep -qE '^parm:[[:space:]]*fbdev'; then
+    exit 0
+fi
+
+# Pick an installed X11 session, preferring common desktops, else the first available.
+sess=""
+for cand in plasma cinnamon xfce gnome-xorg mate lxqt; do
+    if [ -f "/usr/share/xsessions/$cand.desktop" ]; then
+        sess="$cand"
+        break
+    fi
+done
+if [ -z "$sess" ]; then
+    first="$(ls /usr/share/xsessions/*.desktop 2>/dev/null | head -n1 || true)"
+    [ -n "$first" ] && sess="$(basename "$first" .desktop)"
+fi
+[ -n "$sess" ] || exit 0   # no X11 session installed -> can't help, leave as-is
+
+dropin=/etc/lightdm/lightdm.conf.d/99-mintdrivers-nvidia-x11.conf
+install -d /etc/lightdm/lightdm.conf.d
+cat > "$dropin" <<EOF
+# Staged by mintdrivers (mintdrivers-nvidia-uefi-safeguard).
+# The proprietary NVIDIA driver on this UEFI machine has no nvidia-drm fbdev console
+# takeover, so a Wayland desktop boots to a black screen until a VT switch. Default to
+# an X11 session instead; Wayland stays selectable from the login screen. Delete this
+# file once you are on a driver with fbdev console takeover (>= 545, e.g. 580).
+[Seat:*]
+user-session=$sess
+autologin-session=$sess
+EOF
+echo "mintdrivers: staged X11-session fallback ($dropin, session=$sess)"

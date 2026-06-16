@@ -97,6 +97,7 @@ class Application:
 
         self.needs_restart = False
         self.needs_broadcom_reload = False
+        self.needs_nvidia_uefi_safeguard = False
         self.live_mode = False
 
         self.show_page("refresh_page")
@@ -250,6 +251,14 @@ class Application:
             if self.needs_broadcom_reload:
                 print("Reloading Broadcom modules")
                 subprocess.call(["sudo", "mintdrivers-load-broadcom-modules"])
+            if self.needs_nvidia_uefi_safeguard:
+                # A proprietary NVIDIA driver without nvidia-drm fbdev console
+                # takeover boots a Wayland desktop to a black screen on UEFI (the EFI
+                # simple-framebuffer is never evicted). Stage a reversible X11-session
+                # fallback so the next boot is never black; the helper no-ops unless
+                # the risky conditions actually hold.
+                print("Applying NVIDIA UEFI/Wayland black-screen safeguard")
+                subprocess.call(["sudo", "mintdrivers-nvidia-uefi-safeguard"])
             self.needs_restart = (not errors)
             self.progress_bar.set_visible(False)
             self.apt_cache = apt.Cache()
@@ -290,6 +299,8 @@ class Application:
                 installs.append(self.get_package_id(pkg.candidate))
                 if pkg.shortname == "broadcom-sta-dkms":
                     self.needs_broadcom_reload = True
+                if 'nvidia' in pkg.shortname:
+                    self.needs_nvidia_uefi_safeguard = True
 
         self.cancellable = Gio.Cancellable()
         try:
