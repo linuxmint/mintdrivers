@@ -2,14 +2,14 @@ Source: mintdrivers
 Section: admin
 Priority: optional
 Maintainer: Clement Lefebvre <root@linuxmint.com>
-Build-Depends: debhelper (>= 9)
+Build-Depends: debhelper (>= 9), gettext
 Standards-Version: 3.9.5
 
 Package: mintdrivers
 Architecture: all
-Depends: python3 (>= 3.3),
+Depends: python3 (>= 3.7),
          python3-gi,
-         python3-psutil,
+         python3-pyqt6,
          ubuntu-drivers-common,
          gir1.2-xapp-1.0,
          gir1.2-packagekitglib-1.0,

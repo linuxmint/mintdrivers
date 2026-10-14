@@ -1,4 +1,3 @@
-# Allow any user to remove the live media from the APT sources.
+# Allow the driver manager to reload Broadcom modules without a password.
 
-ALL ALL = NOPASSWD:/usr/bin/mintdrivers-remove-live-media
 ALL ALL = NOPASSWD:/usr/bin/mintdrivers-load-broadcom-modules

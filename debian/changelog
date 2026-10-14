@@ -1,3 +1,42 @@
+mintdrivers (1.8.8+mainuan4) resolute; urgency=medium
+
+  * Add asynchronous QtDBus infrastructure for PackageKit transactions.
+  * Plan driver changes using the shared backend and preserve NVIDIA removals.
+  * Model progress, structured errors, cancellation and restart requirements.
+  * Keep real transactions disabled in the Qt interface; add plan previews.
+  * Set the Qt application identity before Plasma settings initialization.
+  * Add a hidden mintdrivers-qt desktop identity for desktop portals.
+
+ -- Mainuan Packaging <openwebosbr@gmail.com>  Wed, 14 Oct 2026 12:00:00 -0300
+
+mintdrivers (1.8.8+mainuan3) resolute; urgency=medium
+
+  * Add the first experimental PyQt6 interface.
+  * Keep the Qt frontend read-only while the legacy GTK frontend remains
+    functional.
+  * Let the GTK and Qt frontends coexist on top of the shared Python backend.
+  * Add a parallel mintdrivers-qt entry point for visual testing.
+
+ -- Mainuan Packaging <openwebosbr@gmail.com>  Wed, 14 Oct 2026 00:00:00 -0300
+
+mintdrivers (1.8.8+mainuan2) resolute; urgency=medium
+
+  * Separate driver discovery, classification, NVIDIA rules, and APT reads
+    from GTK.
+  * Add GUI-independent driver data models and backend unit tests.
+  * Require Python 3.7 for dataclass-based backend models.
+  * Preserve GTK behavior while preparing for a future Qt6 frontend.
+
+ -- Mainuan Packaging <openwebosbr@gmail.com>  Sun, 11 Oct 2026 08:44:57 -0300
+
+mintdrivers (1.8.8+mainuan1) resolute; urgency=medium
+
+  * First Mainuan/Kubuntu 26.04 adaptation.
+  * Remove Linux Mint live-media integration and privileged cleanup calls.
+  * Declare gettext for the translation build.
+
+ -- Mainuan Packaging <openwebosbr@gmail.com>  Sun, 11 Oct 2026 00:35:40 -0300
+
 mintdrivers (1.8.8) zena; urgency=medium
 
   * Connectivity test: Test the repo and port 443
@@ -686,4 +725,3 @@ mintdrivers (1.0.0) olivia; urgency=low
   * Initial release
 
  -- Clement Lefebvre <root@linuxmint.com>  Thu,  21 Mar 2013 17:45:00 +0000
-

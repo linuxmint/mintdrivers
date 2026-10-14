@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Driver Manager (Qt Preview)
+Comment=Preview driver choices without applying changes
+Exec=mintdrivers-qt
+Icon=driver-manager
+Terminal=false
+NoDisplay=true
+Categories=Settings;HardwareSettings;
+StartupNotify=true
