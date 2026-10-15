@@ -1,3 +1,15 @@
+mainuan-gestao-drivers (0.1) resolute; urgency=medium
+
+  * Establish Mainuan Gestao de Drivers as the first branded beta.
+  * Make the Qt frontend the official application and Plasma menu launcher.
+  * Migrate Python modules, resources, gettext and icons to Mainuan paths.
+  * Preserve the temporary GTK legacy entry point and upstream GPL-2+ credits.
+  * Keep driver transactions disabled; retain detection, planning and preview.
+  * Use the Mainuan packaging contact already recorded in this changelog.
+  * Avoid installed-file collisions with the original mintdrivers package.
+
+ -- Mainuan Packaging <openwebosbr@gmail.com>  Wed, 14 Oct 2026 12:01:00 -0300
+
 mintdrivers (1.8.8+mainuan4) resolute; urgency=medium
 
   * Add asynchronous QtDBus infrastructure for PackageKit transactions.

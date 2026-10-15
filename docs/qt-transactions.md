@@ -1,6 +1,6 @@
-# Qt driver transaction infrastructure
+# Mainuan Qt driver transaction infrastructure
 
-The experimental frontend remains read-only. Radio buttons build a desired
+The official frontend of beta 0.1 remains read-only. Radio buttons build a desired
 selection and the preview dialog lists changes. It has only a Close button.
 No frontend callback starts a PackageKit operation, and execution is disabled
 by default in both the controller and transaction classes.
@@ -77,9 +77,11 @@ hints and Resolve; installation/removal methods are forbidden. It verifies
 PackageKit signals, exact IDs and absence of forbidden Python imports.
 
 Application identity is established before QApplication initializes Plasma
-settings. `mintdrivers-qt.desktop` is hidden with NoDisplay=true and matches the
+settings using organization Mainuan and application mainuan-gestao-drivers.
+`org.mainuan.GestaoDrivers.desktop` is the visible Qt launcher and matches the
 desktop file name. Its installed Exec must exist for the portal to recognize it.
-The main GTK desktop launcher is preserved.
+GTK has no desktop launcher and is available only through the temporary
+`mainuan-gestao-drivers-gtk-legacy` entry point.
 
 ## Next Phase
 
@@ -90,7 +92,7 @@ with the Plasma agent, refresh detection after completion, and handle session
 shutdown during an operation. D-Bus timeout/disconnection may leave the outcome
 unknown and must trigger reconciliation before retrying.
 
-Broadcom module reload (`mintdrivers-load-broadcom-modules`) remains in GTK and
+The inherited Broadcom module reload helper (`load-broadcom-modules`) remains in GTK and
 is pending a separate migration. MOK/Secure Boot handling is also pending.
 The existing NVIDIA dependency query is reused unchanged, including its use of
 candidate Depends/PreDepends; this preview is not a full dependency simulation.

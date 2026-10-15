@@ -1,3 +1,0 @@
-# Allow the driver manager to reload Broadcom modules without a password.
-
-ALL ALL = NOPASSWD:/usr/bin/mintdrivers-load-broadcom-modules

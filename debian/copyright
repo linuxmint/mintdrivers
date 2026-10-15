@@ -1,9 +1,26 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: mintdrivers
-Upstream-Contact: Clement Lefebvre <root@linuxmint.com>
+Upstream-Name: Mainuan Gestão de Drivers
+Upstream-Contact: Mainuan Packaging <openwebosbr@gmail.com>
+Source: https://github.com/mainuan/mainuan-gestao-drivers
+Comment: Derived from Linux Mint mintdrivers,
+ https://github.com/linuxmint/mintdrivers.
+ Original upstream contact: Clement Lefebvre <root@linuxmint.com>.
 
 Files: *
 Copyright: 2013-2014 Clement Lefebvre <root@linuxmint.com>
+License: GPL-2+
+Comment: Original upstream and derived code. Existing credits in individual
+ source files and translation catalogs are preserved.
+
+Files: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/__init__.py
+ usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/*
+ usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/*
+ tests/* docs/*
+Copyright: 2026 Mainuan contributors
+License: GPL-2+
+Comment: Mainuan-created interfaces, transaction infrastructure, tests and
+ documentation. This does not assign Mainuan ownership of upstream code.
+
 License: GPL-2+
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

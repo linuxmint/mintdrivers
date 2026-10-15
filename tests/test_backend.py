@@ -4,9 +4,9 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(
-    Path(__file__).resolve().parents[1] / "usr/lib/linuxmint/mintdrivers"))
+    Path(__file__).resolve().parents[1] / "usr/lib/mainuan/mainuan-gestao-drivers"))
 
-from backend import DeviceStatus, DriverBackend, DriverOptionType
+from mainuan_drivers.backend import DeviceStatus, DriverBackend, DriverOptionType
 
 
 class FakeVersion:
@@ -61,9 +61,9 @@ def find_device(backend, device_id="device"):
 
 class DriverBackendTests(unittest.TestCase):
     def test_import_does_not_load_graphical_toolkits(self):
-        module_path = Path(__file__).resolve().parents[1] / "usr/lib/linuxmint/mintdrivers"
+        module_path = Path(__file__).resolve().parents[1] / "usr/lib/mainuan/mainuan-gestao-drivers"
         check = (
-            "import sys; sys.path.insert(0, %r); import backend; "
+            "import sys; sys.path.insert(0, %r); import mainuan_drivers.backend; "
             "blocked = ('gi.repository.Gtk', 'gi.repository.Gdk', "
             "'gi.repository.GdkPixbuf', 'gi.repository.XApp', 'apt', 'apt_pkg', "
             "'UbuntuDrivers', 'UbuntuDrivers.detect'); "
@@ -210,7 +210,7 @@ class DriverBackendTests(unittest.TestCase):
         self.assertEqual(set(options), {opened})
 
     def test_test_device_flows_through_backend_as_display_only_options(self):
-        from backend.drivers import TEST_PACKAGE_OVERRIDES, make_test_device
+        from mainuan_drivers.backend.drivers import TEST_PACKAGE_OVERRIDES, make_test_device
         backend = make_backend(
             {}, extra_devices={"dummy": make_test_device()},
             package_overrides=TEST_PACKAGE_OVERRIDES)

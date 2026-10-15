@@ -1,0 +1,7 @@
+#!/usr/bin/python3
+
+from mainuan_drivers.qt.application import run
+
+
+if __name__ == "__main__":
+    raise SystemExit(run())

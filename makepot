@@ -1,5 +1,12 @@
 #!/bin/bash
 
-intltool-extract --type=gettext/glade usr/share/linuxmint/mintdrivers/main.ui
-xgettext --language=Python --keyword=_ --keyword=N_ --output=mintdrivers.pot usr/lib/linuxmint/mintdrivers/mintdrivers.py generate_desktop_files usr/share/linuxmint/mintdrivers/main.ui.h
-rm -f usr/share/linuxmint/mintdrivers/main.ui.h
+set -eu
+xgettext --language=Python --from-code=UTF-8 --keyword=_ --keyword=N_ \
+    --keyword=ngettext:1,2 --package-name="Mainuan Gestão de Drivers" \
+    --package-version=0.1 --output=mainuan-gestao-drivers.pot \
+    usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/*.py \
+    usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/packagekit.py \
+    usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py
+xgettext --language=Glade --join-existing --package-name="Mainuan Gestão de Drivers" \
+    --package-version=0.1 --output=mainuan-gestao-drivers.pot \
+    usr/share/mainuan/mainuan-gestao-drivers/gtk-legacy.ui

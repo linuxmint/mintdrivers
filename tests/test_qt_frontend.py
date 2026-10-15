@@ -7,14 +7,14 @@ from pathlib import Path
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-MODULE_PATH = Path(__file__).resolve().parents[1] / "usr/lib/linuxmint/mintdrivers"
+MODULE_PATH = Path(__file__).resolve().parents[1] / "usr/lib/mainuan/mainuan-gestao-drivers"
 sys.path.insert(0, str(MODULE_PATH))
 
 from PyQt6.QtWidgets import QApplication, QLabel
 
-from backend import DeviceInfo, DeviceStatus, DriverOption, DriverOptionType
-from qt.main_window import MainWindow, PlanDialog
-from qt.widgets import device_status_text, driver_option_presentation
+from mainuan_drivers.backend import DeviceInfo, DeviceStatus, DriverOption, DriverOptionType
+from mainuan_drivers.qt.main_window import MainWindow, PlanDialog
+from mainuan_drivers.qt.widgets import device_status_text, driver_option_presentation
 
 
 _APP = None
@@ -65,7 +65,7 @@ def device(*drivers):
 class QtFrontendTests(unittest.TestCase):
     def test_selection_previews_plan_without_starting_transaction(self):
         from PyQt6.QtWidgets import QDialogButtonBox, QRadioButton
-        from backend.transactions import TransactionPlanner
+        from mainuan_drivers.backend.transactions import TransactionPlanner
 
         app()
         initial = option("old-driver", installed=True, selected=True, selectable=True)
@@ -92,7 +92,7 @@ class QtFrontendTests(unittest.TestCase):
 
     def test_qt_frontend_import_does_not_load_gtk_xapp_or_packagekit(self):
         check = (
-            "import sys; sys.path.insert(0, %r); import qt.application; "
+            "import sys; sys.path.insert(0, %r); import mainuan_drivers.qt.application; "
             "blocked = ('gi.repository.Gtk', 'gi.repository.Gdk', "
             "'gi.repository.GdkPixbuf', 'gi.repository.XApp', "
             "'gi.repository.PackageKitGlib', 'gi.repository.GLib', 'gi.repository.Gio'); "

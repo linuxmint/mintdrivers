@@ -1,11 +1,14 @@
-Source: mintdrivers
+Source: mainuan-gestao-drivers
 Section: admin
 Priority: optional
-Maintainer: Clement Lefebvre <root@linuxmint.com>
+Maintainer: Mainuan Packaging <openwebosbr@gmail.com>
+Homepage: https://github.com/mainuan/mainuan-gestao-drivers
+Vcs-Git: https://github.com/mainuan/mainuan-gestao-drivers.git
+Vcs-Browser: https://github.com/mainuan/mainuan-gestao-drivers
 Build-Depends: debhelper (>= 9), gettext
 Standards-Version: 3.9.5
 
-Package: mintdrivers
+Package: mainuan-gestao-drivers
 Architecture: all
 Depends: python3 (>= 3.7),
          python3-gi,
@@ -15,5 +18,8 @@ Depends: python3 (>= 3.7),
          gir1.2-packagekitglib-1.0,
          packagekit,
          ${misc:Depends},
-Description: Driver Manager
- Manage the drivers for your devices.
+Description: Mainuan hardware driver management and planning
+ Mainuan Gestao de Drivers provides a Qt6 interface for detecting additional
+ hardware drivers and previewing planned changes through a shared Python
+ backend. This beta does not apply driver changes.
+ A temporary GTK frontend is included for development reference.

@@ -7,8 +7,8 @@ from PyQt6.QtCore import QEventLoop, QObject, QTimer, pyqtSignal
 from PyQt6 import QtDBus
 
 from test_transaction_planner import scenario, target
-from backend.transactions import RestartRequirement, TransactionAction, TransactionError, TransactionState
-from backend.transactions.packagekit import (
+from mainuan_drivers.backend.transactions import RestartRequirement, TransactionAction, TransactionError, TransactionState
+from mainuan_drivers.backend.transactions.packagekit import (
     DriverTransactionController, PackageKitTransaction, PROPERTIES_INTERFACE,
     ROOT_PATH, TRANSACTION_INTERFACE, QtDBusTransport,
 )
@@ -248,10 +248,10 @@ class PackageKitTransactionTests(unittest.TestCase):
             controller.resolve(plan)
 
     def test_qt_dbus_and_frontend_do_not_import_forbidden_modules(self):
-        root = str(Path(__file__).resolve().parents[1] / "usr/lib/linuxmint/mintdrivers")
+        root = str(Path(__file__).resolve().parents[1] / "usr/lib/mainuan/mainuan-gestao-drivers")
         subprocess.run([sys.executable, "-c",
                         "import sys; sys.path.insert(0, %r); "
-                        "import qt.application; import backend.transactions.packagekit; "
+                        "import mainuan_drivers.qt.application; import mainuan_drivers.backend.transactions.packagekit; "
                         "blocked=('Gtk','Gdk','GdkPixbuf','XApp','PackageKitGlib','GLib','Gio'); "
                         "assert 'gi' not in sys.modules; "
                         "assert not any(n.rsplit('.',1)[-1] in blocked for n in sys.modules)" % root], check=True)

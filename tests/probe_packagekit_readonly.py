@@ -2,12 +2,12 @@
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "usr/lib/linuxmint/mintdrivers"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "usr/lib/mainuan/mainuan-gestao-drivers"))
 
 from PyQt6.QtCore import QCoreApplication, QTimer
-from backend import DriverBackend, DriverOptionType
-from backend.transactions import TransactionPlanner, TransactionState
-from backend.transactions.packagekit import PackageKitTransaction, QtDBusTransport
+from mainuan_drivers.backend import DriverBackend, DriverOptionType
+from mainuan_drivers.backend.transactions import TransactionPlanner, TransactionState
+from mainuan_drivers.backend.transactions.packagekit import PackageKitTransaction, QtDBusTransport
 
 
 class ReadOnlyTransport(QtDBusTransport):
@@ -19,7 +19,7 @@ class ReadOnlyTransport(QtDBusTransport):
 
 
 def main():
-    app = QCoreApplication(["mintdrivers-qt-readonly-probe"])
+    app = QCoreApplication(["mainuan-gestao-drivers-readonly-probe"])
     # This explicit CPU fixture lets the probe run on systems with no additional
     # drivers. Versions and IDs still come exclusively from the real APT cache.
     backend = DriverBackend(devices={"microcode-probe": {"drivers": {

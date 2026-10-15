@@ -1,0 +1,397 @@
+# Japanese translation for linuxmint
+# Copyright (c) 2013 Rosetta Contributors and Canonical Ltd 2013
+# This file is distributed under the same license as the linuxmint package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: mainuan-gestao-drivers 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-14 09:37-0300\n"
+"PO-Revision-Date: 2023-12-02 11:01+0000\n"
+"Last-Translator: kmyyfz8q <Unknown>\n"
+"Language-Team: Japanese <https://launchpad.net/~linuxmint-translation-team-"
+"japanese>\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Launchpad-Export-Date: 2026-01-08 15:38+0000\n"
+"X-Generator: Launchpad (build 99c00f518760bdd50fc6e353e7736d2fff8fba4a)\n"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:85
+#, python-format
+msgid "%s - Qt test mode"
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:89
+msgid "Refresh"
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:92
+msgid "Close"
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:95
+msgid "Preview changes"
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:139
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:141
+msgid "Searching for available drivers..."
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:165
+#, fuzzy
+msgid "No additional drivers are necessary."
+msgstr "プロプライエタリなドライバーは使用していません。"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:167
+msgid ""
+"No additional drivers are necessary.\n"
+"\n"
+"Your computer is already using the available/recommended drivers."
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:179
+#, python-format
+msgid "%(count)d device was found."
+msgid_plural "%(count)d devices were found."
+msgstr[0] ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:199
+msgid "Cannot plan this change"
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:200
+msgid ""
+"The driver selection is inconsistent or cannot be changed automatically."
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:213
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:214
+msgid "Driver detection failed."
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:247
+msgid "Planned changes"
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:250
+msgid "Preview only. These changes will not be executed."
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:253
+msgid "Install:"
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:253
+msgid "Remove:"
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:259
+msgid "None"
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:266
+msgid "A restart may be required."
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/widgets.py:45
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:411
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:515
+msgid "Processor microcode"
+msgstr "プロセッサーのマイクロコード"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/widgets.py:47
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:405
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:503
+msgid "This device is using the recommended driver."
+msgstr "このデバイスは推奨のドライバーを使用しています。"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/widgets.py:48
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:406
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:504
+msgid "This device is using an alternative driver."
+msgstr "このデバイスは代替のドライバーを使用しています。"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/widgets.py:49
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:407
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:505
+msgid "This device is using a manually-installed driver."
+msgstr "このデバイスは手動でインストールしたドライバーを使用しています。"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/widgets.py:50
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:408
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:506
+msgid "This device is not working."
+msgstr "このデバイスは動作していません。"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/widgets.py:57
+msgid "Current"
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/widgets.py:59
+#, fuzzy
+msgid "Recommended"
+msgstr "推奨"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/widgets.py:61
+msgid "Integrated into the system"
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/widgets.py:63
+#, fuzzy
+msgid "Open-source"
+msgstr "オープンソース"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/widgets.py:63
+msgid "Proprietary"
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/widgets.py:65
+msgid "Installed"
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/widgets.py:67
+msgid "Requires an Internet connection"
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/widgets.py:71
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:364
+msgid "Continue using a manually installed driver"
+msgstr "手動でインストールしたドライバーを使い続けます"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/widgets.py:78
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:366
+msgid "Do not use the device"
+msgstr "デバイスを使用しません"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/widgets.py:86
+#, fuzzy, python-format
+msgid "Version: %s"
+msgstr "バージョン"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/widgets.py:90
+#, fuzzy
+msgid "Driver package"
+msgstr "ドライバーマネージャー"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/widgets.py:187
+msgid "Current selection"
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/widgets.py:187
+msgid "Available option"
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/widgets.py:226
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:431
+msgid "Unknown"
+msgstr "不明"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/widgets.py:228
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:433
+msgid "Processor"
+msgstr "プロセッサー"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/packagekit.py:54
+#, fuzzy
+msgid "Waiting..."
+msgstr "キャンセルしています..."
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/packagekit.py:55
+msgid "Preparing..."
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/packagekit.py:56
+#, fuzzy
+msgid "Resolving dependencies..."
+msgstr "ドライバーを削除しています..."
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/packagekit.py:57
+#, fuzzy
+msgid "Downloading..."
+msgstr "ドライバーをダウンロードしています..."
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/packagekit.py:58
+#, fuzzy
+msgid "Installing..."
+msgstr "ドライバーをインストールしています..."
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/packagekit.py:59
+#, fuzzy
+msgid "Removing..."
+msgstr "ドライバーを削除しています..."
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/packagekit.py:60
+#, fuzzy
+msgid "Finalizing..."
+msgstr "キャンセルしています..."
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/packagekit.py:61
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:192
+msgid "Cancelling..."
+msgstr "キャンセルしています..."
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/packagekit.py:62
+msgid "Finished."
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/packagekit.py:63
+msgid "Transaction failed."
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/packagekit.py:64
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/packagekit.py:228
+msgid "Transaction cancelled."
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/packagekit.py:82
+msgid "The system bus is unavailable."
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/packagekit.py:193
+msgid "Driver changes are not enabled in this interface."
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/packagekit.py:333
+msgid "The planned package version is no longer available."
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/packagekit.py:338
+msgid "PackageKit did not complete the transaction."
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/packagekit.py:396
+msgid "The PackageKit service disconnected."
+msgstr ""
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:73
+#: usr/share/mainuan/mainuan-gestao-drivers/gtk-legacy.ui:479
+msgid "Driver Manager"
+msgstr "ドライバーマネージャー"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:77
+msgid "Re_vert"
+msgstr "元に戻す (_V)"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:79
+msgid "_Apply Changes"
+msgstr "変更を適用 (_A)"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:81
+msgid "_Cancel"
+msgstr "キャンセル (_C)"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:83
+msgid "_Restart..."
+msgstr "再起動 (_R)..."
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:186
+msgid "Downloading drivers..."
+msgstr "ドライバーをダウンロードしています..."
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:188
+msgid "Installing drivers..."
+msgstr "ドライバーをインストールしています..."
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:190
+msgid "Removing drivers..."
+msgstr "ドライバーを削除しています..."
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:194
+msgid "Loading cache..."
+msgstr "キャッシュを読み込んでいます..."
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:371
+msgid "recommended"
+msgstr "推奨"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:374
+msgid "open-source"
+msgstr "オープンソース"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:377
+msgid "requires a connection to the Internet"
+msgstr "インターネットへの接続が必要"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:379
+msgid "Version"
+msgstr "バージョン"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:472
+msgid "Do not update the CPU microcode"
+msgstr "CPU マイクロコードを更新しない"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:523
+msgid "You need to restart the computer to complete the driver changes."
+msgstr "ドライバーの変更を完了するには、コンピューターを再起動してください。"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:532
+#, python-format
+msgid "%(count)d proprietary driver in use."
+msgid_plural "%(count)d proprietary drivers in use."
+msgstr[0] "%(count)d 個のプロプライエタリなドライバーを使用しています。"
+
+#: usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py:537
+msgid "No proprietary drivers are in use."
+msgstr "プロプライエタリなドライバーは使用していません。"
+
+#: usr/share/mainuan/mainuan-gestao-drivers/gtk-legacy.ui:52
+msgid "Looking for drivers"
+msgstr "ドライバーを探しています"
+
+#: usr/share/mainuan/mainuan-gestao-drivers/gtk-legacy.ui:75
+msgid "Please wait..."
+msgstr "お待ちください..."
+
+#: usr/share/mainuan/mainuan-gestao-drivers/gtk-legacy.ui:210
+msgid "No drivers needed"
+msgstr "ドライバーは必要ありません"
+
+#: usr/share/mainuan/mainuan-gestao-drivers/gtk-legacy.ui:233
+msgid "Your computer does not need any additional drivers."
+msgstr "このコンピューターに追加が必要なドライバーはありません。"
+
+#: usr/share/mainuan/mainuan-gestao-drivers/gtk-legacy.ui:287
+msgid "An error occurred"
+msgstr "エラーが発生しました"
+
+#: usr/share/mainuan/mainuan-gestao-drivers/gtk-legacy.ui:330
+#: usr/share/mainuan/mainuan-gestao-drivers/gtk-legacy.ui:449
+msgid "OK"
+msgstr "OK"
+
+#: usr/share/mainuan/mainuan-gestao-drivers/gtk-legacy.ui:393
+msgid "You appear to be offline"
+msgstr "オフラインのようです"
+
+#: usr/share/mainuan/mainuan-gestao-drivers/gtk-legacy.ui:416
+#, fuzzy
+msgid "Connect to the Internet to check for additional drivers."
+msgstr "このコンピューターに追加が必要なドライバーはありません。"
+
+#: usr/share/mainuan/mainuan-gestao-drivers/gtk-legacy.ui:480
+msgid "Additional and proprietary drivers"
+msgstr "プロプライエタリなどの追加のドライバー"
+
+#~ msgid "Manage the drivers for your devices"
+#~ msgstr "デバイスドライバーを管理します"
+
+#~ msgid "Mount installation media"
+#~ msgstr "インストールメディアをマウント"
+
+#~ msgid ""
+#~ "Connect to the Internet or insert the Linux Mint installation disc (or "
+#~ "USB stick)."
+#~ msgstr ""
+#~ "インターネットに接続するか、Linux Mint のインストールディスク (または USB "
+#~ "スティック) を挿入してください。"
+
+#~ msgid "Installation media detected"
+#~ msgstr "インストールメディアが検出されました"
+
+#~ msgid "Press the button below to mount it as a software repository."
+#~ msgstr "下のボタンを押すと、ソフトウェアリポジトリとしてマウントします。"

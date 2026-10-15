@@ -6,12 +6,12 @@ from pathlib import Path
 
 from test_backend import FakeDependency, FakePackage, driver, make_backend
 
-from backend import DeviceInfo, DriverOptionType
-from backend.transactions import (
+from mainuan_drivers.backend import DeviceInfo, DriverOptionType
+from mainuan_drivers.backend.transactions import (
     PackageReference, PlanningError, RestartRequirement, TransactionAction,
     TransactionPlanner,
 )
-from backend.transactions.planner import package_identity, reboot_required
+from mainuan_drivers.backend.transactions.planner import package_identity, reboot_required
 
 
 def scenario(installed=False, name="old-driver", device_id="device"):
@@ -34,9 +34,9 @@ def target(device, name):
 
 class TransactionPlannerTests(unittest.TestCase):
     def test_planner_import_has_no_qt_or_glib_dependency(self):
-        root = str(Path(__file__).resolve().parents[1] / "usr/lib/linuxmint/mintdrivers")
+        root = str(Path(__file__).resolve().parents[1] / "usr/lib/mainuan/mainuan-gestao-drivers")
         subprocess.run([sys.executable, "-c",
-                        "import sys; sys.path.insert(0, %r); import backend.transactions; "
+                        "import sys; sys.path.insert(0, %r); import mainuan_drivers.backend.transactions; "
                         "assert not any(n == 'gi' or n.startswith('PyQt6') for n in sys.modules)" % root], check=True)
 
     def test_no_changes(self):
@@ -146,5 +146,5 @@ class TransactionPlannerTests(unittest.TestCase):
         for invalid in ("bad", "driver;1;amd64;extra;field", "driver;;amd64;", "bad name;1;amd64;"):
             with self.assertRaises(PlanningError):
                 package_identity(invalid)
-        self.assertFalse(reboot_required("/definitely-missing-mintdrivers-marker"))
+        self.assertFalse(reboot_required("/definitely-missing-mainuan-drivers-marker"))
 
