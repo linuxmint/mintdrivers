@@ -1,16 +1,18 @@
-.TH MAINUAN-GESTAO-DRIVERS 1 "October 2026" "Mainuan 0.5" "User Commands"
+.TH MAINUAN-GESTAO-DRIVERS 1 "October 2026" "Mainuan 0.6" "User Commands"
 .SH NAME
 mainuan-gestao-drivers \- detect hardware drivers and confirm package changes
 .SH SYNOPSIS
 .B mainuan-gestao-drivers
 .RI [ test ]
+.RI [ --debug ]
+.RI [ --version ]
 .SH DESCRIPTION
 Lists additional drivers using the shared driver detection backend.
 Driver selections produce a preview of planned package changes.
 Applying changes requires explicit confirmation of a revalidated plan.
 PackageKit performs installation and removal; the session PolicyKit agent
 handles authorization. No password is collected by this application.
-This is the Qt6 interface of Mainuan Gestao de Drivers, beta 0.5.
+This is the Qt6 interface of Mainuan Gestao de Drivers, beta 0.6.
 The legacy GTK frontend and its privileged Broadcom helper are no longer shipped.
 Driver switches may remove packages before installing replacements and are
 not atomic. Failed operations trigger fresh detection, without automatic rollback.
@@ -22,6 +24,9 @@ and specifically confirmed enrolled. Pending enrollment remains blocked.
 No keys are generated, imported or enrolled by this application.
 Package installation alone does not establish that a driver is active.
 Read-only sysfs binding and module signature evidence refine activation states.
+APT candidates and Ubuntu driver recommendations are respected for distribution
+and third-party repositories. Driver changes are blocked in Live or unknown
+sessions. Detection remains available without Internet or PackageKit.
 .SH OPTIONS
 .TP
 .B test
@@ -30,6 +35,15 @@ Applying changes in this mode only simulates them in memory; no packages or
 drivers are changed on the system.
 The scenario selector includes NVIDIA recommendations, Broadcom, kernel/header
 checks and Secure Boot/MOK states without consulting host APT or firmware.
+.TP
+.B --debug
+Enable detailed diagnostic logging without changing driver policy.
+.TP
+.B --version
+Display the application version and exit.
+.SH DIAGNOSTICS
+The Help menu can copy a local diagnostic summary to the clipboard on request.
+No automatic upload is performed.
 .SH AUTHORS
 Mainuan contributors. Derived from Linux Mint mintdrivers by Clement Lefebvre
 and contributors. Distributed under GPL-2.0-or-later.

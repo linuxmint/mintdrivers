@@ -26,7 +26,7 @@ def dependency_names(value):
 
 def audit_package(control, members, scripts, conffiles=""):
     metadata = Parser().parsestr(control)
-    if (metadata["Package"], metadata["Version"], metadata["Architecture"]) != (PACKAGE, "0.5", "all"):
+    if (metadata["Package"], metadata["Version"], metadata["Architecture"]) != (PACKAGE, "0.6", "all"):
         raise PackageAuditError("Unexpected package identity/version/architecture")
     depends = dependency_names(metadata["Depends"] or "")
     required = {"python3", "python3-pyqt6", "python3-apt", "ubuntu-drivers-common", "packagekit"}

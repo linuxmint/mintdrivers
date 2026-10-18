@@ -32,6 +32,12 @@ SCENARIOS = (
     ("activation-mok", N_("Installed + MOK enrollment required")),
     ("activation-unverified", N_("Installed + activation unverified")),
     ("activation-old-driver", N_("Installed + previous driver bound")),
+    ("third-party-recommended", N_("Third-party recommended driver")),
+    ("third-party-dkms", N_("Third-party DKMS driver")),
+    ("live-session", N_("Live Session; changes blocked")),
+    ("packagekit-unavailable", N_("PackageKit unavailable")),
+    ("backend-error", N_("Driver detection error")),
+    ("no-drivers", N_("No additional drivers")),
 )
 
 
@@ -79,6 +85,9 @@ def scenario_data(name):
         target, alternatives = "generic-driver", []
     drivers = {package: {"recommended": package == target, "from_distro": True, "free": False}
                for package in [target, *alternatives]}
+    if name.startswith("third-party"):
+        drivers[target]["source"] = "third-party"
+        state = DkmsState.NO_DKMS if name == "third-party-recommended" else DkmsState.DKMS_REQUIRED
     device = {"vendor": "Broadcom" if name == "broadcom" else "NVIDIA",
               "model": "Test adapter", "modalias": "", "drivers": drivers}
     overrides = {package: ("1.0", "Test driver", name.startswith("activation-") and package == target)

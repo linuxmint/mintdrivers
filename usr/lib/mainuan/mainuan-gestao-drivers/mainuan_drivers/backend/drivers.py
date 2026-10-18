@@ -1,6 +1,10 @@
 import re
+import logging
+from urllib.parse import urlsplit
 
-from .models import DeviceInfo, DeviceStatus, DriverOption, DriverOptionType
+from .models import AptOrigin, DeviceInfo, DeviceStatus, DriverOption, DriverOptionType, DriverSource
+
+logger = logging.getLogger(__name__)
 
 
 class PackageUnavailableError(LookupError):
@@ -73,6 +77,7 @@ class DriverBackend:
         one_selected = False
         package_options = []
         for package_name, current_driver in driver_data.items():
+            candidate_version, origins = "", ()
             recommended = bool(current_driver.get("recommended", False))
             status = DeviceStatus.RECOMMENDED if recommended else DeviceStatus.ALTERNATIVE
             builtin = bool(current_driver.get("builtin", False))
@@ -80,6 +85,10 @@ class DriverBackend:
 
             try:
                 package = cache[package_name]
+                candidate = package.candidate
+                if candidate:
+                    candidate_version = candidate.version
+                    origins = self._origins(candidate)
                 if package.is_installed:
                     version = package.installed.version
                     summary = package.installed.summary
@@ -92,10 +101,10 @@ class DriverBackend:
             except KeyError:
                 override = self._package_overrides.get(package_name)
                 if override is None:
-                    print("WARNING: a driver ({}) doesn't have any available package associated: {}".format(
-                        package_name, current_driver))
+                    logger.warning("driver package unavailable name=%s", package_name)
                     continue
                 version, summary, package_installed = override
+                candidate_version = version
                 installed = bool(package_installed and not builtin)
 
             selected = False
@@ -116,7 +125,11 @@ class DriverBackend:
                 requires_internet=package_name.startswith("firmware-b43"),
                 status=status,
                 selectable=not is_test_device,
-                packages=self._official_packages(current_driver)))
+                packages=self._official_packages(current_driver),
+                source=self._driver_source(current_driver), candidate_version=candidate_version,
+                origins=origins))
+            logger.debug("driver candidate name=%s version=%s source=%s recommended=%s", package_name,
+                         candidate_version, package_options[-1].source.value, recommended)
 
         options.extend(package_options)
 
@@ -161,6 +174,31 @@ class DriverBackend:
             icon_key=self._get_device_icon(source, source_drivers),
             drivers=tuple(options),
             sys_path=self._sys_path(device_id, source))
+
+    @staticmethod
+    def _driver_source(driver):
+        if "source" in driver:
+            if not isinstance(driver["source"], str):
+                return DriverSource.UNKNOWN
+            return {"distro": DriverSource.DISTRIBUTION, "distribution": DriverSource.DISTRIBUTION,
+                    "third-party": DriverSource.THIRD_PARTY}.get(driver["source"], DriverSource.UNKNOWN)
+        value = driver.get("from_distro")
+        return (DriverSource.DISTRIBUTION if value is True else
+                DriverSource.THIRD_PARTY if value is False else DriverSource.UNKNOWN)
+
+    @staticmethod
+    def _origins(candidate):
+        def clean(value):
+            return "".join(char for char in str(value) if char.isprintable())[:200]
+        results = []
+        for origin in getattr(candidate, "origins", ()):
+            site = clean(getattr(origin, "site", ""))
+            try:
+                site = urlsplit(site if "://" in site else "//" + site).hostname or ""
+            except ValueError:
+                site = ""
+            results.append(AptOrigin(*(clean(getattr(origin, key, "")) for key in ("origin", "label", "archive")), site))
+        return tuple(results)
 
     @staticmethod
     def _sys_path(device_id, source):

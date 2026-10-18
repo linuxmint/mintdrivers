@@ -16,6 +16,7 @@ from mainuan_drivers.backend.transactions.models import (
     TransactionProgress, TransactionResult, TransactionState,
 )
 from mainuan_drivers.backend.transactions.safety import SecureBootState
+from mainuan_drivers.backend.session import SessionState
 
 
 def await_signal(spy):
@@ -35,7 +36,7 @@ class FakeSource:
     def load(self):
         self.loads += 1
         planner = self.snapshots.pop(0) if self.snapshots else self.planner
-        return DriverSnapshot(planner, self.secure_boot)
+        return DriverSnapshot(planner, self.secure_boot, session=SessionState.INSTALLED_SYSTEM)
 
 
 class FakeWorkflowFactory:

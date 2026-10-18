@@ -23,7 +23,7 @@ class MainuanIdentityTests(unittest.TestCase):
     def test_official_identity_and_debian_metadata(self):
         self.assertEqual((APP_NAME, APP_ID, ORGANIZATION, DISPLAY_NAME, VERSION),
                          ("mainuan-gestao-drivers", "org.mainuan.GestaoDrivers",
-                          "Mainuan", "Gestão de Drivers", "0.5"))
+                          "Mainuan", "Gestão de Drivers", "0.6"))
         source, binary = [Parser().parsestr(stanza) for stanza in
                           (ROOT / "debian/control").read_text().strip().split("\n\n")]
         self.assertEqual(source["Source"], APP_NAME)

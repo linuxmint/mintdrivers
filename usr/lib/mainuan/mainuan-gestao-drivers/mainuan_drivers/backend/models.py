@@ -16,6 +16,20 @@ class DriverOptionType(Enum):
     DISABLE = "disable"
 
 
+class DriverSource(Enum):
+    DISTRIBUTION = "distribution"
+    THIRD_PARTY = "third-party"
+    UNKNOWN = "unknown"
+
+
+@dataclass(frozen=True)
+class AptOrigin:
+    origin: str = ""
+    label: str = ""
+    archive: str = ""
+    site: str = ""
+
+
 @dataclass(frozen=True)
 class DriverOption:
     package_name: Optional[str]
@@ -31,6 +45,9 @@ class DriverOption:
     option_type: DriverOptionType = DriverOptionType.PACKAGE
     selectable: bool = True
     packages: Optional[Tuple[str, ...]] = None
+    source: DriverSource = DriverSource.UNKNOWN
+    candidate_version: str = ""
+    origins: Tuple[AptOrigin, ...] = ()
 
 
 @dataclass(frozen=True)

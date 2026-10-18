@@ -9,6 +9,7 @@ from PyQt6.QtCore import QObject, QThread, QTimer, pyqtSignal, pyqtSlot
 from ..drivers import DriverBackend, PackageUnavailableError, TEST_PACKAGE_OVERRIDES, make_test_devices
 from ..models import DriverOptionType
 from ..activation import DriverActivationProbe
+from ..session import SessionState, SystemSessionProbe, session_message
 from ..preflight import (
     DriverPreflight, KernelModuleContext, ModuleEvidence, SystemSecurityProbe,
     SecureBootState, DkmsState, HeadersState, KernelState,
@@ -45,18 +46,21 @@ class DriverSnapshot:
     installed_packages: tuple = ()
     bindings: tuple = ()
     activations: tuple = ()
+    session: SessionState = SessionState.UNKNOWN
+    udc_version: str = ""
 
 
 class SnapshotSource:
     """Each load creates a backend in its calling worker; no APT objects escape."""
 
     def __init__(self, test_mode=False, backend_factory=DriverBackend, secure_boot_reader=None,
-                 security_probe=None, scenario="default", activation_probe=None):
+                 security_probe=None, scenario="default", activation_probe=None, session_probe=None):
         self.test_mode = test_mode
         self.backend_factory = backend_factory
         self.secure_boot_reader = secure_boot_reader
         self.security_probe = security_probe or SystemSecurityProbe()
         self.activation_probe = activation_probe or DriverActivationProbe()
+        self.session_probe = session_probe or SystemSessionProbe()
         self.scenario = scenario
         self._installed = {}
         self._selected = {}
@@ -69,6 +73,8 @@ class SnapshotSource:
         kwargs = {}
         context, fixture_states = None, {}
         if self.test_mode:
+            if self.scenario == "backend-error":
+                raise RuntimeError("Simulated backend failure")
             kwargs = {"devices": {}, "cache": {}, "extra_devices": make_test_devices(),
                       "package_overrides": TEST_PACKAGE_OVERRIDES}
             context = KernelModuleContext(SecureBootState.DISABLED, False, KernelState.CURRENT,
@@ -96,6 +102,8 @@ class SnapshotSource:
                     device = replace(device, drivers=options, status=current.status)
                 updated.append(device)
             devices = tuple(updated)
+        if self.test_mode and self.scenario == "no-drivers":
+            devices = ()
         if self.test_mode:
             packages, facts = {}, []
             for device in devices:
@@ -152,7 +160,16 @@ class SnapshotSource:
                         for device in devices for option in device.drivers if option.selected and option.installed)
         current_plan = TransactionPlan(current, (), (), TransactionAction.NO_CHANGE)
         activations = assess_activation(current_plan, context, installed, evidence=evidence, bindings=bindings)
-        return DriverSnapshot(planner, context.secure_boot_state, context, evidence, installed, bindings, activations)
+        session = (SessionState.LIVE_SESSION if self.scenario == "live-session" else SessionState.INSTALLED_SYSTEM) if self.test_mode else self.session_probe.probe()
+        udc_version = "test" if self.test_mode else "unknown"
+        if not self.test_mode:
+            from ..signing import read_command
+            import subprocess
+            code, output, error = read_command(subprocess.run, ["dpkg-query", "-W", "-f=${Version}", "ubuntu-drivers-common"])
+            if code == 0 and not error:
+                udc_version = output
+        return DriverSnapshot(planner, context.secure_boot_state, context, evidence, installed, bindings,
+                              activations, session, udc_version)
 
     def inspect(self, plan):
         return self.load(plan)
@@ -192,8 +209,8 @@ class SnapshotWorker(QObject):
     def run(self):
         try:
             self.loaded.emit(self.source.load())
-        except Exception:
-            logger.exception("driver snapshot failed")
+        except Exception as error:
+            logger.error("driver snapshot failed type=%s", type(error).__name__)
             self.failed.emit(TransactionError("snapshot-failed", _("Driver detection failed. No new transaction was started.")))
         finally:
             self.finished.emit()
@@ -341,6 +358,7 @@ class DriverExecutionController(QObject):
         self._completed = []
         self._cancel_requested = False
         self._restart = RestartRequirement.NONE
+        self._session = SessionState.UNKNOWN
 
     def can_apply(self, planner, plan):
         if self.active or not self.available or not (plan.installs or plan.removals):
@@ -428,6 +446,10 @@ class DriverExecutionController(QObject):
         self._context = snapshot.context
         self._evidence = snapshot.evidence
         self._bindings_before = snapshot.bindings
+        self._session = snapshot.session
+        if self._session != SessionState.INSTALLED_SYSTEM:
+            self._finish(TransactionState.FAILED, TransactionError("session-blocked", session_message(self._session)))
+            return
         try:
             self._planner = snapshot.planner
             self._plan = self._planner.rebuild(self._input_plan)
@@ -574,6 +596,9 @@ class DriverExecutionController(QObject):
             self._run_stage(TransactionAction.INSTALL)
 
     def _run_stage(self, action):
+        if self._session != SessionState.INSTALLED_SYSTEM:
+            self._finish(TransactionState.FAILED, TransactionError("session-blocked", session_message(self._session)))
+            return
         transaction = self._new_transaction()
         transaction.finished.connect(self._stage_finished)
         logger.info("driver mutation started role=%s test=%s", action.value, self.test_mode)

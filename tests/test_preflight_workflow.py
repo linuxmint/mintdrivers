@@ -168,9 +168,13 @@ class PreflightWorkflowTests(unittest.TestCase):
             for key, label in SCENARIOS:
                 with self.subTest(scenario=key):
                     source.set_scenario(key)
+                    if key == "backend-error":
+                        with self.assertRaises(RuntimeError):
+                            source.load()
+                        continue
                     snapshot = source.load()
                     self.assertTrue(snapshot.planner.preview_only)
-                    self.assertTrue(snapshot.planner.devices)
+                    self.assertEqual(bool(snapshot.planner.devices), key != "no-drivers")
                     self.assertIsNotNone(snapshot.context)
             transport.assert_not_called()
             security.return_value.probe.assert_not_called()

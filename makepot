@@ -3,9 +3,10 @@
 set -eu
 xgettext --language=Python --from-code=UTF-8 --keyword=_ --keyword=N_ \
     --keyword=ngettext:1,2 --package-name="Mainuan Gestão de Drivers" \
-    --package-version=0.5 --output=mainuan-gestao-drivers.pot \
+    --package-version=0.6 --output=mainuan-gestao-drivers.pot \
     usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/*.py \
     usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/preflight.py \
+    usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/session.py \
     usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/test_scenarios.py \
     usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/packagekit.py \
     usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/execution.py \

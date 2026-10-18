@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 import gettext
+import logging
 import re
 from pathlib import Path
 
@@ -11,6 +12,7 @@ from .models import (
 )
 
 _ = gettext.gettext
+logger = logging.getLogger(__name__)
 
 
 class PlanningError(ValueError):
@@ -147,6 +149,7 @@ class TransactionPlanner:
         action = (TransactionAction.SWITCH if installs and removals else
                   TransactionAction.INSTALL if installs else
                   TransactionAction.REMOVE if removals else TransactionAction.NO_CHANGE)
+        logger.debug("plan action=%s installs=%d removals=%d", action.value, len(installs), len(removals))
         return TransactionPlan(
             tuple(selections), tuple(installs.values()), tuple(removals.values()), action,
             RestartRequirement.POSSIBLE if installs or removals else RestartRequirement.NONE,

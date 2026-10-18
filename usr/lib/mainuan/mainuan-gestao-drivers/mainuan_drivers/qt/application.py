@@ -1,4 +1,5 @@
 import gettext
+import argparse
 import locale
 import logging
 import sys
@@ -24,14 +25,20 @@ def run(argv=None):
     if argv is None:
         argv = sys.argv
 
-    test_mode = len(argv) > 1 and argv[1] == "test"
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
+    parser = argparse.ArgumentParser(prog=APP_NAME, description=DISPLAY_NAME)
+    parser.add_argument("mode", nargs="?", choices=("test",))
+    parser.add_argument("--debug", action="store_true", help=_("Show detailed diagnostic logs"))
+    parser.add_argument("--version", action="version", version="%s %s" % (DISPLAY_NAME, VERSION))
+    options = parser.parse_args(argv[1:])
+    test_mode = options.mode == "test"
+    logging.basicConfig(level=logging.DEBUG if options.debug else logging.WARNING,
+                        format="%(asctime)s %(levelname)s %(name)s %(message)s")
     # Plasma reads per-application settings while QApplication is constructed.
     QCoreApplication.setApplicationName(APP_NAME)
     QCoreApplication.setOrganizationName(ORGANIZATION)
     QCoreApplication.setApplicationVersion(VERSION)
     QGuiApplication.setDesktopFileName(APP_ID)
-    app = QApplication(argv)
+    app = QApplication([argv[0] if argv else APP_NAME])
     app.setApplicationDisplayName(DISPLAY_NAME)
     app.setWindowIcon(QIcon.fromTheme(APP_NAME, QIcon(str(ICON_PATH))))
 

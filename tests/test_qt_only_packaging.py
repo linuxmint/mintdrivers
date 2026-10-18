@@ -21,7 +21,7 @@ def member(path, mode=0o644):
 
 class QtOnlyPackagingTests(unittest.TestCase):
     def setUp(self):
-        self.control = ("Package: %s\nVersion: 0.5\nArchitecture: all\n"
+        self.control = ("Package: %s\nVersion: 0.6\nArchitecture: all\n"
                         "Depends: python3, python3-pyqt6, python3-apt, ubuntu-drivers-common, packagekit\n"
                         "Recommends: mokutil, openssl, kmod\n" % PACKAGE)
         self.members = [member("usr/bin/" + PACKAGE),
@@ -31,7 +31,7 @@ class QtOnlyPackagingTests(unittest.TestCase):
         self.scripts = dict.fromkeys(("preinst", "postinst", "postrm"), text)
 
     def test_clean_qt_payload_and_migration_pass(self):
-        self.assertEqual(audit_package(self.control, self.members, self.scripts)["Version"], "0.5")
+        self.assertEqual(audit_package(self.control, self.members, self.scripts)["Version"], "0.6")
 
     def test_sudoers_file_and_even_empty_directory_fail(self):
         for path in ("etc/sudoers.d", "etc/sudoers.d/rule", "etc/sudoers"):
@@ -75,7 +75,7 @@ class QtOnlyPackagingTests(unittest.TestCase):
         audit_package(self.control, self.members, scripts)
 
     def test_wrong_version_or_missing_direct_apt_dependency_fails(self):
-        for control in (self.control.replace("Version: 0.5", "Version: 0.4"),
+        for control in (self.control.replace("Version: 0.6", "Version: 0.4"),
                         self.control.replace("python3-apt, ", "")):
             with self.assertRaises(PackageAuditError):
                 audit_package(control, self.members, self.scripts)
@@ -158,6 +158,12 @@ application.QApplication = create
 application.MainWindow = lambda test_mode: MainWindow(test_mode=test_mode, auto_start=False)
 assert application.run(['mainuan-gestao-drivers', 'test']) == 0
 for scenario, label in SCENARIOS:
+    if scenario == 'backend-error':
+        try:
+            SnapshotSource(test_mode=True, scenario=scenario).load()
+        except RuntimeError:
+            continue
+        raise AssertionError('Expected backend failure fixture')
     assert SnapshotSource(test_mode=True, scenario=scenario).load().planner.preview_only
 blocked = {'gi', 'Gtk', 'Gdk', 'GdkPixbuf', 'XApp', 'PackageKitGlib', 'GLib', 'Gio'}
 assert not any(set(name.split('.')) & blocked for name in sys.modules)

@@ -3,6 +3,7 @@
 from dataclasses import dataclass
 from enum import Enum
 import gettext
+import logging
 import os
 from pathlib import Path
 import re
@@ -13,6 +14,7 @@ from typing import Optional
 from .signing import DkmsSigningProbe, SigningEvidence, SigningReadiness
 
 _ = gettext.gettext
+logger = logging.getLogger(__name__)
 
 
 class SecureBootState(Enum):
@@ -82,6 +84,7 @@ class ModuleEvidence:
     installed: bool = False
     roots: tuple = ()
     prebuilt_module: bool = False
+    prebuilt_firmware_trusted: bool = False
 
 
 @dataclass(frozen=True)
@@ -280,11 +283,13 @@ def collect_module_evidence(backend, names, running_kernel):
                 running_kernel and name.startswith("linux-modules-nvidia-")
                 and name.endswith("-" + running_kernel) and "unsigned" not in name
                 and getattr(version, "source_name", "").startswith("linux-restricted-modules")
-                and any(origin.origin == "Ubuntu" and origin.trusted for origin in getattr(version, "origins", ())))
+                and any(origin.trusted for origin in getattr(version, "origins", ())))
+            firmware_trusted = compatible and any(origin.origin == "Ubuntu" and origin.trusted
+                                                  for origin in getattr(version, "origins", ()))
             evidence.append(ModuleEvidence(backend.get_packagekit_id(name, installed),
                                           analyze_dkms(cache, name), compatible, installed, (root,),
                                           bool(name.startswith("linux-modules-nvidia-") and
-                                               re.search(r"-\d+\.\d+\.\d+-\d+", name))))
+                                               re.search(r"-\d+\.\d+\.\d+-\d+", name)), firmware_trusted))
             for group in getattr(version, "dependencies", ()):
                 pending.extend((dep.name, root) for dep in group if dep.rawtype in ("Depends", "PreDepends"))
     return tuple(evidence)
@@ -300,10 +305,13 @@ class DriverPreflight:
         facts = {tuple(item.package_id.split(";")[:3]): item for item in self.evidence}
         states = []
         incompatible = False
+        signing_unverified = False
         actual_ids = {tuple(ref.package_id.split(";")[:3]) for ref in installs if ref.package_id}
         for ref in installs:
             fact = facts.get(tuple(ref.package_id.split(";")[:3])) if ref.package_id else None
             incompatible = incompatible or bool(fact and fact.prebuilt_module and not fact.prebuilt_compatible)
+            signing_unverified = signing_unverified or bool(fact and fact.prebuilt_module
+                and fact.prebuilt_compatible and not fact.prebuilt_firmware_trusted)
             state = DkmsState.DKMS_REQUIRED if explicit_dkms(ref.name) else fact.dkms_state if fact else (
                 DkmsState.DKMS_REQUIRED if ref.requires_dkms is True else
                 DkmsState.NO_DKMS if ref.requires_dkms is False else DkmsState.UNKNOWN)
@@ -317,7 +325,9 @@ class DriverPreflight:
                      if state in states), DkmsState.NO_DKMS)
         warnings, blockers = [], []
         if incompatible:
-            blockers.append(PreflightIssue("prebuilt-incompatible", _("The prebuilt module does not have a verified Ubuntu source and matching running kernel.")))
+            blockers.append(PreflightIssue("prebuilt-incompatible", _("The prebuilt module's package trust or running-kernel compatibility could not be verified.")))
+        if signing_unverified and context.secure_boot_state in (SecureBootState.ENABLED, SecureBootState.UNKNOWN):
+            blockers.append(PreflightIssue("prebuilt-signing", _("The prebuilt module's Secure Boot signature trust could not be verified. Repository trust alone does not establish module trust.")))
         if installs and context.kernel_requires_dkms:
             warnings.append(PreflightIssue("kernel-dkms-hint", _("The running kernel is outside the standard prebuilt module update path. Verify module compatibility.")))
         if installs and context.kernel_state == KernelState.OUTDATED:
@@ -341,6 +351,8 @@ class DriverPreflight:
                 blockers.append(PreflightIssue("headers-missing", _("Headers for the running kernel are missing or unverified. Install matching headers through system updates before retrying.")))
         if dkms == DkmsState.UNKNOWN and context.secure_boot_state in (SecureBootState.DISABLED, SecureBootState.UNSUPPORTED):
             warnings.append(PreflightIssue("module-unknown", _("The module build requirements could not be fully verified.")))
+        logger.debug("preflight dkms=%s secure_boot=%s blockers=%s", dkms.value,
+                     context.secure_boot_state.value, [issue.code for issue in blockers])
         return DriverPreflightResult(context.secure_boot_state, context.uefi, dkms, context.kernel_state,
                                      context.headers_state if uncertain else HeadersState.NOT_REQUIRED,
                                      context.mok_state, tuple(warnings), tuple(blockers), bool(installs),

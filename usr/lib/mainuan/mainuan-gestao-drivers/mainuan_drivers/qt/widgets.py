@@ -1,5 +1,6 @@
 import gettext
 from dataclasses import dataclass
+from html import escape
 
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
@@ -15,6 +16,7 @@ from PyQt6.QtWidgets import (
 )
 
 from mainuan_drivers.backend import DeviceStatus, DriverOptionType
+from ..backend.models import DriverSource
 from .. import DATA_DIR
 
 
@@ -44,10 +46,10 @@ def device_status_text(device):
     if device.is_cpu:
         return _("Processor microcode")
     return {
-        DeviceStatus.RECOMMENDED: _("This device is using the recommended driver."),
-        DeviceStatus.ALTERNATIVE: _("This device is using an alternative driver."),
-        DeviceStatus.MANUALLY_INSTALLED: _("This device is using a manually-installed driver."),
-        DeviceStatus.NO_DRIVER: _("This device is not working."),
+        DeviceStatus.RECOMMENDED: _("The recommended driver package is selected."),
+        DeviceStatus.ALTERNATIVE: _("An alternative driver package is selected."),
+        DeviceStatus.MANUALLY_INSTALLED: _("A manually installed driver was detected."),
+        DeviceStatus.NO_DRIVER: _("No additional driver is selected."),
     }[device.status]
 
 
@@ -63,6 +65,8 @@ def driver_option_presentation(option):
         badges.append(_("Open-source") if option.free else _("Proprietary"))
     if option.installed:
         badges.append(_("Installed"))
+    if option.source == DriverSource.THIRD_PARTY:
+        badges.append(_("Source: third-party repository"))
     if option.requires_internet:
         badges.append(_("Requires an Internet connection"))
 
@@ -145,6 +149,7 @@ class DeviceWidget(QFrame):
         layout.addLayout(details, 1)
 
         title = QLabel(_device_title(device))
+        title.setTextFormat(Qt.TextFormat.PlainText)
         font = title.font()
         font.setBold(True)
         title.setFont(font)
@@ -206,10 +211,16 @@ class DriverOptionWidget(QWidget):
         self.selection_button = marker if selectable else None
         if selectable:
             marker.setAccessibleName(presentation.title)
+            marker.setAccessibleDescription("; ".join(presentation.badges + (presentation.subtitle,)))
         marker.setToolTip(_("Current selection") if presentation.selected else _("Available option"))
         top.addWidget(marker)
 
         title = QLabel(presentation.title)
+        title.setTextFormat(Qt.TextFormat.PlainText)
+        origins = "\n".join(" / ".join(value for value in (origin.origin, origin.label, origin.archive, origin.site) if value)
+                            for origin in option.origins)
+        tooltip = _("APT candidate: %s") % (option.candidate_version or _("Unknown")) + ("\n" + origins if origins else "")
+        title.setToolTip("<qt>" + escape(tooltip).replace("\n", "<br>") + "</qt>")
         title.setWordWrap(True)
         if presentation.selected:
             font = title.font()
@@ -220,6 +231,7 @@ class DriverOptionWidget(QWidget):
 
         if presentation.subtitle:
             subtitle = QLabel(presentation.subtitle)
+            subtitle.setTextFormat(Qt.TextFormat.PlainText)
             subtitle.setWordWrap(True)
             subtitle.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
             layout.addWidget(subtitle)
@@ -236,6 +248,8 @@ class DriverOptionWidget(QWidget):
 class Badge(QLabel):
     def __init__(self, text):
         super().__init__(text)
+        self.setTextFormat(Qt.TextFormat.PlainText)
+        self.setWordWrap(True)
         self.setFrameShape(QFrame.Shape.StyledPanel)
         self.setMargin(4)
         font = self.font()

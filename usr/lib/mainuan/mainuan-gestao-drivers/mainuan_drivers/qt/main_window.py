@@ -4,12 +4,14 @@ from collections import Counter
 from dataclasses import replace
 
 from PyQt6.QtCore import QObject, Qt, QThread, pyqtSignal, pyqtSlot
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QAction, QIcon
 from PyQt6.QtWidgets import (
     QDialog,
+    QApplication,
     QDialogButtonBox,
     QComboBox,
     QHBoxLayout,
+    QGridLayout,
     QLabel,
     QMainWindow,
     QMessageBox,
@@ -27,6 +29,9 @@ from mainuan_drivers.backend.preflight import (
 )
 from mainuan_drivers.backend.test_scenarios import SCENARIOS
 from mainuan_drivers.backend.signing import SigningReadiness
+from mainuan_drivers.backend.session import SessionState, session_message
+from mainuan_drivers.backend.models import DriverSource
+from mainuan_drivers.backend.diagnostics import diagnostic_text
 from mainuan_drivers.backend.transactions import PlanningError, TransactionPlanner
 from mainuan_drivers.backend.transactions.packagekit import DriverTransactionController
 from mainuan_drivers.backend.transactions.execution import (
@@ -36,7 +41,8 @@ from mainuan_drivers.backend.transactions.models import TransactionState, Restar
 from mainuan_drivers.backend.transactions.planner import package_identity
 
 from .widgets import DeviceWidget, activation_text
-from .. import DISPLAY_NAME
+from .. import DISPLAY_NAME, VERSION
+from .state import DetectionFailure, ViewModel, ViewState
 
 
 _ = gettext.gettext
@@ -47,7 +53,7 @@ class DriverDetectionWorker(QObject):
     snapshotReady = pyqtSignal(object)
     planningReady = pyqtSignal(object)
     loaded = pyqtSignal(object)
-    failed = pyqtSignal(str)
+    failed = pyqtSignal(object)
     finished = pyqtSignal()
 
     def __init__(self, test_mode=False, source=None, inspection_plan=None):
@@ -66,9 +72,15 @@ class DriverDetectionWorker(QObject):
             planner = snapshot.planner
             self.planningReady.emit(planner)
             self.loaded.emit(planner.devices)
-        except Exception:
-            logger.exception("driver detection failed")
-            self.failed.emit(_("Driver detection failed. Consult the application log for details."))
+        except Exception as error:
+            # Exception values can contain repository credentials. Log category,
+            # type and operation, not arbitrary data from third-party libraries.
+            logger.error("driver detection failed type=%s operation=snapshot", type(error).__name__)
+            unavailable = isinstance(error, ImportError)
+            self.failed.emit(DetectionFailure(
+                ViewState.BACKEND_UNAVAILABLE if unavailable else ViewState.BACKEND_ERROR,
+                _("The driver detection backend is unavailable. Check the application dependencies and try again.") if unavailable else
+                _("Driver detection failed. Consult the application log for details.")))
         finally:
             self.finished.emit()
 
@@ -81,6 +93,7 @@ class MainWindow(QMainWindow):
     def __init__(self, test_mode=False, auto_start=True, executor=None):
         super().__init__()
         self.test_mode = test_mode
+        self.view = ViewModel()
         self._thread = None
         self._worker = None
         self.controller = None
@@ -104,7 +117,7 @@ class MainWindow(QMainWindow):
 
         self.refresh_button = QPushButton(_("Refresh"))
         self.refresh_button.setIcon(QIcon.fromTheme("view-refresh"))
-        self.refresh_button.clicked.connect(self.refresh)
+        self.refresh_button.clicked.connect(self._manual_refresh)
         self.close_button = QPushButton(_("Close"))
         self.close_button.setIcon(QIcon.fromTheme("window-close"))
         self.close_button.clicked.connect(self.close)
@@ -120,12 +133,11 @@ class MainWindow(QMainWindow):
         self.status_label = QLabel()
         self.status_label.setWordWrap(True)
 
-        header_layout = QHBoxLayout()
-        header_layout.addStretch(1)
-        header_layout.addWidget(self.plan_button)
-        header_layout.addWidget(self.apply_button)
-        header_layout.addWidget(self.refresh_button)
-        header_layout.addWidget(self.close_button)
+        header_layout = QGridLayout()
+        header_layout.addWidget(self.plan_button, 0, 0)
+        header_layout.addWidget(self.apply_button, 0, 1)
+        header_layout.addWidget(self.refresh_button, 1, 0)
+        header_layout.addWidget(self.close_button, 1, 1)
 
         self.content = QWidget()
         self.content_layout = QVBoxLayout(self.content)
@@ -135,7 +147,6 @@ class MainWindow(QMainWindow):
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
         scroll_area.setFrameShape(QScrollArea.Shape.NoFrame)
-        scroll_area.setWidget(self.content)
 
         root = QWidget()
         root_layout = QVBoxLayout(root)
@@ -155,15 +166,20 @@ class MainWindow(QMainWindow):
         root_layout.addLayout(header_layout)
         self.service_label = QLabel()
         self.service_label.setWordWrap(True)
-        root_layout.addWidget(self.service_label)
         self.preflight_label = QLabel()
         self.preflight_label.setTextFormat(Qt.TextFormat.PlainText)
         self.preflight_label.setWordWrap(True)
-        root_layout.addWidget(self.preflight_label)
         self.result_label = QLabel()
         self.result_label.setTextFormat(Qt.TextFormat.PlainText)
         self.result_label.setWordWrap(True)
-        root_layout.addWidget(self.result_label)
+        body = QWidget()
+        body_layout = QVBoxLayout(body)
+        body_layout.setContentsMargins(0, 0, 0, 0)
+        for label in (self.service_label, self.preflight_label, self.result_label):
+            label.hide()
+            body_layout.addWidget(label)
+        body_layout.addWidget(self.content, 1)
+        scroll_area.setWidget(body)
         root_layout.addWidget(scroll_area, 1)
         self.progress_label = QLabel()
         self.progress_label.setTextFormat(Qt.TextFormat.PlainText)
@@ -181,6 +197,31 @@ class MainWindow(QMainWindow):
         self.progress_label.hide()
         self.cancel_button.hide()
         self.setCentralWidget(root)
+        for widget, name, description in (
+                (self.apply_button, _("Apply changes"), _("Review and confirm the selected driver changes")),
+                (self.refresh_button, _("Refresh"), _("Detect drivers again")),
+                (self.plan_button, _("Preview changes"), _("View planned packages without changing the system")),
+                (self.close_button, _("Close"), _("Close the driver manager")),
+                (self.cancel_button, _("Cancel"), _("Request cancellation when PackageKit permits it")),
+                (self.progress_bar, _("Driver operation progress"), _("Progress reported by PackageKit")),
+                (self.status_label, _("Driver detection status"), _("Current detection result")),
+                (self.result_label, _("Driver operation result"), _("Result and activation information"))):
+            widget.setAccessibleName(name)
+            widget.setAccessibleDescription(description)
+        for label in (self.status_label, self.service_label, self.progress_label):
+            label.setTextFormat(Qt.TextFormat.PlainText)
+        self.service_label.setAccessibleName(_("System availability"))
+        self.preflight_label.setAccessibleName(_("System verification"))
+        self.setTabOrder(self.plan_button, self.apply_button)
+        self.setTabOrder(self.apply_button, self.refresh_button)
+        self.setTabOrder(self.refresh_button, self.close_button)
+        help_menu = self.menuBar().addMenu(_("Help"))
+        self.diagnostic_action = QAction(QIcon.fromTheme("edit-copy"), _("Copy diagnostic information"), self)
+        self.diagnostic_action.setToolTip(_("Copy local diagnostics to the clipboard; nothing is uploaded"))
+        self.diagnostic_action.triggered.connect(self.copy_diagnostics)
+        help_menu.addAction(self.diagnostic_action)
+        about = help_menu.addAction(QIcon.fromTheme("help-about"), _("About"))
+        about.triggered.connect(self.show_about)
 
         if auto_start:
             if not self.test_mode:
@@ -189,11 +230,22 @@ class MainWindow(QMainWindow):
                 self._availability.check()
             self.refresh()
 
+    def _manual_refresh(self):
+        if self._thread is None and not self.executor.active:
+            self.view.outcome = None
+            self.result_label.clear()
+            self.refresh()
+
     def refresh(self):
         if self._thread is not None or self.executor.active:
             return
         if self._availability:
             self._availability.check()
+        self.view.loading = True
+        self.view.backend_error = None
+        self._snapshot = None
+        self.refresh_button.setText(_("Refresh"))
+        self.refresh_button.setAccessibleName(_("Refresh"))
         self._clear_content()
         self.plan_button.setEnabled(False)
         if self.controller:
@@ -228,12 +280,16 @@ class MainWindow(QMainWindow):
 
     @pyqtSlot(object)
     def show_devices(self, devices):
+        self.view.ready = True
+        self.view.devices = len(devices)
+        self.view.backend_error = None
+        self.view.loading = False
         self._clear_content()
         if not devices:
             self.status_label.setText(_("No additional drivers are necessary."))
             empty = QLabel(
-                _("No additional drivers are necessary.\n\n"
-                  "Your computer is already using the available/recommended drivers.")
+                _("Your system is using the appropriate drivers.\n\n"
+                  "No additional drivers are available or necessary.")
             )
             empty.setAlignment(Qt.AlignmentFlag.AlignCenter)
             empty.setWordWrap(True)
@@ -255,6 +311,19 @@ class MainWindow(QMainWindow):
                                if item.device_id == device.device_id), None)
             self.content_layout.addWidget(DeviceWidget(device, callback, self.test_mode, activation))
         self.content_layout.addStretch(1)
+
+    @property
+    def ui_state(self):
+        self.view.running = self.executor.active
+        return self.view.state
+
+    def copy_diagnostics(self):
+        text = diagnostic_text(self._snapshot, self.view.packagekit, self.ui_state, self.test_mode)
+        QApplication.clipboard().setText(text)
+
+    def show_about(self):
+        QMessageBox.about(self, _("About"), _("%(name)s %(version)s\nMainuan\n\nOriginally derived from Linux Mint Driver Manager.\nGPL-2.0-or-later; Clement Lefebvre and contributors.") % {
+            "name": DISPLAY_NAME, "version": VERSION})
 
     @pyqtSlot(object)
     def _set_planner(self, planner):
@@ -283,6 +352,7 @@ class MainWindow(QMainWindow):
         self.executor.source.set_scenario(self.scenario_combo.currentData())
         self.result_label.clear()
         self._pending_result = None
+        self.view.outcome = None
         self.refresh()
 
     def _preflight(self, plan):
@@ -293,6 +363,15 @@ class MainWindow(QMainWindow):
     @pyqtSlot(object)
     def _receive_snapshot(self, snapshot):
         self._snapshot = snapshot
+        self.view.session = snapshot.session
+        if self.view.outcome is None:
+            if any(item.state == ActivationState.INSTALLED_MOK_REQUIRED for item in snapshot.activations):
+                self.view.outcome = ViewState.MOK_REQUIRED
+            elif any(item.state == ActivationState.INSTALLED_REBOOT_REQUIRED for item in snapshot.activations):
+                self.view.outcome = ViewState.REBOOT_REQUIRED
+        if self.test_mode:
+            available = getattr(self.executor.source, "scenario", "") != "packagekit-unavailable"
+            self._service_changed(available, "" if available else _("Changes cannot be applied because PackageKit is unavailable. Driver detection remains available."))
         if self._pending_result:
             result = self._pending_result
             if result.plan and snapshot.context:
@@ -302,17 +381,25 @@ class MainWindow(QMainWindow):
                 result = replace(result, activations=activations)
                 snapshot = replace(snapshot, activations=activations)
                 self._snapshot = snapshot
+                if any(item.state == ActivationState.INSTALLED_MOK_REQUIRED for item in activations):
+                    self.view.outcome = ViewState.MOK_REQUIRED
+                elif any(item.state == ActivationState.INSTALLED_REBOOT_REQUIRED for item in activations):
+                    self.view.outcome = ViewState.REBOOT_REQUIRED
             self.result_label.setText(execution_message(result))
+            self.result_label.show()
             self._pending_result = None
 
     def _service_changed(self, available, message):
         self.executor.available = available
+        self.view.packagekit = available
         self._service_message = message
         self.service_label.setText(message)
         self._update_controls()
 
     def _update_controls(self, *args):
-        idle = not self.executor.active and self._thread is None and not self._confirmation_open
+        self.view.running = self.executor.active
+        idle = not self.executor.active and self._thread is None and not self._confirmation_open and not self.view.loading
+        self.service_label.setText("\n".join(text for text in (session_message(self.view.session), self._service_message) if text))
         if self.test_mode:
             self.scenario_combo.setEnabled(idle)
         self.content.setEnabled(idle)
@@ -328,9 +415,12 @@ class MainWindow(QMainWindow):
                 if preflight:
                     self.preflight_label.setText("\n".join(issue.message for issue in preflight.blockers + preflight.warnings))
                 self.apply_button.setEnabled(self.executor.can_apply(self.controller.planner, plan)
-                                             and not (preflight and preflight.blockers))
+                                             and not (preflight and preflight.blockers)
+                                             and self.view.session == SessionState.INSTALLED_SYSTEM)
             except PlanningError:
                 pass
+        for label in (self.service_label, self.preflight_label, self.result_label):
+            label.setVisible(bool(label.text()))
         if not self.executor.active:
             self.progress_bar.hide()
             self.progress_label.hide()
@@ -371,25 +461,38 @@ class MainWindow(QMainWindow):
         self.cancel_button.setEnabled(progress.allow_cancel and not progress.cancel_requested)
 
     def _execution_finished(self, result):
+        self.view.outcome = (ViewState.REBOOT_REQUIRED if result.restart == RestartRequirement.SYSTEM else
+            ViewState.TRANSACTION_SUCCESS if result.state == TransactionState.FINISHED else
+            ViewState.OFFLINE if result.error and result.error.error_code == 2 else ViewState.TRANSACTION_FAILURE)
         self._pending_result = result if result.plan else None
         message = (_("Package operations finished. Checking driver activation...")
                    if result.state == TransactionState.FINISHED and result.completed else execution_message(result))
         self.result_label.setText(message)
+        self.result_label.show()
         if self._availability:
             self._availability.check()
 
-    @pyqtSlot(str)
+    @pyqtSlot(object)
     def show_error(self, details):
+        failure = details if isinstance(details, DetectionFailure) else DetectionFailure(
+            ViewState.BACKEND_ERROR, _("Driver detection failed. Consult the application log for details."))
+        self.view.backend_error = failure.state
+        self.view.loading = False
+        self.view.ready = False
+        self._snapshot = None
+        if self.controller:
+            self.controller.deleteLater()
+            self.controller = None
         self._clear_content()
         self.status_label.setText(_("Driver detection failed."))
-        label = QLabel(_("Driver detection failed."))
-        label.setWordWrap(True)
-        label.setToolTip(details)
-        self.content_layout.addWidget(label)
-        self.result_label.setText(details)
+        self.result_label.setText(failure.message)
+        self.result_label.show()
+        self.refresh_button.setText(_("Try again"))
+        self.refresh_button.setAccessibleName(_("Try again"))
 
     @pyqtSlot()
     def _detection_finished(self):
+        self.view.loading = False
         self.refresh_button.setEnabled(True)
         self._thread = None
         self._worker = None
@@ -454,6 +557,14 @@ class PlanDialog(QDialog):
             layout.addWidget(QLabel(_("Preview only. These changes will not be executed.")))
         content = QWidget()
         details = QVBoxLayout(content)
+        driver_plan = getattr(plan, "plan", plan)
+        third_party = [selection.target.package_name for selection in driver_plan.selections
+                       if selection.target.source == DriverSource.THIRD_PARTY]
+        if third_party:
+            label = QLabel(_("Third-party repository: %s") % ", ".join(third_party))
+            label.setWordWrap(True)
+            label.setTextFormat(Qt.TextFormat.PlainText)
+            details.addWidget(label)
         if preflight:
             heading = QLabel(_("System verification"))
             font = heading.font()
@@ -516,9 +627,12 @@ class PlanDialog(QDialog):
             buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Apply | QDialogButtonBox.StandardButton.Cancel)
             apply = buttons.button(QDialogButtonBox.StandardButton.Apply)
             apply.setText(_("Apply"))
+            apply.setAccessibleName(_("Apply"))
+            apply.setAccessibleDescription(_("Apply only the changes listed in this confirmation"))
             apply.setEnabled(not (preflight and preflight.blockers))
             apply.clicked.connect(self.accept)
             buttons.button(QDialogButtonBox.StandardButton.Cancel).setText(_("Cancel"))
+            buttons.button(QDialogButtonBox.StandardButton.Cancel).setAccessibleName(_("Cancel"))
             buttons.button(QDialogButtonBox.StandardButton.Cancel).setDefault(True)
         else:
             buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
@@ -543,7 +657,7 @@ def execution_message(result):
                    _("No driver changes were necessary."))
         if result.activations and not result.simulated:
             message = _("Package changes completed. Driver activation checked separately.")
-    elif result.error and result.error.error_code in (2, 10, 42):
+    elif result.error and result.error.error_code in (2, 10):
         message = _("The package download failed. Check the connection and review the detected driver state.")
     elif result.error and result.error.error_code in (13, 20, 35):
         message = _("Package dependencies prevented this change. No more aggressive removal was attempted.")
@@ -556,7 +670,7 @@ def execution_message(result):
         if activation.state == ActivationState.INSTALLED_MOK_REQUIRED:
             message += "\n" + _("Restart the computer and complete key enrollment in MokManager.")
     if result.restart == RestartRequirement.SYSTEM:
-        message += "\n" + _("A system restart is required to complete driver activation.")
+        message = _("A system restart is required to complete driver activation.") + "\n" + message
     elif result.restart == RestartRequirement.SESSION:
         message += "\n" + _("Restart your session to complete the changes.")
     elif result.restart == RestartRequirement.APPLICATION:

@@ -1,3 +1,16 @@
+mainuan-gestao-drivers (0.6) UNRELEASED; urgency=medium
+
+  * Preserve distribution/third-party source and APT candidate origin metadata.
+  * Respect repository pinning without rewriting Ubuntu driver recommendations.
+  * Refine loading, empty, backend error and PackageKit availability states.
+  * Block driver mutations in Live or unverified sessions before execution.
+  * Improve accessibility, keyboard workflows and small-window layouts.
+  * Add opt-in debug logs, local clipboard diagnostics and version information.
+  * Retain obsolete conffile migration for direct upgrades from beta 0.4.
+  * Extend regressions and prepare validation for a future release candidate.
+
+ -- Mainuan Packaging <openwebosbr@gmail.com>  Sun, 18 Oct 2026 10:37:51 -0300
+
 mainuan-gestao-drivers (0.5) UNRELEASED; urgency=medium
 
   * Remove the GTK frontend, XApp and PackageKitGlib runtime dependencies.
