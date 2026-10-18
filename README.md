@@ -1,9 +1,9 @@
 # Gestão de Drivers
 
 **Mainuan Gestão de Drivers** é uma ferramenta de hardware do projeto Mainuan,
-baseado no Kubuntu 26.04 LTS. A versão **0.4 é beta**.
+baseado no Kubuntu 26.04 LTS. A versão **0.5 é beta**.
 
-A interface oficial usa Qt6 Widgets/PyQt6. A detecção usa
+A aplicação é integralmente Qt6 Widgets/PyQt6, sem frontend GTK ou XApp. A detecção usa
 `ubuntu-drivers-common` e consultas APT, com backend Python independente da GUI.
 O planejamento de alterações usa PackageKit via `PyQt6.QtDBus`.
 Nesta versão, alterações válidas podem ser aplicadas após confirmação explícita.
@@ -25,10 +25,9 @@ headers e Broadcom. Esses cenários não consultam nem modificam o estado do hos
 ## Desenvolvimento
 
 O código fica em `usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/`.
-O entry point temporário `mainuan-gestao-drivers-gtk-legacy` mantém a GTK como
-referência de desenvolvimento, sem launcher no menu nem fallback automático.
-As dependências GTK e o helper Broadcom herdado permanecem apenas por ela;
-a Qt não importa GTK, XApp, GLib, Gio ou PackageKitGlib.
+O frontend GTK, seu helper Broadcom e o sudoers legado foram removidos no beta
+0.5. Não há fallback GTK, action PolicyKit própria nem helper privilegiado.
+A autorização pertence ao PackageKit e ao agente PolicyKit da sessão.
 
 ```bash
 python3 -m unittest discover -s tests -v
@@ -40,14 +39,16 @@ dpkg-buildpackage -us -uc -b
 Instale o beta apenas em uma VM para validação:
 
 ```bash
-sudo apt install ./mainuan-gestao-drivers_0.4_all.deb
+sudo apt install ./mainuan-gestao-drivers_0.5_all.deb
 sudo apt remove mainuan-gestao-drivers
 ```
 
 Não há scripts para remover dependências, alterar repositórios, módulos ou
 Secure Boot durante instalação/remoção do aplicativo.
 Consulte [a arquitetura de transações](docs/qt-transactions.md) e o
-[roteiro de validação na VM](docs/beta-0.4-testing.md).
+[roteiro de validação e upgrade 0.4 para 0.5 na VM](docs/beta-0.5-testing.md).
+O upgrade retira o conffile sudoers obsoleto pelo mecanismo Debian apropriado;
+modificações locais são preservadas como backup inativo até o purge.
 Trocas com remoção e instalação não são atômicas; em caso de falha parcial,
 o aplicativo detecta novamente o estado real, sem restaurar drivers automaticamente.
 Autoremove e remoção indiscriminada de dependências não são permitidos.
@@ -59,7 +60,7 @@ pendente continuam bloqueados; não há geração de chave nem enrollment própr
 pré-compilados compatíveis não recebem o bloqueio DKMS. A Qt não descarrega nem
 carrega módulos Broadcom: orienta reiniciar. Pacote instalado não significa driver
 ativo; o resultado é reavaliado após a transação. Consulte a
-[auditoria upstream](docs/upstream-audit-0.4.md) e a
+[auditoria upstream](docs/upstream-audit-0.5.md) e a
 [política de acompanhamento](docs/upstream-sync-policy.md).
 
 ## Origem e Licença

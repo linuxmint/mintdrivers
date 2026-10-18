@@ -296,22 +296,6 @@ class DriverBackend:
         from .preflight import collect_module_evidence
         return collect_module_evidence(self, names, running_kernel)
 
-    def count_installed_proprietary_drivers(self):
-        count = 0
-        source_devices = dict(self._get_source_devices())
-        source_devices.update(self._extra_devices)
-        cache = self._get_cache()
-        for device in source_devices.values():
-            for package_name, driver in device.get("drivers", {}).items():
-                if not driver.get("free", False) or package_name == "broadcom-sta-dkms":
-                    try:
-                        if cache[package_name].is_installed:
-                            count += 1
-                    except KeyError:
-                        continue
-        return count
-
-
 def make_test_device():
     """Return the shared display-only fixture used by frontend test modes."""
     return {

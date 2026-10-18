@@ -5,17 +5,16 @@ Maintainer: Mainuan Packaging <openwebosbr@gmail.com>
 Homepage: https://github.com/mainuan/mainuan-gestao-drivers
 Vcs-Git: https://github.com/mainuan/mainuan-gestao-drivers.git
 Vcs-Browser: https://github.com/mainuan/mainuan-gestao-drivers
-Build-Depends: debhelper (>= 9), gettext
+Build-Depends: debhelper-compat (= 13), gettext
+Rules-Requires-Root: no
 Standards-Version: 3.9.5
 
 Package: mainuan-gestao-drivers
 Architecture: all
 Depends: python3 (>= 3.7),
-         python3-gi,
          python3-pyqt6,
+         python3-apt,
          ubuntu-drivers-common,
-         gir1.2-xapp-1.0,
-         gir1.2-packagekitglib-1.0,
          packagekit,
          ${misc:Depends},
 Recommends: mokutil, openssl, kmod
@@ -24,4 +23,3 @@ Description: Mainuan hardware driver management
  hardware drivers and confirming package changes through a shared Python
  backend. PackageKit and PolicyKit mediate installation and removal.
  Test mode simulates changes without modifying the system.
- A temporary GTK frontend is included for development reference.

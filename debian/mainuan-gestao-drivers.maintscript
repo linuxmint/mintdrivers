@@ -1,0 +1,1 @@
+rm_conffile /etc/sudoers.d/mainuan-gestao-drivers-gtk-legacy 0.5~ mainuan-gestao-drivers

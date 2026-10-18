@@ -23,7 +23,7 @@ class MainuanIdentityTests(unittest.TestCase):
     def test_official_identity_and_debian_metadata(self):
         self.assertEqual((APP_NAME, APP_ID, ORGANIZATION, DISPLAY_NAME, VERSION),
                          ("mainuan-gestao-drivers", "org.mainuan.GestaoDrivers",
-                          "Mainuan", "Gestão de Drivers", "0.4"))
+                          "Mainuan", "Gestão de Drivers", "0.5"))
         source, binary = [Parser().parsestr(stanza) for stanza in
                           (ROOT / "debian/control").read_text().strip().split("\n\n")]
         self.assertEqual(source["Source"], APP_NAME)
@@ -45,7 +45,7 @@ class MainuanIdentityTests(unittest.TestCase):
         self.assertNotIn("sys.path", source)
         self.assertNotIn("gtk", source.lower())
         legacy = ROOT / "usr/bin/mainuan-gestao-drivers-gtk-legacy"
-        self.assertTrue(legacy.resolve().is_file())
+        self.assertFalse(os.path.lexists(legacy))
         for old in ("mintdrivers", "mintdrivers-qt", "driver-manager", "cinnamon-driver-manager"):
             self.assertFalse((ROOT / "usr/bin" / old).exists())
 

@@ -1,3 +1,14 @@
+mainuan-gestao-drivers (0.5) UNRELEASED; urgency=medium
+
+  * Remove the GTK frontend, XApp and PackageKitGlib runtime dependencies.
+  * Remove the legacy Broadcom module helper and its sudoers configuration.
+  * Safely retire the obsolete sudoers conffile with dpkg-maintscript-helper.
+  * Keep the official application entirely Qt, with PackageKit/PolicyKit.
+  * Declare direct python3-apt usage and modernize to debhelper compat 13.
+  * Preserve upstream credits and translations; extend packaging regressions.
+
+ -- Mainuan Packaging <openwebosbr@gmail.com>  Sun, 18 Oct 2026 09:43:47 -0300
+
 mainuan-gestao-drivers (0.4) resolute; urgency=medium
 
   * Audit upstreams and preserve ubuntu-drivers-common recommendations.
