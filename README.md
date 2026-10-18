@@ -1,7 +1,7 @@
 # Gestão de Drivers
 
 **Mainuan Gestão de Drivers** é uma ferramenta de hardware do projeto Mainuan,
-baseado no Kubuntu 26.04 LTS. A versão **0.2 é beta**.
+baseado no Kubuntu 26.04 LTS. A versão **0.3 é beta**.
 
 A interface oficial usa Qt6 Widgets/PyQt6. A detecção usa
 `ubuntu-drivers-common` e consultas APT, com backend Python independente da GUI.
@@ -19,6 +19,8 @@ Sem instalar no host, execute `./usr/bin/mainuan-gestao-drivers` no checkout.
 O modo `test` usa os dispositivos fictícios do backend e **simula todas as
 alterações em memória, sem comunicar transações ao PackageKit**.
 O launcher Plasma é `org.mainuan.GestaoDrivers.desktop`.
+No modo `test`, o seletor de cenários inclui NVIDIA, Secure Boot, DKMS, MOK,
+headers e Broadcom. Esses cenários não consultam nem modificam o estado do host.
 
 ## Desenvolvimento
 
@@ -38,20 +40,25 @@ dpkg-buildpackage -us -uc -b
 Instale o beta apenas em uma VM para validação:
 
 ```bash
-sudo apt install ./mainuan-gestao-drivers_0.2_all.deb
+sudo apt install ./mainuan-gestao-drivers_0.3_all.deb
 sudo apt remove mainuan-gestao-drivers
 ```
 
 Não há scripts para remover dependências, alterar repositórios, módulos ou
 Secure Boot durante instalação/remoção do aplicativo.
 Consulte [a arquitetura de transações](docs/qt-transactions.md) e o
-[roteiro de validação na VM](docs/beta-0.2-testing.md).
+[roteiro de validação na VM](docs/beta-0.3-testing.md).
 Trocas com remoção e instalação não são atômicas; em caso de falha parcial,
 o aplicativo detecta novamente o estado real, sem restaurar drivers automaticamente.
 Autoremove e remoção indiscriminada de dependências não são permitidos.
-O fluxo definitivo Secure Boot/MOK e a ativação de módulos Broadcom ainda
-estão pendentes. Casos DKMS/MOK não suportados são bloqueados quando Secure
-Boot está habilitado ou seu estado não pode ser determinado.
+O preflight verifica requisitos de módulo, kernel/headers, Secure Boot e MOK
+somente para leitura. DKMS com Secure Boot ativo/desconhecido permanece bloqueado
+quando a assinatura não pode ser garantida, mesmo com MOK inscrita. Módulos
+pré-compilados compatíveis não recebem o bloqueio DKMS. A Qt não descarrega nem
+carrega módulos Broadcom: orienta reiniciar. Pacote instalado não significa driver
+ativo; o resultado é reavaliado após a transação. Consulte a
+[auditoria upstream](docs/upstream-audit-0.3.md) e a
+[política de acompanhamento](docs/upstream-sync-policy.md).
 
 ## Origem e Licença
 

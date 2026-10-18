@@ -4,6 +4,7 @@ from enum import Enum
 from typing import Optional, Tuple, Union
 
 from ..models import DriverOption
+from ..preflight import DriverPreflightResult
 
 
 class TransactionAction(Enum):
@@ -105,6 +106,7 @@ class PreparedPlan:
     installs: Tuple[PackageReference, ...]
     removals: Tuple[PackageReference, ...]
     simulated: bool = False
+    preflight: Optional[DriverPreflightResult] = None
 
 
 @dataclass(frozen=True)
@@ -115,3 +117,5 @@ class ExecutionResult:
     restart: RestartRequirement
     simulated: bool = False
     refresh_required: bool = True
+    plan: Optional[TransactionPlan] = None
+    activations: tuple = ()

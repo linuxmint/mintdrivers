@@ -1,12 +1,14 @@
 import gettext
 import logging
 from collections import Counter
+from dataclasses import replace
 
 from PyQt6.QtCore import QObject, Qt, QThread, pyqtSignal, pyqtSlot
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import (
     QDialog,
     QDialogButtonBox,
+    QComboBox,
     QHBoxLayout,
     QLabel,
     QMainWindow,
@@ -20,6 +22,10 @@ from PyQt6.QtWidgets import (
 
 from mainuan_drivers.backend import DriverBackend
 from mainuan_drivers.backend.drivers import make_test_devices
+from mainuan_drivers.backend.preflight import (
+    ActivationState, DriverPreflight, DkmsState, HeadersState, MokState, SecureBootState, assess_activation,
+)
+from mainuan_drivers.backend.test_scenarios import SCENARIOS
 from mainuan_drivers.backend.transactions import PlanningError, TransactionPlanner
 from mainuan_drivers.backend.transactions.packagekit import DriverTransactionController
 from mainuan_drivers.backend.transactions.execution import (
@@ -37,21 +43,26 @@ logger = logging.getLogger(__name__)
 
 
 class DriverDetectionWorker(QObject):
+    snapshotReady = pyqtSignal(object)
     planningReady = pyqtSignal(object)
     loaded = pyqtSignal(object)
     failed = pyqtSignal(str)
     finished = pyqtSignal()
 
-    def __init__(self, test_mode=False, source=None):
+    def __init__(self, test_mode=False, source=None, inspection_plan=None):
         super().__init__()
         self.test_mode = test_mode
         self.source = source
+        self.inspection_plan = inspection_plan
 
     @pyqtSlot()
     def run(self):
         try:
             source = self.source or SnapshotSource(self.test_mode, backend_factory=DriverBackend)
-            planner = source.load().planner
+            snapshot = (source.inspect(self.inspection_plan) if self.inspection_plan and hasattr(source, "inspect")
+                        else source.load())
+            self.snapshotReady.emit(snapshot)
+            planner = snapshot.planner
             self.planningReady.emit(planner)
             self.loaded.emit(planner.devices)
         except Exception:
@@ -72,6 +83,8 @@ class MainWindow(QMainWindow):
         self._thread = None
         self._worker = None
         self.controller = None
+        self._snapshot = None
+        self._pending_result = None
         self.executor = executor or DriverExecutionController(self, test_mode=test_mode)
         self.executor.busyChanged.connect(self._update_controls)
         self.executor.progressChanged.connect(self._show_progress)
@@ -131,11 +144,21 @@ class MainWindow(QMainWindow):
             indicator = QLabel(_("Test mode - no changes will be applied to the system"))
             indicator.setWordWrap(True)
             root_layout.addWidget(indicator)
+            self.scenario_combo = QComboBox()
+            for key, label in SCENARIOS:
+                self.scenario_combo.addItem(_(label), key)
+            self.scenario_combo.setAccessibleName(_("Test scenario"))
+            self.scenario_combo.currentIndexChanged.connect(self._change_scenario)
+            root_layout.addWidget(self.scenario_combo)
         root_layout.addWidget(self.status_label)
         root_layout.addLayout(header_layout)
         self.service_label = QLabel()
         self.service_label.setWordWrap(True)
         root_layout.addWidget(self.service_label)
+        self.preflight_label = QLabel()
+        self.preflight_label.setTextFormat(Qt.TextFormat.PlainText)
+        self.preflight_label.setWordWrap(True)
+        root_layout.addWidget(self.preflight_label)
         self.result_label = QLabel()
         self.result_label.setTextFormat(Qt.TextFormat.PlainText)
         self.result_label.setWordWrap(True)
@@ -187,11 +210,13 @@ class MainWindow(QMainWindow):
         self.content_layout.addStretch(1)
 
         self._thread = QThread(self)
-        self._worker = DriverDetectionWorker(test_mode=self.test_mode, source=self.executor.source)
+        self._worker = DriverDetectionWorker(test_mode=self.test_mode, source=self.executor.source,
+                                            inspection_plan=self._pending_result.plan if self._pending_result else None)
         self._worker.moveToThread(self._thread)
         self._thread.started.connect(self._worker.run)
         self._worker.loaded.connect(self.show_devices)
         self._worker.planningReady.connect(self._set_planner)
+        self._worker.snapshotReady.connect(self._receive_snapshot)
         self._worker.failed.connect(self.show_error)
         self._worker.finished.connect(self._thread.quit)
         self._worker.finished.connect(self._worker.deleteLater)
@@ -246,7 +271,33 @@ class MainWindow(QMainWindow):
 
     def preview_plan(self):
         if self.controller and not self.executor.active and self._thread is None:
-            PlanDialog(self.controller.plan(), self).exec()
+            plan = self.controller.plan()
+            PlanDialog(plan, self, preflight=self._preflight(plan)).exec()
+
+    def _change_scenario(self):
+        if self._thread is not None or self.executor.active:
+            return
+        self.executor.source.set_scenario(self.scenario_combo.currentData())
+        self.result_label.clear()
+        self._pending_result = None
+        self.refresh()
+
+    def _preflight(self, plan):
+        if self._snapshot and self._snapshot.context:
+            return DriverPreflight(self._snapshot.context, self._snapshot.evidence).check(plan.installs)
+        return None
+
+    @pyqtSlot(object)
+    def _receive_snapshot(self, snapshot):
+        self._snapshot = snapshot
+        if self._pending_result:
+            result = self._pending_result
+            if result.plan and snapshot.context:
+                activations = assess_activation(result.plan, snapshot.context, snapshot.installed_packages,
+                                                result.state != TransactionState.FINISHED, snapshot.evidence)
+                result = replace(result, activations=activations)
+            self.result_label.setText(execution_message(result))
+            self._pending_result = None
 
     def _service_changed(self, available, message):
         self.executor.available = available
@@ -256,15 +307,22 @@ class MainWindow(QMainWindow):
 
     def _update_controls(self, *args):
         idle = not self.executor.active and self._thread is None and not self._confirmation_open
+        if self.test_mode:
+            self.scenario_combo.setEnabled(idle)
         self.content.setEnabled(idle)
         self.refresh_button.setEnabled(idle)
         self.apply_button.setEnabled(False)
         self.plan_button.setEnabled(False)
+        self.preflight_label.clear()
         if idle and self.controller:
             try:
                 plan = self.controller.plan()
                 self.plan_button.setEnabled(bool(plan.selections))
-                self.apply_button.setEnabled(self.executor.can_apply(self.controller.planner, plan))
+                preflight = self._preflight(plan)
+                if preflight:
+                    self.preflight_label.setText("\n".join(issue.message for issue in preflight.blockers + preflight.warnings))
+                self.apply_button.setEnabled(self.executor.can_apply(self.controller.planner, plan)
+                                             and not (preflight and preflight.blockers))
             except PlanningError:
                 pass
         if not self.executor.active:
@@ -307,7 +365,9 @@ class MainWindow(QMainWindow):
         self.cancel_button.setEnabled(progress.allow_cancel and not progress.cancel_requested)
 
     def _execution_finished(self, result):
-        message = execution_message(result)
+        self._pending_result = result if result.plan else None
+        message = (_("Package operations finished. Checking driver activation...")
+                   if result.state == TransactionState.FINISHED and result.completed else execution_message(result))
         self.result_label.setText(message)
         if self._availability:
             self._availability.check()
@@ -365,9 +425,10 @@ class MainWindow(QMainWindow):
 
 
 class PlanDialog(QDialog):
-    def __init__(self, plan, parent=None, confirmation=False, changed=False):
+    def __init__(self, plan, parent=None, confirmation=False, changed=False, preflight=None):
         super().__init__(parent)
         self.setWindowTitle(_("Planned changes"))
+        preflight = preflight or getattr(plan, "preflight", None)
         self.resize(560, 420)
         layout = QVBoxLayout(self)
         if confirmation:
@@ -387,6 +448,40 @@ class PlanDialog(QDialog):
             layout.addWidget(QLabel(_("Preview only. These changes will not be executed.")))
         content = QWidget()
         details = QVBoxLayout(content)
+        if preflight:
+            heading = QLabel(_("System verification"))
+            font = heading.font()
+            font.setBold(True)
+            heading.setFont(font)
+            details.addWidget(heading)
+            secure = {SecureBootState.ENABLED: _("Secure Boot: enabled"),
+                      SecureBootState.DISABLED: _("Secure Boot: disabled"),
+                      SecureBootState.UNSUPPORTED: _("Secure Boot: unsupported"),
+                      SecureBootState.UNKNOWN: _("Secure Boot: unknown")}[preflight.secure_boot_state]
+            module = {DkmsState.NO_DKMS: _("Module: no DKMS required"),
+                      DkmsState.DKMS_REQUIRED: _("Module: DKMS required"),
+                      DkmsState.DKMS_POSSIBLE: _("Module: prebuilt/DKMS alternatives"),
+                      DkmsState.UNKNOWN: _("Module requirements: unknown")}[preflight.dkms_state]
+            for text in (secure, module):
+                details.addWidget(QLabel(text))
+            if preflight.dkms_state != DkmsState.NO_DKMS:
+                mok = {MokState.ENROLLED: _("MOK: enrolled; module signing is not verified"),
+                       MokState.NOT_ENROLLED: _("MOK: not enrolled"),
+                       MokState.PENDING: _("MOK: enrollment pending"),
+                       MokState.UNKNOWN: _("MOK: unknown")}[preflight.mok_state]
+                headers = {HeadersState.PRESENT: _("Kernel headers: present"),
+                           HeadersState.MISSING: _("Kernel headers: missing"),
+                           HeadersState.UNKNOWN: _("Kernel headers: unknown"),
+                           HeadersState.NOT_REQUIRED: _("Kernel headers: not required")}[preflight.headers_state]
+                details.addWidget(QLabel(mok))
+                details.addWidget(QLabel(headers))
+            if preflight.requires_reboot:
+                details.addWidget(QLabel(_("Restart: required to complete activation")))
+            for issue in preflight.blockers + preflight.warnings:
+                label = QLabel((_("Blocked: ") if issue in preflight.blockers else _("Warning: ")) + issue.message)
+                label.setTextFormat(Qt.TextFormat.PlainText)
+                label.setWordWrap(True)
+                details.addWidget(label)
         for title, packages in ((_("Install:"), plan.installs), (_("Remove:"), plan.removals)):
             label = QLabel(title)
             font = label.font()
@@ -413,6 +508,7 @@ class PlanDialog(QDialog):
             buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Apply | QDialogButtonBox.StandardButton.Cancel)
             apply = buttons.button(QDialogButtonBox.StandardButton.Apply)
             apply.setText(_("Apply"))
+            apply.setEnabled(not (preflight and preflight.blockers))
             apply.clicked.connect(self.accept)
             buttons.button(QDialogButtonBox.StandardButton.Cancel).setText(_("Cancel"))
             buttons.button(QDialogButtonBox.StandardButton.Cancel).setDefault(True)
@@ -437,6 +533,8 @@ def execution_message(result):
         message = (_("Simulation completed. No system changes were made.") if result.simulated else
                    _("The changes were applied successfully.") if result.completed else
                    _("No driver changes were necessary."))
+        if result.activations and not result.simulated:
+            message = _("Package changes completed. Driver activation is not yet confirmed.")
     elif result.error and result.error.error_code in (2, 10, 42):
         message = _("The package download failed. Check the connection and review the detected driver state.")
     elif result.error and result.error.error_code in (13, 20, 35):
@@ -445,6 +543,16 @@ def execution_message(result):
         message = _("The driver operation failed. The actual system state is being detected again.")
     if result.error:
         message += "\n" + result.error.details
+    activation_text = {
+        ActivationState.ACTIVE: _("Driver activation verified."),
+        ActivationState.INSTALLED_REBOOT_REQUIRED: _("Installed; restart the computer to complete driver activation."),
+        ActivationState.INSTALLED_MOK_REQUIRED: _("Installed; restart the computer and complete key enrollment in MokManager."),
+        ActivationState.INSTALLED_NOT_ACTIVE: _("Installed, but driver activation could not be verified. Review system verification warnings."),
+        ActivationState.FAILED: _("The requested driver package is not installed."),
+        ActivationState.UNKNOWN: _("The current driver activation state is unknown."),
+    }
+    for activation in result.activations:
+        message += "\n" + (activation.package_name + ": " if activation.package_name else "") + activation_text[activation.state]
     if result.restart == RestartRequirement.SYSTEM:
         message += "\n" + _("A system restart is required to complete driver activation.")
     elif result.restart == RestartRequirement.SESSION:

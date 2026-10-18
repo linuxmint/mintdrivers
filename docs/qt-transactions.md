@@ -1,4 +1,4 @@
-# Mainuan Qt driver transactions (beta 0.2)
+# Mainuan Qt driver transactions (beta 0.3)
 
 Valid changes can now be applied after explicit confirmation. Preview alone
 never executes a plan. GTK remains temporary development reference, not fallback.
@@ -77,16 +77,45 @@ PackageKit did not establish a stronger requirement.
 
 ## Secure Boot and Test Mode
 
-`read_secure_boot()` reads UEFI SecureBoot/SetupMode via efivarfs, including the
-four-byte attributes prefix. Missing EFI means BIOS; unreadable/malformed data
-is unknown. Enabled/unknown state blocks required/undetermined DKMS dependencies.
-A signed non-DKMS dependency alternative may be allowed, but simulation also
-checks the actual DKMS packages selected. MOK enrollment is unsupported.
+`SystemSecurityProbe` produces a GUI-independent `KernelModuleContext` in the
+snapshot worker. Secure Boot has ENABLED/DISABLED/UNSUPPORTED/UNKNOWN states;
+EFI presence is independent of its enabled state. Bounded, LC_ALL=C mokutil
+queries use only --sb-state, --list-new and --test-key. The last requires an
+explicit static certificate configuration; dynamic shell configuration is
+never executed, private keys are never read and default certificate paths are
+not guessed. MOK has ENROLLED/NOT_ENROLLED/PENDING/UNKNOWN states. Enrollment is
+not implemented. The older efivarfs reader remains a compatibility function.
+
+`KernelDetectionAdapter` isolates the installed UDC tuple API; failures or
+changed contracts become UNKNOWN. Outdated kernels are warnings, not an upgrade
+request. Headers require a Makefile and a matching include/config/kernel.release
+under the running kernel build directory. No headers are implicitly installed.
+
+`DriverPreflight` uses candidate dependency groups, actual solver effects and
+versioned APT providers to distinguish NO_DKMS/REQUIRED/POSSIBLE/UNKNOWN. A
+prebuilt proof needs the same running kernel, trusted Ubuntu origin, restricted
+module source metadata and a dependency relationship to the selected driver;
+mere availability or an unrelated installed module is insufficient. This is
+repository/ABI evidence, not cryptographic verification of a loaded module.
+Actual DKMS effects cannot hide behind a prebuilt alternative. Secure Boot
+enabled/unknown blocks DKMS without guaranteed signing, even with an enrolled
+key. Missing/unverified matching headers also block DKMS. Removal-only plans
+remain possible. `PreparedPlan.preflight` exposes separate warnings/blockers;
+confirmation and the coordinator both reject blockers before mutation.
+
+After terminal PackageKit results, the GUI withholds any activation claim until
+a fresh snapshot inspects configured dpkg state, installed package ID and
+security context. `assess_activation` separates installed/reboot, installed/MOK,
+not verified, missing and unknown. ACTIVE is reserved for future hardware
+evidence; Finished alone never produces it. If detection fails, no successful
+activation is claimed. No reboot or MOK modification is performed.
 
 `mainuan-gestao-drivers test` unconditionally uses `SimulatedTransaction`, even
 if a real factory is injected. No D-Bus transport is constructed. Only an in-memory
 overlay on shared backend fixtures changes; simulated redetection reflects the
-choices. Restarting the app discards them. Window/confirmation identify test mode.
+choices. A test-only selector exposes 13 security/NVIDIA/Broadcom scenarios in
+addition to the general devices. No APT/firmware/host CPU data is read for these
+fixtures. Restarting the app discards them. Window/confirmation identify test mode.
 
 Qt recommends restart after Broadcom installation rather than using the legacy
 GTK module helper. NVIDIA naming, open/closed/server selection and installed
@@ -99,7 +128,7 @@ Run `python3 -m unittest discover -s tests -v` and
 `python3 tests/probe_packagekit_readonly.py`. The probe permits only introspection,
 creation, properties, hints and Resolve, never InstallPackages/RemovePackages
 (not even simulated). Tests use fakes/offscreen. Real changes and Plasma PolicyKit
-authorization require the [manual VM procedure](beta-0.2-testing.md).
+authorization require the [manual VM procedure](beta-0.3-testing.md).
 
 References: distribution `/usr/share/dbus-1/interfaces/` XMLs,
 [PackageKit enums](https://github.com/PackageKit/PackageKit/blob/v1.3.4/lib/packagekit-glib2/pk-enum.h),

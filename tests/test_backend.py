@@ -182,7 +182,7 @@ class DriverBackendTests(unittest.TestCase):
         device = find_device(make_backend(raw, packages))
         self.assertEqual([o.package_name for o in device.drivers if o.package_name], ["nvidia-driver-550"])
 
-    def test_nvidia_closed_driver_is_preferred_before_560_without_mutating_detection_data(self):
+    def test_nvidia_open_recommendation_before_560_is_preserved_without_mutating_detection_data(self):
         closed = "nvidia-driver-550"
         opened = "nvidia-driver-550-open"
         raw = {"device": {"drivers": {
@@ -192,12 +192,13 @@ class DriverBackendTests(unittest.TestCase):
         packages = {name: FakePackage(name) for name in (closed, opened)}
         device = find_device(make_backend(raw, packages))
         options = {o.package_name: o for o in device.drivers if o.package_name}
-        self.assertEqual(set(options), {closed})
-        self.assertTrue(options[closed].recommended)
+        self.assertEqual(set(options), {closed, opened})
+        self.assertFalse(options[closed].recommended)
+        self.assertTrue(options[opened].recommended)
         self.assertFalse(raw["device"]["drivers"][closed]["recommended"])
         self.assertTrue(raw["device"]["drivers"][opened]["recommended"])
 
-    def test_nvidia_open_driver_is_preferred_from_560(self):
+    def test_nvidia_multiple_explicit_recommendations_are_not_rewritten_from_560(self):
         closed = "nvidia-driver-560"
         opened = "nvidia-driver-560-open"
         raw = {"device": {"drivers": {
@@ -207,7 +208,8 @@ class DriverBackendTests(unittest.TestCase):
         packages = {name: FakePackage(name) for name in (closed, opened)}
         device = find_device(make_backend(raw, packages))
         options = {o.package_name: o for o in device.drivers if o.package_name}
-        self.assertEqual(set(options), {opened})
+        self.assertEqual(set(options), {closed, opened})
+        self.assertTrue(all(option.recommended for option in options.values()))
 
     def test_test_device_flows_through_backend_as_display_only_options(self):
         from mainuan_drivers.backend.drivers import TEST_PACKAGE_OVERRIDES, make_test_device

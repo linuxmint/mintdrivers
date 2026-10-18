@@ -1,3 +1,4 @@
-# Allow the driver manager to reload Broadcom modules without a password.
+# LEGACY ONLY: temporary GTK reference; never used by the official Qt frontend.
+# Allow the legacy driver manager to reload Broadcom modules without a password.
 
 ALL ALL = NOPASSWD:/usr/lib/mainuan/mainuan-gestao-drivers/load-broadcom-modules

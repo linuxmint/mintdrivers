@@ -2,3 +2,6 @@
 
 %:
 	dh ${@}
+
+override_dh_install:
+	dh_install -X__pycache__ -X.pyc -X.pyo

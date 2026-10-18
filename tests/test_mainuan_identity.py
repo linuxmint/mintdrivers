@@ -23,7 +23,7 @@ class MainuanIdentityTests(unittest.TestCase):
     def test_official_identity_and_debian_metadata(self):
         self.assertEqual((APP_NAME, APP_ID, ORGANIZATION, DISPLAY_NAME, VERSION),
                          ("mainuan-gestao-drivers", "org.mainuan.GestaoDrivers",
-                          "Mainuan", "Gestão de Drivers", "0.2"))
+                          "Mainuan", "Gestão de Drivers", "0.3"))
         source, binary = [Parser().parsestr(stanza) for stanza in
                           (ROOT / "debian/control").read_text().strip().split("\n\n")]
         self.assertEqual(source["Source"], APP_NAME)
@@ -69,6 +69,9 @@ class MainuanIdentityTests(unittest.TestCase):
         self.assertTrue((ROOT / "usr/share/icons/hicolor/48x48/apps/mainuan-gestao-drivers.png").is_file())
         for script in ("preinst", "postinst", "prerm", "postrm"):
             self.assertFalse((ROOT / "debian" / script).exists())
+        rules = (ROOT / "debian/rules").read_text()
+        for exclusion in ("-X__pycache__", "-X.pyc", "-X.pyo"):
+            self.assertIn(exclusion, rules)
 
     def test_active_modules_and_resources_do_not_use_mint_namespace(self):
         for path in (MODULE_PATH / "mainuan_drivers").rglob("*.py"):

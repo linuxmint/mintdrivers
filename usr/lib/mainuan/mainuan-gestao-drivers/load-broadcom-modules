@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# LEGACY ONLY: GTK reference helper. The official Qt frontend never calls this.
 
 import subprocess
 

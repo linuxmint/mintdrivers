@@ -8,8 +8,13 @@ from PyQt6.QtCore import QObject, QThread, QTimer, pyqtSignal, pyqtSlot
 
 from ..drivers import DriverBackend, TEST_PACKAGE_OVERRIDES, make_test_devices
 from ..models import DriverOptionType
+from ..preflight import (
+    DriverPreflight, KernelModuleContext, ModuleEvidence, SystemSecurityProbe,
+    SecureBootState, DkmsState, HeadersState, KernelState,
+)
+from ..test_scenarios import scenario_data
 from .models import (
-    ExecutionResult, PreparedPlan, RestartRequirement, TransactionAction,
+    ExecutionResult, PackageReference, PreparedPlan, RestartRequirement, TransactionAction,
     TransactionError, TransactionProgress, TransactionResult, TransactionState,
 )
 from .packagekit import (
@@ -17,7 +22,7 @@ from .packagekit import (
     state_message,
 )
 from .planner import PlanningError, TransactionPlanner, package_identity
-from .safety import SecureBootState, check_secure_boot, read_secure_boot
+from .safety import check_secure_boot, read_secure_boot
 
 _ = gettext.gettext
 logger = logging.getLogger(__name__)
@@ -34,15 +39,21 @@ def effect_identity(reference):
 class DriverSnapshot:
     planner: TransactionPlanner
     secure_boot: SecureBootState
+    context: object = None
+    evidence: tuple = ()
+    installed_packages: tuple = ()
 
 
 class SnapshotSource:
     """Each load creates a backend in its calling worker; no APT objects escape."""
 
-    def __init__(self, test_mode=False, backend_factory=DriverBackend, secure_boot_reader=read_secure_boot):
+    def __init__(self, test_mode=False, backend_factory=DriverBackend, secure_boot_reader=None,
+                 security_probe=None, scenario="default"):
         self.test_mode = test_mode
         self.backend_factory = backend_factory
         self.secure_boot_reader = secure_boot_reader
+        self.security_probe = security_probe or SystemSecurityProbe()
+        self.scenario = scenario
         self._installed = {}
         self._selected = {}
 
@@ -50,11 +61,17 @@ class SnapshotSource:
     def option_key(option):
         return option.package_name, option.option_type, option.builtin
 
-    def load(self):
+    def load(self, inspection_plan=None):
         kwargs = {}
+        context, fixture_states = None, {}
         if self.test_mode:
-            kwargs = {"devices": {}, "extra_devices": make_test_devices(),
+            kwargs = {"devices": {}, "cache": {}, "extra_devices": make_test_devices(),
                       "package_overrides": TEST_PACKAGE_OVERRIDES}
+            context = KernelModuleContext(SecureBootState.DISABLED, False, KernelState.CURRENT,
+                                          "test-kernel", "", False, HeadersState.PRESENT)
+            if self.scenario != "default":
+                devices, overrides, context, fixture_states = scenario_data(self.scenario)
+                kwargs.update(extra_devices=devices, package_overrides=overrides)
         backend = self.backend_factory(**kwargs)
         devices = backend.get_devices()
         if self.test_mode and self._installed:
@@ -76,7 +93,52 @@ class SnapshotSource:
                 updated.append(device)
             devices = tuple(updated)
         planner = TransactionPlanner.from_backend(backend, devices, preview_only=self.test_mode)
-        return DriverSnapshot(planner, self.secure_boot_reader())
+        if self.test_mode:
+            packages, facts = {}, []
+            for device in devices:
+                for option in device.drivers:
+                    if not option.package_name or option.builtin:
+                        continue
+                    state = fixture_states.get(option.package_name, DkmsState.NO_DKMS)
+                    package_id = "%s;%s;all;test" % (option.package_name, option.version)
+                    requirement = {DkmsState.NO_DKMS: False, DkmsState.DKMS_REQUIRED: True}.get(state)
+                    ref = PackageReference(option.package_name, package_id, requirement)
+                    packages[(option.package_name, False)] = ref
+                    if option.installed:
+                        packages[(option.package_name, True)] = ref
+                    facts.append(ModuleEvidence(package_id, state))
+            planner = TransactionPlanner(devices, packages, preview_only=True)
+            evidence = tuple(facts)
+        else:
+            context = self.security_probe.probe()
+            if self.secure_boot_reader:
+                context = replace(context, secure_boot_state=self.secure_boot_reader())
+            names = {option.package_name for device in devices for option in device.drivers
+                     if option.package_name and not option.builtin}
+            if inspection_plan:
+                names.update(ref.name for ref in inspection_plan.installs + inspection_plan.removals)
+            evidence = backend.module_evidence(names, context.running_kernel)
+        installed = tuple((option.package_name, option.installed) for device in devices for option in device.drivers
+                          if option.package_name and not option.builtin)
+        if inspection_plan and not self.test_mode:
+            import apt_pkg
+            status_cache = apt_pkg.Cache(None)
+            installed = tuple((ref.name, backend.get_packagekit_id(ref.name, True)
+                               if ref.name in status_cache and
+                               status_cache[ref.name].current_state == apt_pkg.CURSTATE_INSTALLED else False)
+                              for ref in inspection_plan.installs + inspection_plan.removals)
+        return DriverSnapshot(planner, context.secure_boot_state, context, evidence, installed)
+
+    def inspect(self, plan):
+        return self.load(plan)
+
+    def set_scenario(self, name):
+        if not self.test_mode:
+            raise RuntimeError("Scenarios are only available in explicit test mode")
+        scenario_data(name) if name != "default" else None
+        self.scenario = name
+        self._installed.clear()
+        self._selected.clear()
 
     def record_simulation(self, plan, action):
         if not self.test_mode:
@@ -268,6 +330,7 @@ class DriverExecutionController(QObject):
         if not self.can_apply(planner, plan):
             return False
         self._confirmed = None
+        self._plan = None
         self._prepared = None
         self._input_plan = plan
         self._completed = []
@@ -279,6 +342,8 @@ class DriverExecutionController(QObject):
 
     def confirm(self, prepared):
         if self.active or prepared is not self._prepared:
+            return False
+        if prepared.preflight and prepared.preflight.blockers:
             return False
         if not self.available:
             self._finish(TransactionState.FAILED, TransactionError(
@@ -335,11 +400,13 @@ class DriverExecutionController(QObject):
             return
         snapshot = self._snapshot_result
         self._secure_boot = snapshot.secure_boot
+        self._context = snapshot.context
+        self._evidence = snapshot.evidence
         try:
             self._planner = snapshot.planner
             self._plan = self._planner.rebuild(self._input_plan)
             self._planner.validate_plan(self._plan, executable=not self.test_mode)
-            if not self.test_mode:
+            if not self.test_mode and self._context is None:
                 check_secure_boot(self._plan, snapshot.secure_boot)
             if not (self._plan.installs or self._plan.removals):
                 self._finish(TransactionState.FINISHED)
@@ -377,8 +444,15 @@ class DriverExecutionController(QObject):
             else:
                 transaction.simulate(self._plan, action)
         else:
+            preflight = (DriverPreflight(self._context, self._evidence).check(
+                tuple(self._install_effects.values()), resolved=True) if self._context else None)
             candidate = PreparedPlan(self._plan, tuple(sorted(self._install_effects.values(), key=effect_identity)),
-                                     tuple(sorted(self._remove_effects.values(), key=effect_identity)), self.test_mode)
+                                     tuple(sorted(self._remove_effects.values(), key=effect_identity)), self.test_mode, preflight)
+            if preflight and preflight.blockers:
+                self._prepared = candidate
+                self._set_busy(False)
+                self.prepared.emit(candidate, False)
+                return
             if self._confirmed and candidate == self._confirmed:
                 self._stages = []
                 if self._plan.removals:
@@ -423,7 +497,7 @@ class DriverExecutionController(QObject):
         if any(ref.name in roots and ref.package_id and roots[ref.name].package_id and
                package_identity(ref.package_id) != package_identity(roots[ref.name].package_id) for ref in effects):
             raise PlanningError(_("A target package changed version or architecture. Review the detected plan again."))
-        if not self.test_mode and self._secure_boot != SecureBootState.DISABLED and any(
+        if self._context is None and not self.test_mode and self._secure_boot not in (SecureBootState.DISABLED, SecureBootState.UNSUPPORTED) and any(
                 ref.name == "dkms" or ref.name.endswith("-dkms") or "-dkms-" in ref.name for ref in installs):
             raise PlanningError(_("This driver requires a Secure Boot flow that is not supported by this beta."))
         if not {ref.name for ref in expected} <= {ref.name for ref in effects}:
@@ -431,6 +505,10 @@ class DriverExecutionController(QObject):
         if action == TransactionAction.REMOVE and installs:
             raise PlanningError(_("The removal simulation requires unexpected package installations."))
         if after_removal:
+            if self._context:
+                preflight = DriverPreflight(self._context, self._evidence).check(tuple(installs), resolved=True)
+                if preflight.blockers:
+                    raise PlanningError("\n".join(issue.message for issue in preflight.blockers))
             confirmed = {effect_identity(ref) for ref in self._confirmed.installs}
             if {effect_identity(ref) for ref in installs} != confirmed:
                 raise PlanningError(_("Installation dependencies changed after removal. No further change was applied."))
@@ -527,5 +605,6 @@ class DriverExecutionController(QObject):
         self._set_busy(False)
         logger.info("driver workflow finished state=%s stages=%d error=%s", state.value, len(self._completed),
                     error.error_code if error else None)
-        self.finished.emit(ExecutionResult(state, tuple(self._completed), error, self._restart, self.test_mode))
+        self.finished.emit(ExecutionResult(state, tuple(self._completed), error, self._restart, self.test_mode,
+                                          plan=getattr(self, "_plan", None)))
         self.refreshRequested.emit()

@@ -1,3 +1,14 @@
+mainuan-gestao-drivers (0.3) resolute; urgency=medium
+
+  * Audit Mint and Ubuntu upstreams before porting relevant driver policies.
+  * Respect ubuntu-drivers-common NVIDIA recommendations and custom variants.
+  * Add read-only Secure Boot, DKMS, kernel/header and MOK preflight checks.
+  * Keep Broadcom activation reboot-based, without a Qt privileged helper.
+  * Distinguish package completion from post-installation driver activation.
+  * Expand simulated security scenarios and upstream regression coverage.
+
+ -- Mainuan Packaging <openwebosbr@gmail.com>  Sun, 18 Oct 2026 12:00:00 -0300
+
 mainuan-gestao-drivers (0.2) resolute; urgency=medium
 
   * Enable the first real driver transactions through QtDBus and PackageKit.

@@ -58,7 +58,7 @@ class DriverBackend:
 
     def _build_device(self, device_id, source, cache, is_test_device):
         source_drivers = source.get("drivers", {})
-        driver_data, recommended_overrides = self._filter_nvidia_drivers(source_drivers)
+        driver_data = self._filter_nvidia_drivers(source_drivers, cache)
 
         manual_install = bool(source.get("manual_install", False))
         options = []
@@ -73,9 +73,7 @@ class DriverBackend:
         one_selected = False
         package_options = []
         for package_name, current_driver in driver_data.items():
-            recommended = bool(
-                recommended_overrides.get(package_name, current_driver.get("recommended", False))
-                and current_driver.get("from_distro", False))
+            recommended = bool(current_driver.get("recommended", False))
             status = DeviceStatus.RECOMMENDED if recommended else DeviceStatus.ALTERNATIVE
             builtin = bool(current_driver.get("builtin", False))
             have_builtin = have_builtin or builtin
@@ -86,6 +84,8 @@ class DriverBackend:
                     version = package.installed.version
                     summary = package.installed.summary
                 else:
+                    if package.candidate is None:
+                        raise KeyError(package_name)
                     version = package.candidate.version
                     summary = package.candidate.summary
                 installed = bool(package.is_installed and not builtin)
@@ -137,7 +137,7 @@ class DriverBackend:
         model = source.get("model")
         is_cpu = "intel-microcode" in source_drivers or "amd64-microcode" in source_drivers
         if is_cpu:
-            display_name = self._get_cpu_name()
+            display_name = (source.get("model") or "Processor") if is_test_device else self._get_cpu_name()
         elif vendor is None and model is None:
             display_name = "Unknown"
         elif vendor is None:
@@ -161,48 +161,22 @@ class DriverBackend:
             drivers=tuple(options))
 
     @staticmethod
-    def _filter_nvidia_drivers(source_drivers):
-        """Apply the existing Mint NVIDIA visibility and preference rules."""
-        ignored = set()
-        recommended_overrides = {}
-
-        for package_name, current_driver in source_drivers.items():
-            if not package_name.startswith("nvidia-"):
-                continue
-            if package_name in ignored:
-                print("Skipping ignored NVIDIA driver '%s'" % package_name)
-                continue
-            if package_name.endswith(("-server", "-server-open")):
-                print("Ignoring server NVIDIA driver '%s'" % package_name)
-                ignored.add(package_name)
-                continue
-
+    def _filter_nvidia_drivers(source_drivers, cache):
+        """UDC is the authority for variants/pins, not a Mainuan version rule."""
+        desktop = any(name.startswith("nvidia-driver-") and "-server" not in name
+                      and name in cache and (cache[name].is_installed or cache[name].candidate is not None)
+                      for name in source_drivers)
+        visible = {}
+        for name, details in source_drivers.items():
             try:
-                version = int(re.search(r"nvidia-driver-([0-9]{3}).*", package_name).groups()[0])
-                open_preferred = version >= 560
-            except (AttributeError, TypeError, ValueError):
-                open_preferred = False
-
-            if package_name.endswith("-open"):
-                closed_name = package_name[:-len("-open")]
-                if closed_name not in source_drivers:
-                    continue
-                recommended = current_driver.get("recommended", False) and current_driver.get("from_distro", False)
-                if open_preferred:
-                    print("Ignoring closed NVIDIA driver '%s' as the open one is preferred." % closed_name)
-                    ignored.add(closed_name)
-                else:
-                    print("Ignoring open NVIDIA driver '%s' as a closed one exists and is preferred." % package_name)
-                    if recommended:
-                        recommended_overrides[closed_name] = True
-                    ignored.add(package_name)
-
-        visible_drivers = {
-            package_name: details
-            for package_name, details in source_drivers.items()
-            if package_name not in ignored
-        }
-        return visible_drivers, recommended_overrides
+                installed = cache[name].is_installed
+            except KeyError:
+                installed = False
+            server = name.startswith("nvidia-driver-") and name.endswith(("-server", "-server-open"))
+            if server and desktop and not details.get("recommended", False) and not installed:
+                continue
+            visible[name] = details
+        return visible
 
     @staticmethod
     def _selected_status(options):
@@ -288,38 +262,17 @@ class DriverBackend:
         return package_ids
 
     def package_requires_dkms(self, package_name):
-        """Inspect candidate dependency metadata; None means it cannot be verified."""
-        cache = self._get_cache()
-        visiting, known = set(), {}
+        from .preflight import DkmsState
+        state = self.package_dkms_state(package_name)
+        return {DkmsState.NO_DKMS: False, DkmsState.DKMS_REQUIRED: True}.get(state)
 
-        def requirement(name, depth=0):
-            if name in known:
-                return known[name]
-            if depth > 64:
-                return None
-            if name == "dkms" or name.endswith("-dkms") or "-dkms-" in name:
-                return True
-            if name in visiting:
-                return False
-            try:
-                candidate = cache[name].candidate
-            except KeyError:
-                return None
-            if candidate is None:
-                return None
-            visiting.add(name)
-            groups = []
-            for group in candidate.dependencies:
-                alternatives = [requirement(dep.name, depth + 1) for dep in group
-                                if dep.rawtype in ("Depends", "PreDepends")]
-                if alternatives:
-                    groups.append(False if False in alternatives else None if None in alternatives else True)
-            visiting.remove(name)
-            value = True if True in groups else None if None in groups else False
-            known[name] = value
-            return value
+    def package_dkms_state(self, package_name):
+        from .preflight import analyze_dkms
+        return analyze_dkms(self._get_cache(), package_name)
 
-        return requirement(package_name)
+    def module_evidence(self, names, running_kernel):
+        from .preflight import collect_module_evidence
+        return collect_module_evidence(self, names, running_kernel)
 
     def count_installed_proprietary_drivers(self):
         count = 0

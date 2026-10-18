@@ -9,10 +9,10 @@ from mainuan_drivers.backend.transactions.safety import EFI_GUID, SecureBootStat
 
 
 class DriverSafetyTests(unittest.TestCase):
-    def test_secure_boot_disabled_on_bios_and_unknown_on_unreadable_efi(self):
+    def test_secure_boot_unsupported_on_bios_and_unknown_on_unreadable_efi(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "efi"
-            self.assertEqual(read_secure_boot(root), SecureBootState.DISABLED)
+            self.assertEqual(read_secure_boot(root), SecureBootState.UNSUPPORTED)
             root.mkdir()
             self.assertEqual(read_secure_boot(root), SecureBootState.UNKNOWN)
 
@@ -36,7 +36,7 @@ class DriverSafetyTests(unittest.TestCase):
         self.assertTrue(backend.package_requires_dkms("gpu-driver"))
         driver.candidate.dependencies = [[FakeDependency("gpu-kernel-dkms"), FakeDependency("signed-kernel-module")]]
         backend._get_cache()["signed-kernel-module"] = FakePackage("signed-kernel-module")
-        self.assertFalse(backend.package_requires_dkms("gpu-driver"))
+        self.assertIsNone(backend.package_requires_dkms("gpu-driver"))
         self.assertIsNone(backend.package_requires_dkms("unavailable-driver"))
 
     def test_nested_dependencies_and_cycles_are_read_only(self):
