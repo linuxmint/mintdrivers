@@ -26,6 +26,7 @@ class TransactionState(Enum):
     FINISHED = "finished"
     FAILED = "failed"
     CANCELLED = "cancelled"
+    PARTIAL_FAILURE = "partial_failure"
 
 
 class RestartRequirement(Enum):
@@ -41,6 +42,7 @@ class RestartRequirement(Enum):
 class PackageReference:
     name: str
     package_id: Optional[str]
+    requires_dkms: Optional[bool] = None
 
 
 @dataclass(frozen=True)
@@ -67,6 +69,7 @@ class TransactionError:
     details: str
     cancelled: bool = False
     authorization_denied: bool = False
+    outcome_unknown: bool = False
 
 
 @dataclass(frozen=True)
@@ -92,4 +95,23 @@ class TransactionResult:
     runtime_ms: int = 0
     cancel_requested: bool = False
     secure_boot_attention: Optional[bool] = None
+    effects: Tuple[Tuple[int, PackageReference], ...] = ()
+    mutation_observed: bool = False
 
+
+@dataclass(frozen=True)
+class PreparedPlan:
+    plan: TransactionPlan
+    installs: Tuple[PackageReference, ...]
+    removals: Tuple[PackageReference, ...]
+    simulated: bool = False
+
+
+@dataclass(frozen=True)
+class ExecutionResult:
+    state: TransactionState
+    completed: Tuple[TransactionResult, ...]
+    error: Optional[TransactionError]
+    restart: RestartRequirement
+    simulated: bool = False
+    refresh_required: bool = True

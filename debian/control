@@ -18,8 +18,9 @@ Depends: python3 (>= 3.7),
          gir1.2-packagekitglib-1.0,
          packagekit,
          ${misc:Depends},
-Description: Mainuan hardware driver management and planning
+Description: Mainuan hardware driver management
  Mainuan Gestao de Drivers provides a Qt6 interface for detecting additional
- hardware drivers and previewing planned changes through a shared Python
- backend. This beta does not apply driver changes.
+ hardware drivers and confirming package changes through a shared Python
+ backend. PackageKit and PolicyKit mediate installation and removal.
+ Test mode simulates changes without modifying the system.
  A temporary GTK frontend is included for development reference.

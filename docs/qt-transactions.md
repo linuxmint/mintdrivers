@@ -1,104 +1,109 @@
-# Mainuan Qt driver transaction infrastructure
+# Mainuan Qt driver transactions (beta 0.2)
 
-The official frontend of beta 0.1 remains read-only. Radio buttons build a desired
-selection and the preview dialog lists changes. It has only a Close button.
-No frontend callback starts a PackageKit operation, and execution is disabled
-by default in both the controller and transaction classes.
+Valid changes can now be applied after explicit confirmation. Preview alone
+never executes a plan. GTK remains temporary development reference, not fallback.
 
 ## Architecture and API
 
-`backend.transactions` imports only the standard library and backend models.
-`TransactionPlanner.from_backend(backend, devices)` captures package IDs and
-installed NVIDIA dependencies in the detection worker. No APT cache crosses
-threads. `build({device_id: DriverOption})` and `validate_plan(plan)` then work
-without I/O. Driver choices must belong to the captured devices. Each device
-must have exactly one current option. Manual installations cannot be switched
-automatically. Shared packages still selected by another device are retained.
-Unknown IDs and fictitious plans can be previewed but cannot be executed.
+`TransactionPlanner.from_backend(backend, devices)` captures package IDs,
+installed NVIDIA dependencies and DKMS dependency information in the detection
+worker. No APT cache crosses threads. `build()`, `validate_plan()` and `rebuild()`
+operate on Python models. Manual/arbitrary choices are rejected; shared packages
+still selected by another device are retained.
 
-`backend.transactions.packagekit` imports PyQt6.QtCore and PyQt6.QtDBus, without
-widgets, gi, GLib, Gio or PackageKitGlib. `DriverTransactionController` exposes
-`select(device, option)`, `plan()`, `resolve(plan)`, `install(plan)`, `remove(plan)`
-and `cancel()`. `PackageKitTransaction` exposes the last four methods and is
-single-use. Modifying methods require explicitly enabling execution internally;
-the Qt frontend does not do this. They first run a separate read-only resolution
-transaction and verify exact name/version/architecture identities. Forged plans
-are rejected by rebuilding them against the backend snapshot.
+`DriverExecutionController.prepare(planner, plan)` locks immediately, loads a
+fresh `DriverSnapshot` in QThread, rebuilds selections, resolves exact IDs and
+simulates PackageKit dependency effects. `prepared` carries a `PreparedPlan`
+including additional installation dependencies. Unrelated removals, downgrades
+and untrusted packages are blocked. `confirm(prepared)` accepts only the exact
+prepared object, takes a new snapshot and repeats preflight. Changed plans or
+effects require new confirmation. Every terminal outcome requests fresh detection.
+Dependencies with identical names but different versions/architectures remain
+distinct, and duplicate names in confirmation include architecture labels.
 
-The transport is replaceable with a small fake implementing `call`, `subscribe`,
-`unsubscribe`, `eventReceived` and `serviceLost`. QtDBus uses the system bus and
-`QDBusPendingCallWatcher`, with no blocking calls or polling in the GUI.
+Removal precedes installation, preserving the inherited Mint switch sequence.
+After removal, installation is simulated again; changed dependencies stop the
+workflow. `PackageKitTransaction` resolves the relevant IDs immediately before
+each real stage; removals require INSTALLED IDs. Each transaction is single-use.
+Execution stays disabled by default in the low-level class; only the confirmed
+coordinator enables it.
 
-## D-Bus contract
+Separate remove/install transactions are not atomic. A failed second stage
+stops execution, records completed stages and returns `PARTIAL_FAILURE`, without
+automatic restoration. Interrupted mutation/daemon loss may have an uncertain
+outcome even within one stage. Simulation does not hold a lock across confirmation
+and execution: external package operations can still race. Conservative flags
+and revalidation mitigate this but cannot guarantee atomicity or rollback.
+If a mutation method acknowledgement times out, the coordinator stays active
+until Finished, Destroy or daemon disconnection, rather than abandoning a job
+that could still execute. A known final success supersedes that transient timeout.
 
-- Service and manager interface: `org.freedesktop.PackageKit`.
+`ExecutionResult` carries completed stages, structured error/uncertainty, restart
+and simulation status. Widgets consume semantic signals only on the GUI thread.
+Selection, refresh and apply are locked while busy. Closing an active operation
+is prevented; cancellation is requested only when PackageKit allows it.
+
+## D-Bus Contract
+
+- System bus service/manager interface: `org.freedesktop.PackageKit`.
 - Manager path: `/org/freedesktop/PackageKit`.
-- Transaction path: whatever object path `CreateTransaction` returns; it need
-  not be a child of the manager path.
-- Transaction interface: `org.freedesktop.PackageKit.Transaction`.
-- Properties: `org.freedesktop.DBus.Properties`.
-- Availability check: `org.freedesktop.DBus.Introspectable.Introspect`.
-- Flow: introspect, create, subscribe, read properties, set hints, call method.
-- Methods: `Resolve(t, as)`, `InstallPackages(t, as)`,
-  `RemovePackages(t, as, b, b)`, `Cancel()`.
-- PackageKit 1.x flags use unsigned 64-bit bitfields (`t`); string arrays use
-  QStringList (`as`), not Python lists marshalled as variant arrays (`av`).
-- Installations require trusted packages. Removal uses `allow_deps=false` and
-  `autoremove=false`. Purge and global autoremove are not implemented.
-- Hints keep existing metadata and request the singular `Package` signal.
-  Mutation permits interactive authorization; resolution does not request it.
+- Transaction interface: `org.freedesktop.PackageKit.Transaction` at the fresh
+  path returned by `CreateTransaction`.
+- Properties/introspection: `org.freedesktop.DBus.Properties` and
+  `org.freedesktop.DBus.Introspectable`.
+- Async methods: `Introspect`, `GetAll`, `CreateTransaction`, `SetHints`,
+  `Resolve(t, as)`, `InstallPackages(t, as)`, `RemovePackages(t, as, b, b)`, `Cancel`.
+- QtDBus explicitly marshals unsigned 64-bit flags/QStringList; pending-call
+  watchers integrate with Qt's event loop without blocking polling.
+- Install flags: ONLY_TRUSTED (2), plus SIMULATE (4) in preflight. Remove flags:
+  0, or 4 for simulation. Both booleans are always false: `allow_deps=false`,
+  `autoremove=false`. Purge/global autoremove are not implemented.
+- Only real install/remove permit interactive authorization in message and hints.
+  PackageKit, PolicyKit and the Plasma session agent handle authorization.
 - Signals: `PropertiesChanged`, `Package`, `ErrorCode`, `Finished`,
-  `RequireRestart`, `ItemProgress`, `Destroy`; daemon owner loss is also handled.
+  `RequireRestart`, `ItemProgress`, `Destroy`, manager owner loss/lock changes.
+- PackageKit 1.3.x is supported. Missing/unsupported/locked service disables Apply
+  while driver detection continues. No command-line package fallback exists.
 
-Status values map to waiting, preparing, resolving, downloading, installing,
-removing, finalizing and cancelling. Only `Finished` establishes the final
-result. Percentage 101 (or any value outside 0..100) becomes None. Item progress
-never replaces the overall percentage. Runtime from `Finished` is milliseconds.
-Errors retain numeric PackageKit codes or D-Bus error names, details,
-authorization denial and cancellation. Requesting cancellation is separate
-from receiving a cancelled result. Failed cancellation does not terminate a
-running transaction. Restart severity preserves session/system requirements,
-including security variants. `/var/run/reboot-required` is read after modifying
-operations, but no restart is performed. Secure Boot attention is an optional
-result field reserved for later validation, not a detected condition today.
+Waiting/preparing/resolving/downloading/installing/removing/finalizing/cancelling
+map to semantic states. Only Finished establishes success. Percentage outside
+0..100 becomes None; item progress does not replace overall progress. Errors
+preserve numeric/D-Bus codes, authorization denial and cancellation. Cancel
+requests do not themselves establish cancellation and never kill the daemon.
+Restart signals preserve application/session/system requirements and combine
+with `/var/run/reboot-required` after successful real stages. No restart is run.
+A plan's possible-restart advisory is retained after completed real stages when
+PackageKit did not establish a stronger requirement.
 
-PolicyKit and the session agent handle authorization. There is no password
-dialog, sudo, pkexec, root helper, new policy or command-line package fallback.
+## Secure Boot and Test Mode
+
+`read_secure_boot()` reads UEFI SecureBoot/SetupMode via efivarfs, including the
+four-byte attributes prefix. Missing EFI means BIOS; unreadable/malformed data
+is unknown. Enabled/unknown state blocks required/undetermined DKMS dependencies.
+A signed non-DKMS dependency alternative may be allowed, but simulation also
+checks the actual DKMS packages selected. MOK enrollment is unsupported.
+
+`mainuan-gestao-drivers test` unconditionally uses `SimulatedTransaction`, even
+if a real factory is injected. No D-Bus transport is constructed. Only an in-memory
+overlay on shared backend fixtures changes; simulated redetection reflects the
+choices. Restarting the app discards them. Window/confirmation identify test mode.
+
+Qt recommends restart after Broadcom installation rather than using the legacy
+GTK module helper. NVIDIA naming, open/closed/server selection and installed
+dependency enumeration stay in the shared backend. No new root helper, sudoers,
+PolicyKit action or reboot action exists.
 
 ## Verification
 
-Run `python3 -m unittest discover -s tests -v` for fake transaction tests and
-planner/Qt tests. GUI tests use offscreen only in their test environment.
+Run `python3 -m unittest discover -s tests -v` and
+`python3 tests/probe_packagekit_readonly.py`. The probe permits only introspection,
+creation, properties, hints and Resolve, never InstallPackages/RemovePackages
+(not even simulated). Tests use fakes/offscreen. Real changes and Plasma PolicyKit
+authorization require the [manual VM procedure](beta-0.2-testing.md).
 
-Run `python3 tests/probe_packagekit_readonly.py` for a manual integration probe.
-It uses a CPU fixture with real APT versions to work even when detection returns
-no devices. The transport permits only introspection, creation, properties,
-hints and Resolve; installation/removal methods are forbidden. It verifies
-PackageKit signals, exact IDs and absence of forbidden Python imports.
-
-Application identity is established before QApplication initializes Plasma
-settings using organization Mainuan and application mainuan-gestao-drivers.
-`org.mainuan.GestaoDrivers.desktop` is the visible Qt launcher and matches the
-desktop file name. Its installed Exec must exist for the portal to recognize it.
-GTK has no desktop launcher and is available only through the temporary
-`mainuan-gestao-drivers-gtk-legacy` entry point.
-
-## Next Phase
-
-Real execution remains unvalidated. Before enabling it: review/confirm a fresh
-plan, simulate dependency effects (especially shared NVIDIA libraries), define
-the sequencing and recovery of remove/install phases, validate authorization
-with the Plasma agent, refresh detection after completion, and handle session
-shutdown during an operation. D-Bus timeout/disconnection may leave the outcome
-unknown and must trigger reconciliation before retrying.
-
-The inherited Broadcom module reload helper (`load-broadcom-modules`) remains in GTK and
-is pending a separate migration. MOK/Secure Boot handling is also pending.
-The existing NVIDIA dependency query is reused unchanged, including its use of
-candidate Depends/PreDepends; this preview is not a full dependency simulation.
-GTK retains its PackageKitGlib implementation. No driver changes are made by
-the integration probe or the current Qt frontend.
-
-API references: the distribution's `/usr/share/dbus-1/interfaces/` XMLs and
-[PackageKit 1.3.4 enums](https://github.com/PackageKit/PackageKit/blob/v1.3.4/lib/packagekit-glib2/pk-enum.h).
-License remains GPL-2.0-or-later; Linux Mint credits are preserved.
+References: distribution `/usr/share/dbus-1/interfaces/` XMLs,
+[PackageKit enums](https://github.com/PackageKit/PackageKit/blob/v1.3.4/lib/packagekit-glib2/pk-enum.h),
+[APT simulation/commit](https://github.com/PackageKit/PackageKit/blob/v1.3.4/backends/apt/apt-job.cpp),
+[efivarfs format](https://www.kernel.org/doc/html/latest/filesystems/efivarfs.html).
+Identity/domain remain `org.mainuan.GestaoDrivers`/`mainuan-gestao-drivers`.
+GPL-2.0-or-later and Linux Mint copyrights/credits are preserved.

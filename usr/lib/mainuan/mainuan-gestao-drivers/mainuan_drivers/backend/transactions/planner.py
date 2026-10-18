@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
+import gettext
 import re
 from pathlib import Path
 
@@ -8,6 +9,8 @@ from .models import (
     DriverSelection, PackageReference, RestartRequirement,
     TransactionAction, TransactionPlan,
 )
+
+_ = gettext.gettext
 
 
 class PlanningError(ValueError):
@@ -76,7 +79,8 @@ class TransactionPlanner:
                         package_id = backend.get_packagekit_id(name, installed)
                     except PackageUnavailableError:
                         package_id = None
-                    packages[(name, installed)] = PackageReference(name, package_id)
+                    packages[(name, installed)] = PackageReference(
+                        name, package_id, backend.package_requires_dkms(name))
                 if option.installed and "nvidia" in name:
                     dependencies[name] = tuple(
                         PackageReference(package_identity(package_id)[0], package_id)
@@ -144,3 +148,18 @@ class TransactionPlanner:
                 not package.package_id for package in plan.installs + plan.removals)):
             raise PlanningError("Preview or unavailable packages cannot be executed")
         return plan
+
+    def rebuild(self, previous):
+        """Map desired options onto a fresh snapshot, including changed versions."""
+        desired = {}
+        for selection in previous.selections:
+            device = self._devices.get(selection.device_id)
+            if device is None:
+                raise PlanningError(_("The selected device is no longer available"))
+            matches = [option for option in device.drivers if
+                       (option.package_name, option.option_type, option.builtin) ==
+                       (selection.target.package_name, selection.target.option_type, selection.target.builtin)]
+            if len(matches) != 1:
+                raise PlanningError(_("The selected driver is no longer available"))
+            desired[device.device_id] = matches[0]
+        return self.build(desired)

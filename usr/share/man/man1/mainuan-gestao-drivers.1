@@ -1,20 +1,25 @@
-.TH MAINUAN-GESTAO-DRIVERS 1 "October 2026" "Mainuan 0.1" "User Commands"
+.TH MAINUAN-GESTAO-DRIVERS 1 "October 2026" "Mainuan 0.2" "User Commands"
 .SH NAME
-mainuan-gestao-drivers \- detect hardware drivers and preview planned changes
+mainuan-gestao-drivers \- detect hardware drivers and confirm package changes
 .SH SYNOPSIS
 .B mainuan-gestao-drivers
 .RI [ test ]
 .SH DESCRIPTION
 Lists additional drivers using the shared driver detection backend.
-Driver selections produce a read-only preview of planned package changes.
-This is the official Qt6 interface of Mainuan Gestao de Drivers, beta 0.1.
-The interface does not install or remove driver packages.
-PackageKit execution is not enabled in this frontend.
+Driver selections produce a preview of planned package changes.
+Applying changes requires explicit confirmation of a revalidated plan.
+PackageKit performs installation and removal; the session PolicyKit agent
+handles authorization. No password is collected by this application.
+This is the official Qt6 interface of Mainuan Gestao de Drivers, beta 0.2.
+Driver switches may remove packages before installing replacements and are
+not atomic. Failed operations trigger fresh detection, without automatic rollback.
+No global autoremove or automatic restart is performed.
 .SH OPTIONS
 .TP
 .B test
-Include fictitious devices for inspecting driver choices and plan previews.
-Fictitious plans cannot be executed.
+Use fictitious devices for inspecting driver choices, confirmation and progress.
+Applying changes in this mode only simulates them in memory; no packages or
+drivers are changed on the system.
 .SH AUTHORS
 Mainuan contributors. Derived from Linux Mint mintdrivers by Clement Lefebvre
 and contributors. Distributed under GPL-2.0-or-later.

@@ -58,6 +58,8 @@ class PackageKitTransactionTests(unittest.TestCase):
         app()
 
         class Connection:
+            error_name = "org.freedesktop.PackageKit.Denied"
+
             def isConnected(self):
                 return True
 
@@ -65,7 +67,7 @@ class PackageKitTransactionTests(unittest.TestCase):
                 if message.member() == "GetAll":
                     reply = message.createReply([{"Status": 13}])
                 else:
-                    reply = message.createErrorReply("org.freedesktop.PackageKit.Denied", "Denied")
+                    reply = message.createErrorReply(self.error_name, "Denied")
                 return QtDBus.QDBusPendingCall.fromCompletedCall(reply)
 
         transport = QtDBusTransport(connection=Connection())
@@ -86,6 +88,15 @@ class PackageKitTransactionTests(unittest.TestCase):
         QTimer.singleShot(1000, loop.quit)
         loop.exec()
         self.assertTrue(replies[1][1].authorization_denied)
+        for name in ("org.freedesktop.PackageKit.Transaction.RefusedByPolicy",
+                     "org.freedesktop.PolicyKit1.Error.Cancelled"):
+            with self.subTest(error=name):
+                transport.bus.error_name = name
+                transport.call("/test", TRANSACTION_INTERFACE, "Cancel", [], completed)
+                QTimer.singleShot(1000, loop.quit)
+                loop.exec()
+                self.assertTrue(replies[-1][1].authorization_denied)
+                self.assertEqual(replies[-1][1].cancelled, name.endswith(".Cancelled"))
 
     def make_transaction(self, installed=False, **kwargs):
         _, device, planner = scenario(installed)
@@ -213,6 +224,55 @@ class PackageKitTransactionTests(unittest.TestCase):
             getattr(transaction, method)(plan)
             self.assertEqual(self.calls, [])
             self.assertEqual(self.results[0].error.error_code, "execution-disabled")
+
+    def test_simulation_uses_flags_and_conservative_removal_without_enabling_execution(self):
+        for action, expected in ((TransactionAction.INSTALL, [6, ["new-driver;2.0-candidate;amd64;"]]),
+                                 (TransactionAction.REMOVE, [4, ["old-driver;1.0-installed;amd64;"], False, False])):
+            transaction, plan = self.make_transaction(True)
+            transaction.simulate(plan, action)
+            self.assertEqual(self.calls[-1][3], expected)
+            hints = next(call[3] for call in self.calls if call[2] == "SetHints")
+            self.assertIn("interactive=false", hints[0])
+
+    def test_removal_resolves_installed_filter_and_rejects_available_only_package(self):
+        transaction, plan = self.make_transaction(True)
+        transaction.execution_enabled = True
+        transaction.remove(plan)
+        validator = transaction._validator
+        self.assertEqual(self.calls[-1][3], [4, ["old-driver"]])
+        self.emit(validator, "Package", [2, "old-driver;1.0-installed;amd64;available", "Driver"])
+        self.emit(validator, "Finished", [1, 1])
+        self.assertEqual(self.results[0].error.error_code, "package-not-installed")
+        self.assertFalse(any(call[2] == "RemovePackages" for call in self.calls))
+
+    def test_daemon_loss_during_mutation_reports_unknown_outcome(self):
+        transaction, plan = self.make_transaction(auto_resolve=True)
+        transaction.execution_enabled = True
+        transaction.install(plan)
+        transaction.transport.serviceLost.emit()
+        self.assertTrue(self.results[0].error.outcome_unknown)
+
+    def test_mutation_method_timeout_keeps_listening_until_finished(self):
+        transaction, plan = self.make_transaction(auto_resolve=True)
+        transaction.execution_enabled = True
+        transaction.install(plan)
+        transaction._method_reply([], TransactionError("org.freedesktop.DBus.Error.NoReply", "Timed out"))
+        self.assertFalse(transaction._done)
+        self.assertEqual(self.results, [])
+        self.assertTrue(transaction.transport.subscribed)
+        self.assertTrue(self.errors[-1].outcome_unknown)
+        self.emit(transaction, "Package", [12, "new-driver;2.0-candidate;amd64;", "Driver"])
+        self.emit(transaction, "Finished", [1, 1])
+        self.assertEqual(self.results[0].state, TransactionState.FINISHED)
+
+    def test_mutation_progress_is_recorded_for_failure_reconciliation(self):
+        transaction, plan = self.make_transaction(auto_resolve=True)
+        transaction.execution_enabled = True
+        transaction.install(plan)
+        self.emit(transaction, "Package", [12, "new-driver;2.0-candidate;amd64;", "Driver"])
+        self.emit(transaction, "ErrorCode", [54, "Configure failed"])
+        self.emit(transaction, "Finished", [2, 1])
+        self.assertTrue(self.results[0].mutation_observed)
 
     def test_internal_install_and_remove_only_call_fake_after_resolution(self):
         for method, expected, args in (

@@ -1,5 +1,6 @@
 import gettext
 import locale
+import logging
 import sys
 
 from PyQt6.QtCore import QCoreApplication
@@ -24,6 +25,7 @@ def run(argv=None):
         argv = sys.argv
 
     test_mode = len(argv) > 1 and argv[1] == "test"
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
     # Plasma reads per-application settings while QApplication is constructed.
     QCoreApplication.setApplicationName(APP_NAME)
     QCoreApplication.setOrganizationName(ORGANIZATION)

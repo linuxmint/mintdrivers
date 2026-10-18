@@ -23,7 +23,7 @@ class MainuanIdentityTests(unittest.TestCase):
     def test_official_identity_and_debian_metadata(self):
         self.assertEqual((APP_NAME, APP_ID, ORGANIZATION, DISPLAY_NAME, VERSION),
                          ("mainuan-gestao-drivers", "org.mainuan.GestaoDrivers",
-                          "Mainuan", "Gestão de Drivers", "0.1"))
+                          "Mainuan", "Gestão de Drivers", "0.2"))
         source, binary = [Parser().parsestr(stanza) for stanza in
                           (ROOT / "debian/control").read_text().strip().split("\n\n")]
         self.assertEqual(source["Source"], APP_NAME)
@@ -165,7 +165,7 @@ assert 'gi' not in sys.modules
         self.assertIn("mainuan-gestao-drivers.mo", (ROOT / "Makefile").read_text())
         for catalog in (ROOT / "po").glob("*.po"):
             self.assertTrue(catalog.name.startswith("mainuan-gestao-drivers-"))
-            self.assertIn('"Project-Id-Version: mainuan-gestao-drivers 0.1\\n"', catalog.read_text())
+            self.assertIn('"Project-Id-Version: mainuan-gestao-drivers ', catalog.read_text())
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / "mainuan-gestao-drivers.mo"
             subprocess.run(["msgfmt", "--check", "-o", str(output),

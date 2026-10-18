@@ -287,6 +287,40 @@ class DriverBackend:
                 package_ids.append(self.get_packagekit_id(dependency_name, installed=True))
         return package_ids
 
+    def package_requires_dkms(self, package_name):
+        """Inspect candidate dependency metadata; None means it cannot be verified."""
+        cache = self._get_cache()
+        visiting, known = set(), {}
+
+        def requirement(name, depth=0):
+            if name in known:
+                return known[name]
+            if depth > 64:
+                return None
+            if name == "dkms" or name.endswith("-dkms") or "-dkms-" in name:
+                return True
+            if name in visiting:
+                return False
+            try:
+                candidate = cache[name].candidate
+            except KeyError:
+                return None
+            if candidate is None:
+                return None
+            visiting.add(name)
+            groups = []
+            for group in candidate.dependencies:
+                alternatives = [requirement(dep.name, depth + 1) for dep in group
+                                if dep.rawtype in ("Depends", "PreDepends")]
+                if alternatives:
+                    groups.append(False if False in alternatives else None if None in alternatives else True)
+            visiting.remove(name)
+            value = True if True in groups else None if None in groups else False
+            known[name] = value
+            return value
+
+        return requirement(package_name)
+
     def count_installed_proprietary_drivers(self):
         count = 0
         source_devices = dict(self._get_source_devices())
@@ -325,3 +359,13 @@ TEST_PACKAGE_OVERRIDES = {
     "mesa-vulkan-drivers": ("1.0", "Dummy open-source alternative driver", True),
     "intel-microcode": ("1.0", "Dummy processor microcode", True),
 }
+
+
+def make_test_devices():
+    return {
+        "dummy": make_test_device(),
+        "dummy-microcode": {
+            "modalias": "", "vendor": "Intel Corporation", "model": "Processor Microcode",
+            "drivers": {"intel-microcode": {"free": False, "from_distro": True, "recommended": True}},
+        },
+    }

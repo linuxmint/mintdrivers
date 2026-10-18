@@ -1,13 +1,14 @@
 # Gestão de Drivers
 
 **Mainuan Gestão de Drivers** é uma ferramenta de hardware do projeto Mainuan,
-baseado no Kubuntu 26.04 LTS. A versão **0.1 é o primeiro beta**.
+baseado no Kubuntu 26.04 LTS. A versão **0.2 é beta**.
 
 A interface oficial usa Qt6 Widgets/PyQt6. A detecção usa
 `ubuntu-drivers-common` e consultas APT, com backend Python independente da GUI.
 O planejamento de alterações usa PackageKit via `PyQt6.QtDBus`.
-Nesta versão, seleção e prévia estão disponíveis, mas **nenhuma alteração de
-driver é aplicada pela interface Qt**.
+Nesta versão, alterações válidas podem ser aplicadas após confirmação explícita.
+PackageKit e o agente PolicyKit do Plasma cuidam da autorização, sem senha
+solicitada pelo aplicativo nem execução direta de APT/dpkg.
 
 ```bash
 mainuan-gestao-drivers
@@ -15,7 +16,8 @@ mainuan-gestao-drivers test
 ```
 
 Sem instalar no host, execute `./usr/bin/mainuan-gestao-drivers` no checkout.
-O modo `test` acrescenta os mesmos dispositivos fictícios do backend.
+O modo `test` usa os dispositivos fictícios do backend e **simula todas as
+alterações em memória, sem comunicar transações ao PackageKit**.
 O launcher Plasma é `org.mainuan.GestaoDrivers.desktop`.
 
 ## Desenvolvimento
@@ -36,13 +38,20 @@ dpkg-buildpackage -us -uc -b
 Instale o beta apenas em uma VM para validação:
 
 ```bash
-sudo apt install ./mainuan-gestao-drivers_0.1_all.deb
+sudo apt install ./mainuan-gestao-drivers_0.2_all.deb
 sudo apt remove mainuan-gestao-drivers
 ```
 
 Não há scripts para remover dependências, alterar repositórios, módulos ou
 Secure Boot durante instalação/remoção do aplicativo.
-Consulte [a arquitetura de transações](docs/qt-transactions.md).
+Consulte [a arquitetura de transações](docs/qt-transactions.md) e o
+[roteiro de validação na VM](docs/beta-0.2-testing.md).
+Trocas com remoção e instalação não são atômicas; em caso de falha parcial,
+o aplicativo detecta novamente o estado real, sem restaurar drivers automaticamente.
+Autoremove e remoção indiscriminada de dependências não são permitidos.
+O fluxo definitivo Secure Boot/MOK e a ativação de módulos Broadcom ainda
+estão pendentes. Casos DKMS/MOK não suportados são bloqueados quando Secure
+Boot está habilitado ou seu estado não pode ser determinado.
 
 ## Origem e Licença
 

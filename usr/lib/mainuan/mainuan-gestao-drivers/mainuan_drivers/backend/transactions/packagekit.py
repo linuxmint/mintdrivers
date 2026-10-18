@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 """Asynchronous PackageKit D-Bus client. No widgets or GLib dependencies."""
 import gettext
+import logging
 import re
 from dataclasses import replace
 
@@ -15,6 +16,7 @@ from .planner import PlanningError, package_identity, reboot_required
 
 
 _ = gettext.gettext
+logger = logging.getLogger(__name__)
 SERVICE = "org.freedesktop.PackageKit"
 ROOT_PATH = "/org/freedesktop/PackageKit"
 TRANSACTION_INTERFACE = SERVICE + ".Transaction"
@@ -23,6 +25,8 @@ PROPERTIES_INTERFACE = "org.freedesktop.DBus.Properties"
 # Stable PackageKit 1.x enum values; flags are bitfields, not enum ordinals.
 FILTER_NONE = 1 << 1
 ONLY_TRUSTED = 1 << 1
+SIMULATE = 1 << 2
+FILTER_INSTALLED = 1 << 2
 STATUS_MAP = {
     0: TransactionState.PREPARING, 1: TransactionState.WAITING,
     2: TransactionState.PREPARING, 3: TransactionState.PREPARING,
@@ -62,6 +66,7 @@ def state_message(state):
         TransactionState.FINISHED: _("Finished."),
         TransactionState.FAILED: _("Transaction failed."),
         TransactionState.CANCELLED: _("Transaction cancelled."),
+        TransactionState.PARTIAL_FAILURE: _("The driver change was not completed."),
     }[state]
 
 
@@ -89,8 +94,9 @@ class QtDBusTransport(QObject):
         elif method == "SetHints":
             args[0] = QtDBus.QDBusArgument(args[0], QMetaType.Type.QStringList.value)
         message.setArguments(args)
-        message.setInteractiveAuthorizationAllowed(method in ("InstallPackages", "RemovePackages"))
-        watcher = QtDBus.QDBusPendingCallWatcher(self.bus.asyncCall(message, 30000), self)
+        modifying = method in ("InstallPackages", "RemovePackages") and not (arguments[0] & SIMULATE)
+        message.setInteractiveAuthorizationAllowed(modifying)
+        watcher = QtDBus.QDBusPendingCallWatcher(self.bus.asyncCall(message, 300000 if modifying else 30000), self)
         self._watchers.add(watcher)
 
         def completed(pending):
@@ -100,7 +106,9 @@ class QtDBusTransport(QObject):
                 name = reply.errorName()
                 error = TransactionError(
                     name, reply.errorMessage(),
-                    authorization_denied=name.endswith(("Denied", "NotAuthorized", "AccessDenied")),
+                    cancelled=name.endswith(".Cancelled"),
+                    authorization_denied=name.endswith(("Denied", "NotAuthorized", "AccessDenied", "RefusedByPolicy"))
+                    or name == "org.freedesktop.PolicyKit1.Error.Cancelled",
                 )
             self._watchers.discard(pending)
             pending.deleteLater()
@@ -141,8 +149,8 @@ class QtDBusTransport(QObject):
 class PackageKitTransaction(QObject):
     """Single-use transaction; modifying methods first resolve the exact plan.
 
-    execution_enabled is deliberately false by default. The current frontend
-    never enables it. A fresh daemon object path is used for each operation.
+    Execution is false by default; the confirmed-plan coordinator enables it.
+    A fresh daemon object path is used for each operation.
     """
 
     progressChanged = pyqtSignal(object)
@@ -169,9 +177,21 @@ class PackageKitTransaction(QObject):
         self._packages = {}
         self._expected = set()
         self._validator = None
+        self._simulation = False
+        self._resolve_action = None
+        self._package_infos = {}
+        self._mutation_started = False
+        self._mutation_observed = False
 
-    def resolve(self, plan):
+    def resolve(self, plan, action=None):
+        self._resolve_action = action
         self._prepare(plan, TransactionAction.RESOLVE)
+
+    def simulate(self, plan, action):
+        if action not in (TransactionAction.INSTALL, TransactionAction.REMOVE):
+            raise ValueError("Only installation/removal can be simulated")
+        self._simulation = True
+        self._prepare(plan, action)
 
     def install(self, plan):
         self._prepare(plan, TransactionAction.INSTALL)
@@ -189,22 +209,23 @@ class PackageKitTransaction(QObject):
         except PlanningError as error:
             self._fail(TransactionError("invalid-plan", str(error)))
             return
-        if action != TransactionAction.RESOLVE and not self.execution_enabled:
+        if action != TransactionAction.RESOLVE and not self._simulation and not self.execution_enabled:
             self._fail(TransactionError("execution-disabled", _("Driver changes are not enabled in this interface.")))
             return
-        references = (plan.installs if action == TransactionAction.INSTALL else
-                      plan.removals if action == TransactionAction.REMOVE else
+        reference_action = self._resolve_action if action == TransactionAction.RESOLVE else action
+        references = (plan.installs if reference_action == TransactionAction.INSTALL else
+                      plan.removals if reference_action == TransactionAction.REMOVE else
                       plan.installs + plan.removals)
         if not references:
             self._complete(TransactionState.FINISHED, 1)
             return
         self._expected = {package_identity(ref.package_id) for ref in references}
-        if action != TransactionAction.RESOLVE:
+        if action != TransactionAction.RESOLVE and not self._simulation:
             self._validator = PackageKitTransaction(
                 self.planner, self, transport_factory=self._transport_factory)
             self._validator.progressChanged.connect(self._validation_progress)
             self._validator.finished.connect(lambda result: self._validated(result, action, references))
-            self._validator.resolve(plan)
+            self._validator.resolve(plan, action)
         else:
             self._begin(action, references)
 
@@ -232,12 +253,15 @@ class PackageKitTransaction(QObject):
         self._begin(action, references)
 
     def _begin(self, action, references):
-        self._operation = ("Resolve", [FILTER_NONE, sorted({ref.name for ref in references})])
+        flags = SIMULATE if self._simulation else 0
+        filters = FILTER_INSTALLED if self._resolve_action == TransactionAction.REMOVE else FILTER_NONE
+        self._operation = ("Resolve", [filters, sorted({ref.name for ref in references})])
         if action == TransactionAction.INSTALL:
-            self._operation = ("InstallPackages", [ONLY_TRUSTED, [ref.package_id for ref in references]])
+            self._operation = ("InstallPackages", [ONLY_TRUSTED | flags, [ref.package_id for ref in references]])
         elif action == TransactionAction.REMOVE:
             # No dependent-package removals and no global autoremove.
-            self._operation = ("RemovePackages", [0, [ref.package_id for ref in references], False, False])
+            self._operation = ("RemovePackages", [flags, [ref.package_id for ref in references], False, False])
+        logger.info("transaction started role=%s packages=%d simulation=%s", action.value, len(references), self._simulation)
         self._update(state=TransactionState.PREPARING)
         self.transport.call(ROOT_PATH, "org.freedesktop.DBus.Introspectable", "Introspect", [], self._available)
 
@@ -274,7 +298,7 @@ class PackageKitTransaction(QObject):
             return
         if args:
             self._properties(args[0])
-        hints = ["interactive=" + ("false" if self.progress.action == TransactionAction.RESOLVE else "true"),
+        hints = ["interactive=" + ("false" if self.progress.action == TransactionAction.RESOLVE or self._simulation else "true"),
                  "cache-age=2147483647"]
         # Omitting supports-plural-signals requests the supported Package signal.
         self.transport.call(self._path, TRANSACTION_INTERFACE, "SetHints", [hints], self._hinted)
@@ -286,10 +310,17 @@ class PackageKitTransaction(QObject):
             self._fail(error)
             return
         method, arguments = self._operation
+        self._mutation_started = method in ("InstallPackages", "RemovePackages") and not self._simulation
         self.transport.call(self._path, TRANSACTION_INTERFACE, method, arguments, self._method_reply)
 
     def _method_reply(self, args, error):
         if error and not self._done:
+            if self._mutation_started and error.error_code in (
+                    "org.freedesktop.DBus.Error.NoReply", "org.freedesktop.DBus.Error.Timeout"):
+                # A missing method acknowledgement does not end the daemon job.
+                self.errorOccurred.emit(replace(error, outcome_unknown=True))
+                self._update(percentage=None, message=_("Waiting for the PackageKit result. The operation may still be running."))
+                return
             self._fail(error)
 
     @pyqtSlot(str, object)
@@ -308,6 +339,9 @@ class PackageKitTransaction(QObject):
                 self._fail(TransactionError("invalid-package-id", str(package_id)))
                 return
             self._packages[identity] = PackageReference(identity[0], package_id)
+            self._package_infos[identity] = info
+            if self._mutation_started and info in (11, 12, 13, 14, 15, 19, 20):
+                self._mutation_observed = True
             self._update(package_id=package_id)
         elif name == "ItemProgress":
             package_id, status, percentage = args
@@ -331,6 +365,9 @@ class PackageKitTransaction(QObject):
             elif exit_code == 1 and not self._error:
                 if self.progress.action == TransactionAction.RESOLVE and not self._expected <= set(self._packages):
                     self._fail(TransactionError("package-unavailable", _("The planned package version is no longer available.")), exit_code)
+                elif self._resolve_action == TransactionAction.REMOVE and any(
+                        self._package_infos.get(identity) != 1 for identity in self._expected):
+                    self._fail(TransactionError("package-not-installed", _("A package selected for removal is no longer installed.")), exit_code)
                 else:
                     self._complete(TransactionState.FINISHED, exit_code, runtime)
             else:
@@ -396,6 +433,10 @@ class PackageKitTransaction(QObject):
             self._fail(TransactionError("service-lost", _("The PackageKit service disconnected.")))
 
     def _fail(self, error, exit_code=None):
+        if self._mutation_started and error.error_code in (
+                "service-lost", "transaction-destroyed", "org.freedesktop.DBus.Error.NoReply",
+                "org.freedesktop.DBus.Error.Timeout", "org.freedesktop.DBus.Error.Disconnected"):
+            error = replace(error, outcome_unknown=True)
         self._error = error
         if not error.cancelled:
             self.errorOccurred.emit(error)
@@ -407,13 +448,17 @@ class PackageKitTransaction(QObject):
         self._done = True
         self.transport.unsubscribe()
         # Resolution alone never causes or newly reports a reboot requirement.
-        if self.progress.action != TransactionAction.RESOLVE and reboot_required():
+        if state == TransactionState.FINISHED and self._mutation_started and reboot_required():
             self._update(restart=RestartRequirement.SYSTEM)
             self.restartRequired.emit(RestartRequirement.SYSTEM)
         self._update(state=state, allow_cancel=False)
+        logger.info("transaction finished role=%s state=%s exit=%s error=%s", self.progress.action.value,
+                    state.value, exit_code, self._error.error_code if self._error else None)
         self.finished.emit(TransactionResult(
             self.progress.action, state, exit_code, self._error, self.progress.restart,
             tuple(self._packages.values()), runtime, self.progress.cancel_requested,
+            effects=tuple((self._package_infos[key], ref) for key, ref in self._packages.items()),
+            mutation_observed=self._mutation_observed,
         ))
 
 
