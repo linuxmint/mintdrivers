@@ -26,6 +26,7 @@ from mainuan_drivers.backend.preflight import (
     ActivationState, DriverPreflight, DkmsState, HeadersState, MokState, SecureBootState, assess_activation,
 )
 from mainuan_drivers.backend.test_scenarios import SCENARIOS
+from mainuan_drivers.backend.signing import SigningReadiness
 from mainuan_drivers.backend.transactions import PlanningError, TransactionPlanner
 from mainuan_drivers.backend.transactions.packagekit import DriverTransactionController
 from mainuan_drivers.backend.transactions.execution import (
@@ -34,7 +35,7 @@ from mainuan_drivers.backend.transactions.execution import (
 from mainuan_drivers.backend.transactions.models import TransactionState, RestartRequirement
 from mainuan_drivers.backend.transactions.planner import package_identity
 
-from .widgets import DeviceWidget
+from .widgets import DeviceWidget, activation_text
 from .. import DISPLAY_NAME
 
 
@@ -250,7 +251,9 @@ class MainWindow(QMainWindow):
         )
         for device in devices:
             callback = (lambda option, current_device=device: self._select(current_device, option)) if self.controller else None
-            self.content_layout.addWidget(DeviceWidget(device, callback, self.test_mode))
+            activation = next((item for item in getattr(self._snapshot, "activations", ())
+                               if item.device_id == device.device_id), None)
+            self.content_layout.addWidget(DeviceWidget(device, callback, self.test_mode, activation))
         self.content_layout.addStretch(1)
 
     @pyqtSlot(object)
@@ -294,8 +297,11 @@ class MainWindow(QMainWindow):
             result = self._pending_result
             if result.plan and snapshot.context:
                 activations = assess_activation(result.plan, snapshot.context, snapshot.installed_packages,
-                                                result.state != TransactionState.FINISHED, snapshot.evidence)
+                                                result.state != TransactionState.FINISHED, snapshot.evidence,
+                                                snapshot.bindings, result.bindings_before)
                 result = replace(result, activations=activations)
+                snapshot = replace(snapshot, activations=activations)
+                self._snapshot = snapshot
             self.result_label.setText(execution_message(result))
             self._pending_result = None
 
@@ -465,10 +471,12 @@ class PlanDialog(QDialog):
             for text in (secure, module):
                 details.addWidget(QLabel(text))
             if preflight.dkms_state != DkmsState.NO_DKMS:
-                mok = {MokState.ENROLLED: _("MOK: enrolled; module signing is not verified"),
+                mok = {MokState.ENROLLED: _("MOK: signing certificate enrolled"),
                        MokState.NOT_ENROLLED: _("MOK: not enrolled"),
                        MokState.PENDING: _("MOK: enrollment pending"),
                        MokState.UNKNOWN: _("MOK: unknown")}[preflight.mok_state]
+                if preflight.signing.state == SigningReadiness.READY_ENROLLED:
+                    details.addWidget(QLabel(_("DKMS signing: configured")))
                 headers = {HeadersState.PRESENT: _("Kernel headers: present"),
                            HeadersState.MISSING: _("Kernel headers: missing"),
                            HeadersState.UNKNOWN: _("Kernel headers: unknown"),
@@ -534,7 +542,7 @@ def execution_message(result):
                    _("The changes were applied successfully.") if result.completed else
                    _("No driver changes were necessary."))
         if result.activations and not result.simulated:
-            message = _("Package changes completed. Driver activation is not yet confirmed.")
+            message = _("Package changes completed. Driver activation checked separately.")
     elif result.error and result.error.error_code in (2, 10, 42):
         message = _("The package download failed. Check the connection and review the detected driver state.")
     elif result.error and result.error.error_code in (13, 20, 35):
@@ -543,16 +551,10 @@ def execution_message(result):
         message = _("The driver operation failed. The actual system state is being detected again.")
     if result.error:
         message += "\n" + result.error.details
-    activation_text = {
-        ActivationState.ACTIVE: _("Driver activation verified."),
-        ActivationState.INSTALLED_REBOOT_REQUIRED: _("Installed; restart the computer to complete driver activation."),
-        ActivationState.INSTALLED_MOK_REQUIRED: _("Installed; restart the computer and complete key enrollment in MokManager."),
-        ActivationState.INSTALLED_NOT_ACTIVE: _("Installed, but driver activation could not be verified. Review system verification warnings."),
-        ActivationState.FAILED: _("The requested driver package is not installed."),
-        ActivationState.UNKNOWN: _("The current driver activation state is unknown."),
-    }
     for activation in result.activations:
-        message += "\n" + (activation.package_name + ": " if activation.package_name else "") + activation_text[activation.state]
+        message += "\n" + (activation.package_name + ": " if activation.package_name else "") + activation_text(activation.state)
+        if activation.state == ActivationState.INSTALLED_MOK_REQUIRED:
+            message += "\n" + _("Restart the computer and complete key enrollment in MokManager.")
     if result.restart == RestartRequirement.SYSTEM:
         message += "\n" + _("A system restart is required to complete driver activation.")
     elif result.restart == RestartRequirement.SESSION:

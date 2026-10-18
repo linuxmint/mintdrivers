@@ -15,6 +15,7 @@ from mainuan_drivers.backend.preflight import (
     SystemSecurityProbe, analyze_dkms, assess_activation,
 )
 from mainuan_drivers.backend.transactions.models import PackageReference
+from mainuan_drivers.backend.signing import DkmsSigningProbe
 
 
 def context(**kwargs):
@@ -44,6 +45,8 @@ class SecurityProbeTests(unittest.TestCase):
         self.adapter.read.return_value = (KernelState.CURRENT, "6.20.0-1-generic", "", False)
 
     def command(self, argv, **kwargs):
+        if argv[0] == "openssl":
+            return subprocess.CompletedProcess(argv, 0, "SHA256 Fingerprint=" + "ab" * 32, "")
         self.assertEqual(argv[0], "mokutil")
         self.assertIn(argv[1], ("--sb-state", "--list-new", "--test-key"))
         self.assertNotIn("shell", kwargs)
@@ -57,13 +60,18 @@ class SecurityProbeTests(unittest.TestCase):
         return subprocess.CompletedProcess(argv, code, output, "")
 
     def probe(self):
+        defaults = Mock()
+        defaults.read.return_value = (str(self.root / "key"), str(self.root / "default.der"))
+        signing = DkmsSigningProbe(self.config, self.runner, defaults, lambda kernel: True)
         return SystemSecurityProbe(self.efi, self.root / "modules", self.config,
-                                   self.runner, self.adapter).probe()
+                                   self.runner, self.adapter, signing).probe()
 
     def certificate(self):
         certificate = self.root / "signing.der"
         certificate.write_bytes(b"fake certificate (never passed to real mokutil)")
-        (self.config / "framework.conf").write_text('mok_certificate="%s"\n' % certificate)
+        key = self.root / "key"
+        key.write_bytes(b"Never read this")
+        (self.config / "framework.conf").write_text('mok_signing_key="%s"\nmok_certificate="%s"\n' % (key, certificate))
         return certificate
 
     def test_secure_boot_enabled_and_disabled(self):
@@ -100,7 +108,7 @@ class SecurityProbeTests(unittest.TestCase):
 
     def test_pending_mok_detected_without_guessing_a_certificate(self):
         self.pending_output = "SHA1 Fingerprint: aa:bb:cc"
-        self.assertEqual(self.probe().mok_state, MokState.PENDING)
+        self.assertEqual(self.probe().mok_state, MokState.UNKNOWN)
         self.assertFalse(any(call.args[0][1] == "--test-key" for call in self.runner.call_args_list))
 
     def test_enrolled_certificate_must_be_explicitly_identified(self):
@@ -321,8 +329,8 @@ class PreflightPolicyTests(unittest.TestCase):
     def test_activation_never_infers_active_from_installed_package(self):
         _, device, planner = scenario(installed=False)
         plan = planner.build({device.device_id: target(device, "new-driver")})
-        for mok, expected in ((MokState.UNKNOWN, ActivationState.INSTALLED_REBOOT_REQUIRED),
-                              (MokState.PENDING, ActivationState.INSTALLED_MOK_REQUIRED)):
+        for mok, expected in ((MokState.UNKNOWN, ActivationState.INSTALLED_ACTIVATION_UNVERIFIED),
+                              (MokState.PENDING, ActivationState.INSTALLED_ACTIVATION_UNVERIFIED)):
             with self.subTest(mok=mok):
                 actual = assess_activation(plan, context(mok_state=mok), (("new-driver", True),))
                 self.assertEqual(actual[0].state, expected)

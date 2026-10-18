@@ -6,8 +6,9 @@ from dataclasses import dataclass, replace
 
 from PyQt6.QtCore import QObject, QThread, QTimer, pyqtSignal, pyqtSlot
 
-from ..drivers import DriverBackend, TEST_PACKAGE_OVERRIDES, make_test_devices
+from ..drivers import DriverBackend, PackageUnavailableError, TEST_PACKAGE_OVERRIDES, make_test_devices
 from ..models import DriverOptionType
+from ..activation import DriverActivationProbe
 from ..preflight import (
     DriverPreflight, KernelModuleContext, ModuleEvidence, SystemSecurityProbe,
     SecureBootState, DkmsState, HeadersState, KernelState,
@@ -42,17 +43,20 @@ class DriverSnapshot:
     context: object = None
     evidence: tuple = ()
     installed_packages: tuple = ()
+    bindings: tuple = ()
+    activations: tuple = ()
 
 
 class SnapshotSource:
     """Each load creates a backend in its calling worker; no APT objects escape."""
 
     def __init__(self, test_mode=False, backend_factory=DriverBackend, secure_boot_reader=None,
-                 security_probe=None, scenario="default"):
+                 security_probe=None, scenario="default", activation_probe=None):
         self.test_mode = test_mode
         self.backend_factory = backend_factory
         self.secure_boot_reader = secure_boot_reader
         self.security_probe = security_probe or SystemSecurityProbe()
+        self.activation_probe = activation_probe or DriverActivationProbe()
         self.scenario = scenario
         self._installed = {}
         self._selected = {}
@@ -92,7 +96,6 @@ class SnapshotSource:
                     device = replace(device, drivers=options, status=current.status)
                 updated.append(device)
             devices = tuple(updated)
-        planner = TransactionPlanner.from_backend(backend, devices, preview_only=self.test_mode)
         if self.test_mode:
             packages, facts = {}, []
             for device in devices:
@@ -106,10 +109,11 @@ class SnapshotSource:
                     packages[(option.package_name, False)] = ref
                     if option.installed:
                         packages[(option.package_name, True)] = ref
-                    facts.append(ModuleEvidence(package_id, state))
+                    facts.append(ModuleEvidence(package_id, state, installed=option.installed))
             planner = TransactionPlanner(devices, packages, preview_only=True)
             evidence = tuple(facts)
         else:
+            planner = TransactionPlanner.from_backend(backend, devices)
             context = self.security_probe.probe()
             if self.secure_boot_reader:
                 context = replace(context, secure_boot_state=self.secure_boot_reader())
@@ -120,14 +124,35 @@ class SnapshotSource:
             evidence = backend.module_evidence(names, context.running_kernel)
         installed = tuple((option.package_name, option.installed) for device in devices for option in device.drivers
                           if option.package_name and not option.builtin)
-        if inspection_plan and not self.test_mode:
+        if not self.test_mode and (installed or inspection_plan):
             import apt_pkg
             status_cache = apt_pkg.Cache(None)
-            installed = tuple((ref.name, backend.get_packagekit_id(ref.name, True)
-                               if ref.name in status_cache and
-                               status_cache[ref.name].current_state == apt_pkg.CURSTATE_INSTALLED else False)
-                              for ref in inspection_plan.installs + inspection_plan.removals)
-        return DriverSnapshot(planner, context.secure_boot_state, context, evidence, installed)
+            names = {name for name, value in installed}
+            if inspection_plan:
+                names.update(ref.name for ref in inspection_plan.installs + inspection_plan.removals)
+            verified = []
+            for name in sorted(names):
+                value = False
+                if name in status_cache and status_cache[name].current_state == apt_pkg.CURSTATE_INSTALLED:
+                    try:
+                        value = backend.get_packagekit_id(name, True)
+                    except PackageUnavailableError:
+                        value = None
+                verified.append((name, value))
+            installed = tuple(verified)
+        if self.test_mode:
+            from ..test_scenarios import scenario_bindings
+            bindings = scenario_bindings(self.scenario)
+        else:
+            bindings = tuple((device.device_id, self.activation_probe.probe(device.sys_path)) for device in devices)
+        from ..preflight import assess_activation
+        from .models import DriverSelection, TransactionPlan
+        # Startup after reboot derives current activation anew, never QSettings.
+        current = tuple(DriverSelection(device.device_id, option, option, TransactionAction.NO_CHANGE)
+                        for device in devices for option in device.drivers if option.selected and option.installed)
+        current_plan = TransactionPlan(current, (), (), TransactionAction.NO_CHANGE)
+        activations = assess_activation(current_plan, context, installed, evidence=evidence, bindings=bindings)
+        return DriverSnapshot(planner, context.secure_boot_state, context, evidence, installed, bindings, activations)
 
     def inspect(self, plan):
         return self.load(plan)
@@ -402,6 +427,7 @@ class DriverExecutionController(QObject):
         self._secure_boot = snapshot.secure_boot
         self._context = snapshot.context
         self._evidence = snapshot.evidence
+        self._bindings_before = snapshot.bindings
         try:
             self._planner = snapshot.planner
             self._plan = self._planner.rebuild(self._input_plan)
@@ -606,5 +632,6 @@ class DriverExecutionController(QObject):
         logger.info("driver workflow finished state=%s stages=%d error=%s", state.value, len(self._completed),
                     error.error_code if error else None)
         self.finished.emit(ExecutionResult(state, tuple(self._completed), error, self._restart, self.test_mode,
-                                          plan=getattr(self, "_plan", None)))
+                                          plan=getattr(self, "_plan", None),
+                                          bindings_before=getattr(self, "_bindings_before", ())))
         self.refreshRequested.emit()

@@ -119,3 +119,4 @@ class ExecutionResult:
     refresh_required: bool = True
     plan: Optional[TransactionPlan] = None
     activations: tuple = ()
+    bindings_before: tuple = ()

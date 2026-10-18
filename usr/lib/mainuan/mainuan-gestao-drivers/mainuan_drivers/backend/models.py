@@ -30,6 +30,7 @@ class DriverOption:
     status: DeviceStatus
     option_type: DriverOptionType = DriverOptionType.PACKAGE
     selectable: bool = True
+    packages: Optional[Tuple[str, ...]] = None
 
 
 @dataclass(frozen=True)
@@ -44,3 +45,4 @@ class DeviceInfo:
     status: DeviceStatus
     icon_key: str
     drivers: Tuple[DriverOption, ...]
+    sys_path: Optional[str] = None

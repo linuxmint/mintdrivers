@@ -3,7 +3,7 @@
 set -eu
 xgettext --language=Python --from-code=UTF-8 --keyword=_ --keyword=N_ \
     --keyword=ngettext:1,2 --package-name="Mainuan Gestão de Drivers" \
-    --package-version=0.3 --output=mainuan-gestao-drivers.pot \
+    --package-version=0.4 --output=mainuan-gestao-drivers.pot \
     usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/*.py \
     usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/preflight.py \
     usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/test_scenarios.py \
@@ -13,5 +13,5 @@ xgettext --language=Python --from-code=UTF-8 --keyword=_ --keyword=N_ \
     usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/planner.py \
     usr/lib/mainuan/mainuan-gestao-drivers/gtk_legacy.py
 xgettext --language=Glade --join-existing --package-name="Mainuan Gestão de Drivers" \
-    --package-version=0.3 --output=mainuan-gestao-drivers.pot \
+    --package-version=0.4 --output=mainuan-gestao-drivers.pot \
     usr/share/mainuan/mainuan-gestao-drivers/gtk-legacy.ui

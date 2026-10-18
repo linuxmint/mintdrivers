@@ -18,7 +18,7 @@ Depends: python3 (>= 3.7),
          gir1.2-packagekitglib-1.0,
          packagekit,
          ${misc:Depends},
-Recommends: mokutil
+Recommends: mokutil, openssl, kmod
 Description: Mainuan hardware driver management
  Mainuan Gestao de Drivers provides a Qt6 interface for detecting additional
  hardware drivers and confirming package changes through a shared Python

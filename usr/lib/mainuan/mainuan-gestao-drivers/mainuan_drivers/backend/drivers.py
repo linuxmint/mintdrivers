@@ -115,7 +115,8 @@ class DriverBackend:
                 free=bool(current_driver.get("free", False)),
                 requires_internet=package_name.startswith("firmware-b43"),
                 status=status,
-                selectable=not is_test_device))
+                selectable=not is_test_device,
+                packages=self._official_packages(current_driver)))
 
         options.extend(package_options)
 
@@ -158,7 +159,28 @@ class DriverBackend:
             is_virtual=is_virtual,
             status=status,
             icon_key=self._get_device_icon(source, source_drivers),
-            drivers=tuple(options))
+            drivers=tuple(options),
+            sys_path=self._sys_path(device_id, source))
+
+    @staticmethod
+    def _sys_path(device_id, source):
+        path = source.get("sys_path", source.get("syspath", device_id))
+        if isinstance(path, str) and path.startswith("/sys/") and ".." not in path.split("/"):
+            return path
+        return None
+
+    @staticmethod
+    def _official_packages(driver):
+        # Optional per-option contract only; never interpret a global/GPGPU map
+        # as the package set for the user's selected desktop driver.
+        packages = driver.get("packages")
+        if packages is None:
+            return None
+        if not isinstance(packages, (list, tuple)) or not packages or any(
+                not isinstance(name, str) or not re.fullmatch(r"[a-z0-9][a-z0-9+.-]+", name)
+                for name in packages):
+            raise ValueError("Unsupported UDC packages metadata")
+        return tuple(dict.fromkeys(packages))
 
     @staticmethod
     def _filter_nvidia_drivers(source_drivers, cache):

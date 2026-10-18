@@ -15,6 +15,8 @@ from mainuan_drivers.backend.preflight import (
     SecureBootState, HeadersState, KernelState, assess_activation,
 )
 from mainuan_drivers.backend.test_scenarios import SCENARIOS
+from mainuan_drivers.backend.signing import SigningEvidence, SigningReadiness
+from mainuan_drivers.backend.activation import DeviceBinding
 from mainuan_drivers.backend.transactions.execution import DriverExecutionController, DriverSnapshot, SnapshotSource
 from mainuan_drivers.backend.transactions.models import (
     ExecutionResult, PackageReference, PreparedPlan, RestartRequirement, TransactionAction,
@@ -69,6 +71,58 @@ class PreflightWorkflowTests(unittest.TestCase):
         prepared = self.prepare(controller, planner, plan)
         self.assertTrue(prepared.preflight.blockers)
         self.assertFalse(controller.confirm(prepared))
+
+    def test_actual_signing_certificate_enrolled_permits_simulated_workflow(self):
+        security = context(secure_boot_state=SecureBootState.ENABLED, mok_state=MokState.ENROLLED,
+                           signing=SigningEvidence(SigningReadiness.READY_ENROLLED, "/public/B.der"))
+        controller, planner, plan, source, factory = self.build(security, installed=False)
+        prepared = self.prepare(controller, planner, plan)
+        self.assertFalse(prepared.preflight.blockers)
+        done = QSignalSpy(controller.finished)
+        self.assertTrue(controller.confirm(prepared))
+        self.assertEqual(await_signal(done)[0].state, TransactionState.FINISHED)
+        self.assertTrue(any(method == "install" for method, action in factory.calls))
+
+    def test_signing_trust_changed_before_confirmation_stops_mutation(self):
+        security = context(secure_boot_state=SecureBootState.ENABLED,
+                           signing=SigningEvidence(SigningReadiness.READY_ENROLLED, "/public/B.der"))
+        controller, planner, plan, source, factory = self.build(security)
+        prepared = self.prepare(controller, planner, plan)
+        source.security = replace(security, signing=SigningEvidence(SigningReadiness.CERTIFICATE_NOT_ENROLLED, "/public/C.der"))
+        changed = QSignalSpy(controller.prepared)
+        self.assertTrue(controller.confirm(prepared))
+        updated = await_signal(changed)[0]
+        self.assertTrue(updated.preflight.blockers)
+        self.assertFalse(any(method in ("install", "remove") for method, action in factory.calls))
+
+    def test_controller_carries_before_binding_as_diagnostic_evidence(self):
+        controller, planner, plan, source, factory = self.build(context(), installed=False)
+        original = source.load
+        binding = (("device", DeviceBinding("nouveau", "nouveau", True)),)
+        source.load = lambda: replace(original(), bindings=binding)
+        prepared = self.prepare(controller, planner, plan)
+        done = QSignalSpy(controller.finished)
+        self.assertTrue(controller.confirm(prepared))
+        self.assertEqual(await_signal(done)[0].bindings_before, binding)
+
+    def test_ready_ui_shows_configured_signing_without_blocker(self):
+        source = SnapshotSource(test_mode=True, scenario="secure-dkms-enrolled")
+        snapshot = source.load()
+        executor = DriverExecutionController(test_mode=True, source=source)
+        window = MainWindow(test_mode=True, auto_start=False, executor=executor)
+        self.addCleanup(window.deleteLater)
+        window._receive_snapshot(snapshot)
+        window._set_planner(snapshot.planner)
+        device = snapshot.planner.devices[0]
+        window._select(device, next(option for option in device.drivers if option.recommended))
+        self.assertTrue(window.apply_button.isEnabled())
+        plan = window.controller.plan()
+        prepared = PreparedPlan(plan, plan.installs, plan.removals, True, window._preflight(plan))
+        dialog = PlanDialog(prepared, confirmation=True)
+        self.addCleanup(dialog.deleteLater)
+        labels = "\n".join(label.text() for label in dialog.findChildren(QLabel))
+        self.assertIn("DKMS signing: configured", labels)
+        self.assertNotIn("Blocked:", labels)
 
     def test_missing_headers_blocks_even_with_secure_boot_disabled(self):
         controller, planner, plan, source, factory = self.build(context(headers_state=HeadersState.MISSING))
@@ -146,7 +200,7 @@ class PreflightWorkflowTests(unittest.TestCase):
         self.assertEqual(result.restart, RestartRequirement.SYSTEM)
         current = source.inspect(plan)
         activation = assess_activation(plan, current.context, current.installed_packages)
-        self.assertEqual(activation[0].state, ActivationState.INSTALLED_REBOOT_REQUIRED)
+        self.assertEqual(activation[0].state, ActivationState.INSTALLED_ACTIVATION_UNVERIFIED)
         secure = replace(snapshot.context, secure_boot_state=SecureBootState.ENABLED)
         self.assertTrue(DriverPreflight(secure, snapshot.evidence).check(plan.installs, True).blockers)
 
@@ -207,9 +261,24 @@ class PreflightWorkflowTests(unittest.TestCase):
                 result = source.inspect(plan)
                 self.assertEqual(dict(result.installed_packages)["driver-package"], expected)
 
+    def test_startup_does_not_claim_half_configured_package_installed(self):
+        backend, device, planner = scenario(installed=True)
+        security = Mock()
+        security.probe.return_value = context()
+        activation = Mock()
+        activation.probe.return_value = DeviceBinding()
+        source = SnapshotSource(backend_factory=lambda: backend, security_probe=security, activation_probe=activation)
+        apt = SimpleNamespace(Cache=Mock(return_value={"old-driver": SimpleNamespace(current_state=2)}),
+                              CURSTATE_INSTALLED=6)
+        with patch.dict("sys.modules", {"apt_pkg": apt}):
+            snapshot = source.load()
+        self.assertFalse(dict(snapshot.installed_packages)["old-driver"])
+        self.assertEqual(snapshot.activations[0].state, ActivationState.FAILED)
+
     def test_installed_mok_pending_is_not_reported_as_driver_ready(self):
         _, device, planner = scenario(installed=False)
         plan = planner.build({device.device_id: target(device, "new-driver")})
+        plan = replace(plan, installs=tuple(replace(ref, requires_dkms=True) for ref in plan.installs))
         activation = assess_activation(plan, context(mok_state=MokState.PENDING), (("new-driver", True),))
         result = ExecutionResult(TransactionState.FINISHED, (), None, RestartRequirement.NONE,
                                  plan=plan, activations=activation)

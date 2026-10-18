@@ -6,10 +6,11 @@ import gettext
 import os
 from pathlib import Path
 import re
-import shlex
 import stat
 import subprocess
 from typing import Optional
+
+from .signing import DkmsSigningProbe, SigningEvidence, SigningReadiness
 
 _ = gettext.gettext
 
@@ -49,9 +50,11 @@ class MokState(Enum):
 
 
 class ActivationState(Enum):
-    ACTIVE = "active"  # Reserved: package success alone is never proof of this.
+    ACTIVE_CONFIRMED = "active"
+    ACTIVE = "active"  # Compatibility alias; requires binding evidence.
     INSTALLED_REBOOT_REQUIRED = "installed_reboot_required"
     INSTALLED_MOK_REQUIRED = "installed_mok_required"
+    INSTALLED_ACTIVATION_UNVERIFIED = "installed_activation_unverified"
     INSTALLED_NOT_ACTIVE = "installed_not_active"
     FAILED = "failed"
     UNKNOWN = "unknown"
@@ -68,6 +71,7 @@ class KernelModuleContext:
     headers_state: HeadersState = HeadersState.UNKNOWN
     mok_state: MokState = MokState.UNKNOWN
     certificate: str = ""
+    signing: SigningEvidence = SigningEvidence()
 
 
 @dataclass(frozen=True)
@@ -97,6 +101,7 @@ class DriverPreflightResult:
     warnings: tuple = ()
     blockers: tuple = ()
     requires_reboot: bool = False
+    signing: SigningEvidence = SigningEvidence()
 
 
 @dataclass(frozen=True)
@@ -104,6 +109,8 @@ class DriverActivation:
     device_id: str
     package_name: str
     state: ActivationState
+    binding: object = None
+    binding_before: object = None
 
 
 class KernelDetectionAdapter:
@@ -132,12 +139,14 @@ class KernelDetectionAdapter:
 
 class SystemSecurityProbe:
     def __init__(self, efi_root="/sys/firmware/efi", modules_root="/lib/modules",
-                 config_root="/etc/dkms", runner=subprocess.run, kernel_adapter=None):
+                 config_root="/etc/dkms", runner=subprocess.run, kernel_adapter=None,
+                 signing_probe=None):
         self.efi_root = Path(efi_root)
         self.modules_root = Path(modules_root)
         self.config_root = Path(config_root)
         self.runner = runner
         self.kernel_adapter = kernel_adapter or KernelDetectionAdapter()
+        self.signing_probe = signing_probe or DkmsSigningProbe(config_root, runner)
 
     def _mokutil(self, *args):
         try:
@@ -146,32 +155,6 @@ class SystemSecurityProbe:
             return result.returncode, result.stdout.strip(), result.stderr.strip()
         except (OSError, subprocess.SubprocessError, UnicodeError):
             return None, "", ""
-
-    def _certificate(self):
-        # Configuration is shell syntax. Accept only static assignments, never
-        # source/eval it and never guess which of Ubuntu's two defaults is used.
-        certificate = ""
-        try:
-            files = [self.config_root / "framework.conf"]
-            files += sorted((self.config_root / "framework.conf.d").glob("*.conf"))
-            for path in files:
-                if not path.exists():
-                    continue
-                for line in path.read_text().splitlines():
-                    tokens = shlex.split(line, comments=True)
-                    if not tokens:
-                        continue
-                    if len(tokens) != 1 or not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*=[^$`;<>|&]*", tokens[0]):
-                        return ""
-                    key, value = tokens[0].split("=", 1)
-                    if key == "sign_file" and value:
-                        return ""
-                    if key == "mok_certificate":
-                        certificate = value
-            path = Path(certificate)
-            return str(path) if path.is_absolute() and path.is_file() and path.read_bytes() else ""
-        except (OSError, ValueError):
-            return ""
 
     def probe(self):
         inaccessible_efi = False
@@ -188,21 +171,10 @@ class SystemSecurityProbe:
         if uefi:
             secure = SecureBootState.UNKNOWN
             code, output, error = self._mokutil("--sb-state")
-            if code == 0 and output in ("SecureBoot enabled", "Secure Boot enabled"):
+            if code == 0 and not error and output in ("SecureBoot enabled", "Secure Boot enabled"):
                 secure = SecureBootState.ENABLED
-            elif code == 0 and output in ("SecureBoot disabled", "Secure Boot disabled"):
+            elif code == 0 and not error and output in ("SecureBoot disabled", "Secure Boot disabled"):
                 secure = SecureBootState.DISABLED
-            code, output, error = self._mokutil("--list-new")
-            if code == 0 and re.search(r"(?:SHA1|SHA256) Fingerprint:|(?:SHA1|SHA256)Fingerprint:", output):
-                mok = MokState.PENDING
-            elif code == 0 and not output:
-                certificate = self._certificate()
-                if certificate:
-                    code, output, error = self._mokutil("--test-key", certificate)
-                    if code == 0 and output == certificate + " is already enrolled":
-                        mok = MokState.ENROLLED
-                    elif code == 1 and output == certificate + " is not enrolled":
-                        mok = MokState.NOT_ENROLLED
         kernel, running, latest, dkms = self.kernel_adapter.read()
         headers = HeadersState.UNKNOWN
         try:
@@ -217,7 +189,13 @@ class SystemSecurityProbe:
                     headers = HeadersState.MISSING
         except (OSError, UnicodeError):
             pass
-        return KernelModuleContext(secure, uefi, kernel, running, latest, dkms, headers, mok, certificate)
+        signing = self.signing_probe.probe(running) if uefi else SigningEvidence(SigningReadiness.UNSUPPORTED)
+        # Global pending/enrolled hints cannot establish trust in the signing key.
+        mok = {SigningReadiness.READY_ENROLLED: MokState.ENROLLED,
+               SigningReadiness.CERTIFICATE_NOT_ENROLLED: MokState.NOT_ENROLLED,
+               SigningReadiness.PENDING_ENROLLMENT: MokState.PENDING}.get(signing.state, MokState.UNKNOWN)
+        return KernelModuleContext(secure, uefi, kernel, running, latest, dkms, headers,
+                                   mok, signing.certificate, signing)
 
 
 def explicit_dkms(name):
@@ -352,9 +330,12 @@ class DriverPreflight:
         deferred = not resolved and dkms == DkmsState.DKMS_POSSIBLE
         if deferred:
             warnings.append(PreflightIssue("module-alternatives", _("PackageKit must resolve the prebuilt/DKMS module alternatives before confirmation.")))
-        if uncertain and context.secure_boot_state in (SecureBootState.ENABLED, SecureBootState.UNKNOWN) and not deferred:
+        ready = (context.secure_boot_state == SecureBootState.ENABLED
+                 and dkms in (DkmsState.DKMS_REQUIRED, DkmsState.DKMS_POSSIBLE)
+                 and context.signing.state == SigningReadiness.READY_ENROLLED)
+        if uncertain and context.secure_boot_state in (SecureBootState.ENABLED, SecureBootState.UNKNOWN) and not deferred and not ready:
             blockers.append(PreflightIssue("secure-boot-dkms", _("This driver may need a DKMS module with Secure Boot active or unknown. "
-                "MOK enrollment and module signing cannot be guaranteed by this beta, even with an enrolled key. No changes will be applied.")))
+                "The actual DKMS signing certificate must be identified and enrolled before changes can be applied.")))
         if dkms in (DkmsState.DKMS_REQUIRED, DkmsState.DKMS_POSSIBLE) and not deferred:
             if context.headers_state != HeadersState.PRESENT:
                 blockers.append(PreflightIssue("headers-missing", _("Headers for the running kernel are missing or unverified. Install matching headers through system updates before retrying.")))
@@ -362,10 +343,11 @@ class DriverPreflight:
             warnings.append(PreflightIssue("module-unknown", _("The module build requirements could not be fully verified.")))
         return DriverPreflightResult(context.secure_boot_state, context.uefi, dkms, context.kernel_state,
                                      context.headers_state if uncertain else HeadersState.NOT_REQUIRED,
-                                     context.mok_state, tuple(warnings), tuple(blockers), bool(installs))
+                                     context.mok_state, tuple(warnings), tuple(blockers), bool(installs),
+                                     context.signing if uncertain else SigningEvidence(SigningReadiness.NOT_REQUIRED))
 
 
-def assess_activation(plan, context, installed_packages, failed=False, evidence=()):
+def assess_activation(plan, context, installed_packages, failed=False, evidence=(), bindings=(), before=()):
     """Fresh package state is necessary but never sufficient to claim ACTIVE."""
     results = []
     for selection in plan.selections:
@@ -380,12 +362,24 @@ def assess_activation(plan, context, installed_packages, failed=False, evidence=
                     installed.split(";")[:3] != expected.package_id.split(";")[:3]):
                 state = ActivationState.UNKNOWN
             elif installed:
-                if context.mok_state == MokState.PENDING:
+                ref = expected
+                if ref is None:
+                    from .transactions.models import PackageReference
+                    fact = next((item for item in evidence if item.installed and
+                                 item.package_id.split(";")[0] == name), None)
+                    ref = PackageReference(name, fact.package_id if fact else None)
+                check = DriverPreflight(context, evidence).check((ref,), resolved=True)
+                if check.dkms_state != DkmsState.NO_DKMS and (
+                        context.signing.state == SigningReadiness.PENDING_ENROLLMENT or context.mok_state == MokState.PENDING):
                     state = ActivationState.INSTALLED_MOK_REQUIRED
+                elif failed:
+                    state = ActivationState.INSTALLED_NOT_ACTIVE
                 else:
-                    ref = expected
-                    check = DriverPreflight(context, evidence).check((ref,) if ref else (), resolved=True)
-                    state = (ActivationState.INSTALLED_NOT_ACTIVE if check.blockers or failed else
-                             ActivationState.INSTALLED_REBOOT_REQUIRED)
-        results.append(DriverActivation(selection.device_id, name or "", state))
+                    from .activation import activation_state
+                    binding = dict(bindings).get(selection.device_id)
+                    prior = dict(before).get(selection.device_id)
+                    state = activation_state(name, binding, prior, context, check.dkms_state,
+                                             changing=selection.current.package_name != name)
+        results.append(DriverActivation(selection.device_id, name or "", state,
+                                       dict(bindings).get(selection.device_id), dict(before).get(selection.device_id)))
     return tuple(results)

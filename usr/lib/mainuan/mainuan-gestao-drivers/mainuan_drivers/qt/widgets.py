@@ -112,8 +112,21 @@ def themed_icon(icon_key):
     return QIcon.fromTheme("computer")
 
 
+def activation_text(state):
+    from ..backend.preflight import ActivationState
+    return {
+        ActivationState.ACTIVE_CONFIRMED: _("Driver active"),
+        ActivationState.INSTALLED_REBOOT_REQUIRED: _("Installed; restart to activate"),
+        ActivationState.INSTALLED_MOK_REQUIRED: _("Installed; MOK enrollment required"),
+        ActivationState.INSTALLED_ACTIVATION_UNVERIFIED: _("Installed; activation could not be confirmed"),
+        ActivationState.INSTALLED_NOT_ACTIVE: _("Installed; driver is not confirmed active"),
+        ActivationState.FAILED: _("The requested driver package is not installed."),
+        ActivationState.UNKNOWN: _("The current driver activation state is unknown."),
+    }[state]
+
+
 class DeviceWidget(QFrame):
-    def __init__(self, device, on_select=None, preview_only=False):
+    def __init__(self, device, on_select=None, preview_only=False, activation=None):
         super().__init__()
         self.setFrameShape(QFrame.Shape.StyledPanel)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
@@ -141,6 +154,15 @@ class DeviceWidget(QFrame):
         status = QLabel(device_status_text(device))
         status.setWordWrap(True)
         details.addWidget(status)
+        if activation:
+            label = QLabel(activation_text(activation.state))
+            label.setWordWrap(True)
+            binding = activation.binding
+            if binding:
+                label.setToolTip(_("Bound driver: %(driver)s\nModule: %(module)s\nSigner: %(signer)s") % {
+                    "driver": binding.driver or _("Unknown"), "module": binding.module or _("Unknown"),
+                    "signer": binding.signer or _("Unknown")})
+            details.addWidget(label)
 
         self.option_group = QButtonGroup(self)
         self._selected_button = None

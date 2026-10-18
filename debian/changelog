@@ -1,3 +1,14 @@
+mainuan-gestao-drivers (0.4) resolute; urgency=medium
+
+  * Audit upstreams and preserve ubuntu-drivers-common recommendations.
+  * Identify the actual DKMS signing certificate and verify its specific MOK.
+  * Allow Secure Boot DKMS only with verified enrolled signing infrastructure.
+  * Inspect sysfs device binding and refine post-installation activation states.
+  * Accept validated optional UDC package sets with the existing API fallback.
+  * Extend read-only signing, activation and simulated workflow coverage.
+
+ -- Mainuan Packaging <openwebosbr@gmail.com>  Sun, 18 Oct 2026 16:00:00 -0300
+
 mainuan-gestao-drivers (0.3) resolute; urgency=medium
 
   * Audit Mint and Ubuntu upstreams before porting relevant driver policies.

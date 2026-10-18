@@ -86,6 +86,16 @@ class TransactionPlanner:
                         PackageReference(package_identity(package_id)[0], package_id)
                         for package_id in backend.get_installed_nvidia_dependency_ids(name)
                     )
+                for related in option.packages or ():
+                    validate_package_name(related)
+                    installed = backend.is_package_installed(related)
+                    for current in (False, True) if installed else (False,):
+                        try:
+                            package_id = backend.get_packagekit_id(related, current)
+                        except PackageUnavailableError:
+                            package_id = None
+                        packages[(related, current)] = PackageReference(
+                            related, package_id, backend.package_requires_dkms(related))
         return cls(devices, packages, dependencies, preview_only)
 
     def _package(self, name, installed):
@@ -107,6 +117,7 @@ class TransactionPlanner:
                 raise PlanningError("Target is not a driver option for this device")
             if target.package_name and not target.builtin:
                 retained.add(target.package_name)
+                retained.update(target.packages or ())
             if target == current:
                 continue
             if current.option_type == DriverOptionType.MANUAL or target.option_type == DriverOptionType.MANUAL:
@@ -119,6 +130,9 @@ class TransactionPlanner:
             has_remove = current.option_type == DriverOptionType.PACKAGE and not current.builtin
             if has_install and not target.installed:
                 installs[target.package_name] = self._package(target.package_name, False)
+                for name in target.packages or ():
+                    if (name, True) not in self._packages:
+                        installs[name] = self._package(name, False)
             if has_remove and current.installed:
                 removals[current.package_name] = self._package(current.package_name, True)
                 for ref in self._nvidia_dependencies.get(current.package_name, ()):

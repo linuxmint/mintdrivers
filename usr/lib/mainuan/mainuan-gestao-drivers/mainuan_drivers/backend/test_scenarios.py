@@ -5,6 +5,8 @@ from dataclasses import replace
 from .preflight import (
     DkmsState, HeadersState, KernelModuleContext, KernelState, MokState, SecureBootState,
 )
+from .signing import SigningEvidence, SigningReadiness
+from .activation import DeviceBinding
 
 N_ = lambda text: text
 SCENARIOS = (
@@ -22,6 +24,14 @@ SCENARIOS = (
     ("kernel-outdated", N_("Kernel update pending")),
     ("headers-missing", N_("Kernel headers missing")),
     ("mok-pending", N_("MOK enrollment pending")),
+    ("secure-dkms-unrelated", N_("Secure Boot + DKMS + unrelated MOK")),
+    ("secure-dkms-pending", N_("Secure Boot + DKMS + matching enrollment pending")),
+    ("secure-dkms-unknown", N_("Secure Boot + DKMS + signing unknown")),
+    ("activation-active", N_("Installed + driver active")),
+    ("activation-reboot", N_("Installed + restart required")),
+    ("activation-mok", N_("Installed + MOK enrollment required")),
+    ("activation-unverified", N_("Installed + activation unverified")),
+    ("activation-old-driver", N_("Installed + previous driver bound")),
 )
 
 
@@ -40,6 +50,12 @@ def scenario_data(name):
     elif name.startswith("secure-dkms"):
         context = replace(context, secure_boot_state=SecureBootState.ENABLED,
                           mok_state=MokState.ENROLLED if name.endswith("enrolled") else MokState.NOT_ENROLLED)
+        readiness = {"secure-dkms-enrolled": SigningReadiness.READY_ENROLLED,
+                     "secure-dkms-missing": SigningReadiness.CERTIFICATE_NOT_ENROLLED,
+                     "secure-dkms-unrelated": SigningReadiness.CERTIFICATE_NOT_ENROLLED,
+                     "secure-dkms-pending": SigningReadiness.PENDING_ENROLLMENT}.get(name, SigningReadiness.UNKNOWN)
+        context = replace(context, signing=SigningEvidence(readiness, "/test/public.der"),
+                          mok_state=MokState.PENDING if readiness == SigningReadiness.PENDING_ENROLLMENT else context.mok_state)
     elif name == "unknown-dkms":
         context = replace(context, secure_boot_state=SecureBootState.UNKNOWN)
     elif name == "broadcom":
@@ -56,10 +72,25 @@ def scenario_data(name):
         context = replace(context, headers_state=HeadersState.MISSING)
     if name == "mok-pending":
         context = replace(context, mok_state=MokState.PENDING)
+    if name == "activation-mok":
+        context = replace(context, secure_boot_state=SecureBootState.ENABLED, mok_state=MokState.PENDING,
+                          signing=SigningEvidence(SigningReadiness.PENDING_ENROLLMENT, "/test/public.der"))
+    if name == "activation-unverified":
+        target, alternatives = "generic-driver", []
     drivers = {package: {"recommended": package == target, "from_distro": True, "free": False}
                for package in [target, *alternatives]}
     device = {"vendor": "Broadcom" if name == "broadcom" else "NVIDIA",
               "model": "Test adapter", "modalias": "", "drivers": drivers}
-    overrides = {package: ("1.0", "Test driver", False) for package in drivers}
+    overrides = {package: ("1.0", "Test driver", name.startswith("activation-") and package == target)
+                 for package in drivers}
     states = {package: state for package in drivers}
     return {"security-test": device}, overrides, context, states
+
+
+def scenario_bindings(name):
+    """Synthetic evidence only; never inspect host sysfs or invoke modinfo."""
+    if name == "activation-active":
+        return (("security-test", DeviceBinding("nvidia", "nvidia", True)),)
+    if name in ("activation-reboot", "activation-old-driver"):
+        return (("security-test", DeviceBinding("nouveau", "nouveau", True)),)
+    return ()

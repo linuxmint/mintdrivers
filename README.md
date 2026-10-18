@@ -1,7 +1,7 @@
 # Gestão de Drivers
 
 **Mainuan Gestão de Drivers** é uma ferramenta de hardware do projeto Mainuan,
-baseado no Kubuntu 26.04 LTS. A versão **0.3 é beta**.
+baseado no Kubuntu 26.04 LTS. A versão **0.4 é beta**.
 
 A interface oficial usa Qt6 Widgets/PyQt6. A detecção usa
 `ubuntu-drivers-common` e consultas APT, com backend Python independente da GUI.
@@ -40,24 +40,26 @@ dpkg-buildpackage -us -uc -b
 Instale o beta apenas em uma VM para validação:
 
 ```bash
-sudo apt install ./mainuan-gestao-drivers_0.3_all.deb
+sudo apt install ./mainuan-gestao-drivers_0.4_all.deb
 sudo apt remove mainuan-gestao-drivers
 ```
 
 Não há scripts para remover dependências, alterar repositórios, módulos ou
 Secure Boot durante instalação/remoção do aplicativo.
 Consulte [a arquitetura de transações](docs/qt-transactions.md) e o
-[roteiro de validação na VM](docs/beta-0.3-testing.md).
+[roteiro de validação na VM](docs/beta-0.4-testing.md).
 Trocas com remoção e instalação não são atômicas; em caso de falha parcial,
 o aplicativo detecta novamente o estado real, sem restaurar drivers automaticamente.
 Autoremove e remoção indiscriminada de dependências não são permitidos.
 O preflight verifica requisitos de módulo, kernel/headers, Secure Boot e MOK
-somente para leitura. DKMS com Secure Boot ativo/desconhecido permanece bloqueado
-quando a assinatura não pode ser garantida, mesmo com MOK inscrita. Módulos
+somente para leitura. DKMS com Secure Boot ativo pode prosseguir quando o
+certificado realmente usado pelo DKMS é identificado e sua inscrição MOK é
+confirmada. Uma MOK diferente não basta. Estado desconhecido ou inscrição
+pendente continuam bloqueados; não há geração de chave nem enrollment próprio. Módulos
 pré-compilados compatíveis não recebem o bloqueio DKMS. A Qt não descarrega nem
 carrega módulos Broadcom: orienta reiniciar. Pacote instalado não significa driver
 ativo; o resultado é reavaliado após a transação. Consulte a
-[auditoria upstream](docs/upstream-audit-0.3.md) e a
+[auditoria upstream](docs/upstream-audit-0.4.md) e a
 [política de acompanhamento](docs/upstream-sync-policy.md).
 
 ## Origem e Licença
