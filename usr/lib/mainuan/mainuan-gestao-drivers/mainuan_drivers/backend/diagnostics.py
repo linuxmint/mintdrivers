@@ -23,6 +23,8 @@ def diagnostic_text(snapshot, packagekit, view_state, simulated=False):
             data["devices"].append({"type": device.icon_key, "drivers": [
                 {"package": option.package_name, "candidate": option.candidate_version,
                  "installed": option.installed, "recommended": option.recommended,
-                 "source": option.source.value, "origins": [origin.__dict__ for origin in option.origins]}
+                 "source": option.source.value, "origins": [
+                     {"origin": origin.origin, "label": origin.label, "archive": origin.archive, "site": origin.site}
+                     for origin in option.origins]}
                 for option in device.drivers if option.package_name and not option.builtin]})
     return json.dumps(data, ensure_ascii=False, indent=2)

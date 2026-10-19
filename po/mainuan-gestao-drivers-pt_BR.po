@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: mainuan-gestao-drivers 0.6\n"
+"Project-Id-Version: mainuan-gestao-drivers 1.0~rc1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 10:52-0300\n"
-"PO-Revision-Date: 2025-07-05 19:31+0000\n"
+"POT-Creation-Date: 2026-10-18 17:20-0300\n"
+"PO-Revision-Date: 2026-10-18 17:20-0300\n"
 "Last-Translator: Eric Hepp <Unknown>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "Language: pt_BR\n"
@@ -21,27 +21,27 @@ msgstr ""
 
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/application.py:30
 msgid "Show detailed diagnostic logs"
-msgstr "Exibir logs detalhados de diagnóstico"
+msgstr "Exibir registros detalhados de diagnóstico"
 
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:82
 msgid ""
 "The driver detection backend is unavailable. Check the application "
 "dependencies and try again."
 msgstr ""
-"O backend de detecção de drivers está indisponível. Verifique as "
+"O mecanismo de detecção de drivers está indisponível. Verifique as "
 "dependências do aplicativo e tente novamente."
 
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:83
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:478
 msgid "Driver detection failed. Consult the application log for details."
 msgstr ""
-"Falha na detecção de drivers. Consulte o log do aplicativo para obter "
+"Falha na detecção de drivers. Consulte os registros do aplicativo para obter "
 "detalhes."
 
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:114
 #, python-format
 msgid "%s - Qt test mode"
-msgstr "%s - Modo de teste Qt"
+msgstr "%s - Modo de teste"
 
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:118
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:202
@@ -95,7 +95,7 @@ msgstr "Visualizar os pacotes planejados sem alterar o sistema"
 
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:204
 msgid "Close the driver manager"
-msgstr "Fechar o gestor de drivers"
+msgstr "Fechar o Gestão de Drivers"
 
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:205
 msgid "Request cancellation when PackageKit permits it"
@@ -241,8 +241,8 @@ msgid "Planned changes"
 msgstr "Alterações planejadas"
 
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:544
-msgid "Beta version"
-msgstr "Versão beta"
+msgid "Release candidate"
+msgstr "Versão candidata (RC)"
 
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:545
 msgid "Changes that will be applied"
@@ -319,19 +319,19 @@ msgstr "Assinatura DKMS: configurada"
 
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:591
 msgid "Kernel headers: present"
-msgstr "Headers do kernel: presentes"
+msgstr "Cabeçalhos do kernel: presentes"
 
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:592
 msgid "Kernel headers: missing"
-msgstr "Headers do kernel: ausentes"
+msgstr "Cabeçalhos do kernel: ausentes"
 
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:593
 msgid "Kernel headers: unknown"
-msgstr "Headers do kernel: desconhecidos"
+msgstr "Cabeçalhos do kernel: desconhecidos"
 
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:594
 msgid "Kernel headers: not required"
-msgstr "Headers do kernel: não necessários"
+msgstr "Cabeçalhos do kernel: não necessários"
 
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/qt/main_window.py:598
 msgid "Restart: required to complete activation"
@@ -658,8 +658,8 @@ msgid ""
 "Headers for the running kernel are missing or unverified. Install matching "
 "headers through system updates before retrying."
 msgstr ""
-"Os headers do kernel em uso estão ausentes ou não foram verificados. Instale "
-"os headers correspondentes pelas atualizações do sistema antes de tentar "
+"Os cabeçalhos do kernel em uso estão ausentes ou não foram verificados. Instale "
+"os cabeçalhos correspondentes pelas atualizações do sistema antes de tentar "
 "novamente."
 
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/preflight.py:353
@@ -717,7 +717,7 @@ msgstr "NVIDIA com pin personalizado proprietário"
 
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/test_scenarios.py:21
 msgid "NVIDIA open recommended"
-msgstr "NVIDIA open recomendado"
+msgstr "NVIDIA de código aberto recomendado"
 
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/test_scenarios.py:22
 msgid "NVIDIA closed recommended"
@@ -725,7 +725,7 @@ msgstr "NVIDIA proprietário recomendado"
 
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/test_scenarios.py:23
 msgid "NVIDIA server recommended"
-msgstr "NVIDIA server recomendado"
+msgstr "NVIDIA para servidores recomendado"
 
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/test_scenarios.py:24
 msgid "Kernel update pending"
@@ -733,7 +733,7 @@ msgstr "Atualização de kernel pendente"
 
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/test_scenarios.py:25
 msgid "Kernel headers missing"
-msgstr "Headers do kernel ausentes"
+msgstr "Cabeçalhos do kernel ausentes"
 
 #: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/test_scenarios.py:26
 msgid "MOK enrollment pending"
@@ -982,13 +982,16 @@ msgstr ""
 "Este driver requer um fluxo de Secure Boot que ainda não é suportado por "
 "esta versão beta. Nenhuma configuração de firmware ou MOK será alterada."
 
-#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/planner.py:175
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/planner.py:179
 msgid "The selected device is no longer available"
 msgstr "O dispositivo selecionado não está mais disponível"
 
-#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/planner.py:180
+#: usr/lib/mainuan/mainuan-gestao-drivers/mainuan_drivers/backend/transactions/planner.py:184
 msgid "The selected driver is no longer available"
 msgstr "O driver selecionado não está mais disponível"
+
+#~ msgid "Beta version"
+#~ msgstr "Versão beta"
 
 #~ msgid "This device is using the recommended driver."
 #~ msgstr "Este dispositivo está usando o driver recomendado."

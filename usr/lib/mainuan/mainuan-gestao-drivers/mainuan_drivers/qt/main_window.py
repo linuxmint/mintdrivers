@@ -541,7 +541,7 @@ class PlanDialog(QDialog):
         self.resize(560, 420)
         layout = QVBoxLayout(self)
         if confirmation:
-            layout.addWidget(QLabel(_("Beta version")))
+            layout.addWidget(QLabel(_("Release candidate")))
             label = QLabel(_("Changes that will be applied"))
             label.setWordWrap(True)
             layout.addWidget(label)

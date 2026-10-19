@@ -1,7 +1,8 @@
 # Gestão de Drivers
 
 **Mainuan Gestão de Drivers** é uma ferramenta de hardware do projeto Mainuan,
-baseado no Kubuntu 26.04 LTS. A versão **0.6 é beta**, ainda não Release Candidate.
+baseado no Kubuntu 26.04 LTS. A versão **1.0 RC1** é candidata à versão final,
+com arquitetura e funcionalidades congeladas para validação; ainda não é 1.0 final.
 
 A aplicação é integralmente Qt6 Widgets/PyQt6, sem frontend GTK ou XApp. A detecção usa
 `ubuntu-drivers-common` e consultas APT, com backend Python independente da GUI.
@@ -46,17 +47,22 @@ python3 tests/probe_packagekit_readonly.py
 dpkg-buildpackage -us -uc -b
 ```
 
-Instale o beta apenas em uma VM para validação:
+Instale o candidato em uma VM para validação:
 
 ```bash
-sudo apt install ./mainuan-gestao-drivers_0.6_all.deb
+sudo apt install './mainuan-gestao-drivers_1.0~rc1_all.deb'
 sudo apt remove mainuan-gestao-drivers
 ```
 
 Não há scripts para remover dependências, alterar repositórios, módulos ou
 Secure Boot durante instalação/remoção do aplicativo.
 Consulte [a arquitetura de transações](docs/qt-transactions.md) e o
-[roteiro de validação e upgrades 0.4/0.5 para 0.6 na VM](docs/beta-0.6-testing.md).
+[roteiro de instalação, upgrades 0.4/0.5/0.6 e purge na VM](docs/1.0-rc1-testing.md).
+Consulte também a [matriz de testes](docs/rc1-test-matrix.md) e os
+[critérios para 1.0 final](docs/1.0-release-criteria.md).
+Hardware real adicional ainda possui cobertura limitada; cenários fictícios
+não substituem validação com hardware compatível e não devem ser confundidos
+com instalações reais. Não force um driver incompatível na VM.
 O upgrade retira o conffile sudoers obsoleto pelo mecanismo Debian apropriado;
 modificações locais são preservadas como backup inativo até o purge.
 Trocas com remoção e instalação não são atômicas; em caso de falha parcial,
@@ -70,7 +76,7 @@ pendente continuam bloqueados; não há geração de chave nem enrollment própr
 pré-compilados compatíveis não recebem o bloqueio DKMS. A Qt não descarrega nem
 carrega módulos Broadcom: orienta reiniciar. Pacote instalado não significa driver
 ativo; o resultado é reavaliado após a transação. Consulte a
-[auditoria upstream](docs/upstream-audit-0.6.md) e a
+[auditoria upstream](docs/upstream-audit-1.0-rc1.md) e a
 [política de acompanhamento](docs/upstream-sync-policy.md).
 
 ## Origem e Licença

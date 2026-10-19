@@ -68,7 +68,7 @@ class DriverExecutionUITests(unittest.TestCase):
         prepared = PreparedPlan(plan, plan.installs, plan.removals)
         dialog = PlanDialog(prepared, confirmation=True, changed=True)
         labels = [label.text() for label in dialog.findChildren(QLabel)]
-        self.assertIn("Beta version", labels)
+        self.assertIn("Release candidate", labels)
         self.assertIn("new-driver", labels)
         self.assertIn("old-driver", labels)
         self.assertTrue(any("Review the updated" in label for label in labels))

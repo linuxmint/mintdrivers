@@ -1,3 +1,14 @@
+mainuan-gestao-drivers (1.0~rc1) UNRELEASED; urgency=medium
+
+  * Freeze the Mainuan/Kubuntu port with pure Qt6, without GTK/XApp.
+  * Consolidate PackageKit/PolicyKit, UDC NVIDIA and third-party APT support.
+  * Preserve DKMS/Secure Boot/MOK checks, Broadcom and activation detection.
+  * Retain Live Session protection, accessibility and conffile migration.
+  * Harden malformed plan handling and diagnostic metadata privacy.
+  * Add RC regressions, validation matrix and final release criteria.
+
+ -- Mainuan Packaging <openwebosbr@gmail.com>  Sun, 18 Oct 2026 17:17:46 -0300
+
 mainuan-gestao-drivers (0.6) UNRELEASED; urgency=medium
 
   * Preserve distribution/third-party source and APT candidate origin metadata.

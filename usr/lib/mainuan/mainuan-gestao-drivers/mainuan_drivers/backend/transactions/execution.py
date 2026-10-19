@@ -384,7 +384,7 @@ class DriverExecutionController(QObject):
         return True
 
     def confirm(self, prepared):
-        if self.active or prepared is not self._prepared:
+        if self.active or not isinstance(prepared, PreparedPlan) or prepared is not self._prepared:
             return False
         if prepared.preflight and prepared.preflight.blockers:
             return False
@@ -400,7 +400,7 @@ class DriverExecutionController(QObject):
         return True
 
     def discard(self, prepared):
-        if not self.active and prepared is self._prepared:
+        if not self.active and isinstance(prepared, PreparedPlan) and prepared is self._prepared:
             self._finish(TransactionState.CANCELLED)
 
     def _set_busy(self, busy):

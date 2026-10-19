@@ -21,7 +21,7 @@ def member(path, mode=0o644):
 
 class QtOnlyPackagingTests(unittest.TestCase):
     def setUp(self):
-        self.control = ("Package: %s\nVersion: 0.6\nArchitecture: all\n"
+        self.control = ("Package: %s\nVersion: 1.0~rc1\nArchitecture: all\n"
                         "Depends: python3, python3-pyqt6, python3-apt, ubuntu-drivers-common, packagekit\n"
                         "Recommends: mokutil, openssl, kmod\n" % PACKAGE)
         self.members = [member("usr/bin/" + PACKAGE),
@@ -31,7 +31,7 @@ class QtOnlyPackagingTests(unittest.TestCase):
         self.scripts = dict.fromkeys(("preinst", "postinst", "postrm"), text)
 
     def test_clean_qt_payload_and_migration_pass(self):
-        self.assertEqual(audit_package(self.control, self.members, self.scripts)["Version"], "0.6")
+        self.assertEqual(audit_package(self.control, self.members, self.scripts)["Version"], "1.0~rc1")
 
     def test_sudoers_file_and_even_empty_directory_fail(self):
         for path in ("etc/sudoers.d", "etc/sudoers.d/rule", "etc/sudoers"):
@@ -75,7 +75,7 @@ class QtOnlyPackagingTests(unittest.TestCase):
         audit_package(self.control, self.members, scripts)
 
     def test_wrong_version_or_missing_direct_apt_dependency_fails(self):
-        for control in (self.control.replace("Version: 0.6", "Version: 0.4"),
+        for control in (self.control.replace("Version: 1.0~rc1", "Version: 0.4"),
                         self.control.replace("python3-apt, ", "")):
             with self.assertRaises(PackageAuditError):
                 audit_package(control, self.members, self.scripts)

@@ -220,7 +220,7 @@ class UxAndDiagnosticTests(unittest.TestCase):
     def test_diagnostic_allowlist_and_explicit_clipboard_action(self):
         window, snapshot = self.window("third-party-recommended")
         data = json.loads(diagnostic_text(snapshot, True, window.ui_state, True))
-        self.assertEqual(data["version"], "0.6")
+        self.assertEqual(data["version"], "1.0~rc1")
         self.assertTrue(data["test_mode"])
         self.assertNotIn("sys_path", json.dumps(data))
         self.assertNotIn("certificate", json.dumps(data))
@@ -317,7 +317,7 @@ class CommandLineTests(unittest.TestCase):
         launcher = Path(__file__).resolve().parents[1] / "usr/bin/mainuan-gestao-drivers"
         result = subprocess.run([str(launcher), "--version"], capture_output=True, text=True, timeout=10)
         self.assertEqual(result.returncode, 0)
-        self.assertIn("0.6", result.stdout)
+        self.assertIn("1.0~rc1", result.stdout)
         self.assertNotIn("Traceback", result.stderr)
 
     def test_normal_and_debug_logging_levels(self):

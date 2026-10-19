@@ -26,7 +26,7 @@ def dependency_names(value):
 
 def audit_package(control, members, scripts, conffiles=""):
     metadata = Parser().parsestr(control)
-    if (metadata["Package"], metadata["Version"], metadata["Architecture"]) != (PACKAGE, "0.6", "all"):
+    if (metadata["Package"], metadata["Version"], metadata["Architecture"]) != (PACKAGE, "1.0~rc1", "all"):
         raise PackageAuditError("Unexpected package identity/version/architecture")
     depends = dependency_names(metadata["Depends"] or "")
     required = {"python3", "python3-pyqt6", "python3-apt", "ubuntu-drivers-common", "packagekit"}
@@ -44,7 +44,9 @@ def audit_package(control, members, scripts, conffiles=""):
         if (path.is_absolute() or ".." in path.parts or any(part.startswith("sudoers") for part in path.parts)
                 or "gtk" in lower or "xapp" in lower
                 or "load-broadcom" in lower or "mintdrivers" in lower
-                or "tests" in path.parts or "__pycache__" in path.parts
+                or set(path.parts) & {"tests", "tools", ".git", ".github", ".pytest_cache", "__pycache__"}
+                or path.name in {"qt_ux_probe.py", "probe_packagekit_readonly.py", "inspect_deb.py", "makepot", "Makefile"}
+                or name.endswith((".deb", ".buildinfo", ".changes", ".dsc"))
                 or name.endswith((".pyc", ".pyo")) or "packagekit_mutation_probe" in name
                 or name.startswith("usr/share/polkit-1/actions")):
             raise PackageAuditError("Forbidden payload path: " + name)

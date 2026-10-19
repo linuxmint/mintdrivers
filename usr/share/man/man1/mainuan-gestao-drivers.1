@@ -1,4 +1,4 @@
-.TH MAINUAN-GESTAO-DRIVERS 1 "October 2026" "Mainuan 0.6" "User Commands"
+.TH MAINUAN-GESTAO-DRIVERS 1 "October 2026" "Mainuan 1.0 RC1" "User Commands"
 .SH NAME
 mainuan-gestao-drivers \- detect hardware drivers and confirm package changes
 .SH SYNOPSIS
@@ -6,13 +6,14 @@ mainuan-gestao-drivers \- detect hardware drivers and confirm package changes
 .RI [ test ]
 .RI [ --debug ]
 .RI [ --version ]
+.RI [ --help ]
 .SH DESCRIPTION
 Lists additional drivers using the shared driver detection backend.
 Driver selections produce a preview of planned package changes.
 Applying changes requires explicit confirmation of a revalidated plan.
 PackageKit performs installation and removal; the session PolicyKit agent
 handles authorization. No password is collected by this application.
-This is the Qt6 interface of Mainuan Gestao de Drivers, beta 0.6.
+This is the Qt6 interface of Mainuan Gestao de Drivers, release candidate 1.0 RC1.
 The legacy GTK frontend and its privileged Broadcom helper are no longer shipped.
 Driver switches may remove packages before installing replacements and are
 not atomic. Failed operations trigger fresh detection, without automatic rollback.
@@ -41,6 +42,9 @@ Enable detailed diagnostic logging without changing driver policy.
 .TP
 .B --version
 Display the application version and exit.
+.TP
+.B --help
+Display command usage and exit.
 .SH DIAGNOSTICS
 The Help menu can copy a local diagnostic summary to the clipboard on request.
 No automatic upload is performed.
