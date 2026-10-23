@@ -277,15 +277,7 @@ class Application:
 
         for pkg in self.driver_changes:
             if pkg.is_installed:
-                removals.append(self.get_package_id(pkg.installed))
-                # The main NVIDIA package is only a metapackage.
-                # We need to collect its dependencies, so that
-                # we can uninstall the driver properly.
-                if 'nvidia' in pkg.shortname:
-                    for dep in self.get_dependencies(self.apt_cache, pkg.shortname, 'nvidia'):
-                        dep_pkg = self.apt_cache[dep]
-                        if dep_pkg.is_installed:
-                            removals.append(self.get_package_id(dep_pkg.installed))
+                removals.extend(self.get_removals(pkg))
             else:
                 installs.append(self.get_package_id(pkg.candidate))
                 if pkg.shortname == "broadcom-sta-dkms":
@@ -402,6 +394,36 @@ class Application:
         """ Return the PackageKit package id """
         assert isinstance(ver, apt.package.Version)
         return "%s;%s;%s;" % (ver.package.shortname, ver.version, ver.package.architecture())
+
+    def get_removals(self, pkg):
+        """ Return the PackageKit ids of pkg and everything that must go with it """
+        to_remove = [pkg]
+        # The main NVIDIA package is only a metapackage.
+        # We need to collect its dependencies, so that
+        # we can uninstall the driver properly.
+        if 'nvidia' in pkg.shortname:
+            for dep in self.get_dependencies(self.apt_cache, pkg.shortname, 'nvidia'):
+                if dep in self.apt_cache and self.apt_cache[dep].is_installed:
+                    to_remove.append(self.apt_cache[dep])
+
+        # PackageKit refuses to remove a package if something still installed
+        # depends on it, so keep adding whatever the removal breaks until
+        # nothing is left broken (this is what apt does).
+        try:
+            with self.apt_cache.actiongroup():
+                for p in to_remove:
+                    p.mark_delete(auto_fix=False)
+                while self.apt_cache.broken_count > 0:
+                    broken = [p for p in self.apt_cache if p.is_inst_broken]
+                    for p in broken:
+                        p.mark_delete(auto_fix=False)
+                    if any(p.is_inst_broken for p in broken):
+                        break
+            removals = [self.get_package_id(p.installed) for p in self.apt_cache.get_changes() if p.marked_delete]
+        finally:
+            self.apt_cache.clear()
+
+        return removals
 
     @staticmethod
     def get_dependencies(apt_cache, package_name, pattern=None):
