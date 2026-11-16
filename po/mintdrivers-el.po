@@ -8,20 +8,20 @@ msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2022-09-16 10:45+0100\n"
-"PO-Revision-Date: 2023-05-08 13:24+0000\n"
-"Last-Translator: Ourania J. Banti <Unknown>\n"
+"PO-Revision-Date: 2026-10-10 13:09+0000\n"
+"Last-Translator: Dimitris Spentzos <Unknown>\n"
 "Language-Team: Greek <el@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2026-01-08 15:38+0000\n"
-"X-Generator: Launchpad (build 99c00f518760bdd50fc6e353e7736d2fff8fba4a)\n"
+"X-Launchpad-Export-Date: 2026-11-16 11:55+0000\n"
+"X-Generator: Launchpad (build 72ba15af7e009b17d4aa1467977127ac8392a4de)\n"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67 generate_desktop_files:26
 #: generate_desktop_files:41 usr/share/linuxmint/mintdrivers/main.ui.h:12
 msgid "Driver Manager"
-msgstr "Διαχειριστής οδηγών"
+msgstr "Διαχείριση προγραμμάτων οδήγησης"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:71
 msgid "Re_vert"
@@ -29,7 +29,7 @@ msgstr "Επαναφο_ρά"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:73
 msgid "_Apply Changes"
-msgstr "Εφαρμογή _Αλλαγών"
+msgstr "Εφ_αρμογή αλλαγών"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:75
 msgid "_Cancel"
@@ -41,15 +41,15 @@ msgstr "_Επανεκκίνηση..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:211
 msgid "Downloading drivers..."
-msgstr "Λήψη οδηγών..."
+msgstr "Λήψη προγραμμάτων οδήγησης..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:213
 msgid "Installing drivers..."
-msgstr "Εγκατάσταση οδηγών..."
+msgstr "Εγκατάσταση προγραμμάτων οδήγησης..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:215
 msgid "Removing drivers..."
-msgstr "Αφαίρεση οδηγών..."
+msgstr "Αφαίρεση προγραμμάτων οδήγησης..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:217
 msgid "Cancelling..."
@@ -57,7 +57,7 @@ msgstr "Ακύρωση..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:219
 msgid "Loading cache..."
-msgstr "Φόρτωση λανθάνουσας μνήμης..."
+msgstr "Φόρτωση προσωρινής μνήμης..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:423
 msgid "This device is using the recommended driver."
@@ -69,15 +69,16 @@ msgstr "Αυτή η συσκευή χρησιμοποιεί ένα εναλλα�
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:425
 msgid "This device is using a manually-installed driver."
-msgstr "Αυτή η συσκευή χρησιμοποιεί ένα χειροκίνητα εγκατεστημένο οδηγό."
+msgstr ""
+"Αυτή η συσκευή χρησιμοποιεί ένα χειροκίνητα εγκατεστημένο πρόγραμμα οδήγησης."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:426
 msgid "This device is not working."
-msgstr "Αυτή η συσκευή δε λειτουργεί."
+msgstr "Αυτή η συσκευή δεν λειτουργεί."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:435
 msgid "Continue using a manually installed driver"
-msgstr "Συνέχεια χρήσης του χειροκίνητα εγκατεστημένου οδηγού"
+msgstr "Συνέχεια χρήσης χειροκίνητα εγκατεστημένου προγράμματος οδήγησης"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:468
 msgid "Version"
@@ -89,15 +90,15 @@ msgstr "προτείνεται"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:473
 msgid "open-source"
-msgstr "ανοιχτού-κώδικα"
+msgstr "ανοικτού κώδικα"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:476
 msgid "requires a connection to the Internet"
-msgstr "απαιτείται σύνδεση στο Διαδίκτυο"
+msgstr "απαιτείται σύνδεση στο διαδίκτυο"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:500
 msgid "Do not use the device"
-msgstr "Να μη χρησιμοποιείται αυτή η συσκευή"
+msgstr "Να μην χρησιμοποιείται η συσκευή"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:518
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:519
@@ -120,28 +121,28 @@ msgstr "Μην ανανεώνετε τον μικροκώδικα της CPU"
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:683
 msgid "You need to restart the computer to complete the driver changes."
 msgstr ""
-"Πρέπει να επανεκκινήσετε τον υπολογιστή για να ολοκληρωθούν οι αλλαγές του "
-"οδηγού."
+"Πρέπει να επανεκκινήσετε τον υπολογιστή για να ολοκληρωθούν οι αλλαγές των "
+"προγραμμάτων οδήγησης."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:697
 #, python-format
 msgid "%(count)d proprietary driver in use."
 msgid_plural "%(count)d proprietary drivers in use."
-msgstr[0] "%(count)d ιδιοταγής οδηγός σε χρήση."
-msgstr[1] "%(count)d ιδοταγείς οδηγοί σε χρήση."
+msgstr[0] "%(count)d ιδιοταγές πρόγραμμα οδήγησης σε χρήση."
+msgstr[1] "%(count)d ιδιοταγή προγράμματα οδήγησης σε χρήση."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:702
 msgid "No proprietary drivers are in use."
-msgstr "Δε χρησιμοποιούνται ιδιοταγείς οδηγοί."
+msgstr "Δεν χρησιμοποιούνται ιδιοταγή προγράμματα οδήγησης."
 
 #: generate_desktop_files:26 generate_desktop_files:41
 #: usr/share/linuxmint/mintdrivers/main.ui.h:13
 msgid "Additional and proprietary drivers"
-msgstr "Πρόσθετοι και ιδιόκτητοι οδηγοί"
+msgstr "Πρόσθετα και ιδιοταγή προγράμματα οδήγησης"
 
 #: generate_desktop_files:41
 msgid "Manage the drivers for your devices"
-msgstr "Διαχειριστείτε τους οδηγούς για τις συσκευές σας"
+msgstr "Διαχειριστείτε τα προγράμματα οδήγησης για τις συσκευές σας"
 
 #: generate_desktop_files:67 usr/share/linuxmint/mintdrivers/main.ui.h:11
 msgid "Mount installation media"
@@ -149,23 +150,23 @@ msgstr "Προσαρτήστε μέσο εγκατάστασης"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
 msgid "Looking for drivers"
-msgstr "Αναζήτηση οδηγών"
+msgstr "Αναζήτηση προγραμμάτων οδήγησης"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:2
 msgid "Please wait..."
-msgstr "Παρακαλώ περιμένετε..."
+msgstr "Περιμένετε..."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:3
 msgid "No drivers needed"
-msgstr "Δε χρειάζονται οδηγοί"
+msgstr "Δεν απαιτούνται προγράμματα οδήγησης"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:4
 msgid "Your computer does not need any additional drivers."
-msgstr "Ο υπολογιστής σας δεν χρειάζεται επιπλέον οδηγούς."
+msgstr "Ο υπολογιστής σας δεν χρειάζεται επιπλέον προγράμματα οδήγησης."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:5
 msgid "An error occurred"
-msgstr "Προέκυψε ένα σφάλμα"
+msgstr "Προέκυψε σφάλμα"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:6
 msgid "OK"
@@ -180,8 +181,8 @@ msgid ""
 "Connect to the Internet or insert the Linux Mint installation disc (or USB "
 "stick)."
 msgstr ""
-"Συνδεθείτε στο διαδίκτυο ή τοποθετήστε το δίσκο εγκατάστασης του Linux Mint "
-"(ή το USB stick)."
+"Συνδεθείτε στο διαδίκτυο ή τοποθετήστε τον δίσκο εγκατάστασης (ή τη μονάδα "
+"USB) του Linux Mint."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:9
 msgid "Installation media detected"
@@ -190,4 +191,4 @@ msgstr "Εντοπίστηκε μέσο εγκατάστασης"
 #: usr/share/linuxmint/mintdrivers/main.ui.h:10
 msgid "Press the button below to mount it as a software repository."
 msgstr ""
-"Πατήστε το κουμπί παρακάτω για να το προσαρτήσετε ως πηγή λογισμικού."
+"Πατήστε το παρακάτω κουμπί για να το προσαρτήσετε ως αποθετήριο λογισμικού."

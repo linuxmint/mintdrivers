@@ -8,68 +8,69 @@ msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2022-09-16 10:45+0100\n"
-"PO-Revision-Date: 2021-12-05 09:38+0000\n"
-"Last-Translator: Murat Käribay <Unknown>\n"
+"PO-Revision-Date: 2026-01-24 17:27+0000\n"
+"Last-Translator: Baurzhan Muftakhidinov <Unknown>\n"
 "Language-Team: Kazakh <kk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2026-01-08 15:39+0000\n"
-"X-Generator: Launchpad (build 99c00f518760bdd50fc6e353e7736d2fff8fba4a)\n"
+"X-Launchpad-Export-Date: 2026-11-16 11:55+0000\n"
+"X-Generator: Launchpad (build 72ba15af7e009b17d4aa1467977127ac8392a4de)\n"
+"Language: kk\n"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67 generate_desktop_files:26
 #: generate_desktop_files:41 usr/share/linuxmint/mintdrivers/main.ui.h:12
 msgid "Driver Manager"
-msgstr "Драйверлердің менеджері"
+msgstr "Драйвер менеджері"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:71
 msgid "Re_vert"
-msgstr "_Қалпына келтіру"
+msgstr "Кері қай_тару"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:73
 msgid "_Apply Changes"
-msgstr "_Қолдануға өзгерту"
+msgstr "Өзгерістерді іске асы_ру"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:75
 msgid "_Cancel"
-msgstr "_Бас тарту"
+msgstr "Бас тар_ту"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:77
 msgid "_Restart..."
-msgstr "_Қайтақосу..."
+msgstr "Қайта іске қо_су..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:211
 msgid "Downloading drivers..."
-msgstr ""
+msgstr "Драйверлер жүктелуде..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:213
 msgid "Installing drivers..."
-msgstr ""
+msgstr "Драйверлер орнатылуда..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:215
 msgid "Removing drivers..."
-msgstr ""
+msgstr "Драйверлер өшірілуде..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:217
 msgid "Cancelling..."
-msgstr ""
+msgstr "Бас тартылуда..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:219
 msgid "Loading cache..."
-msgstr ""
+msgstr "Кэш жүктелуде..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:423
 msgid "This device is using the recommended driver."
-msgstr "Бұл құрылғы ұсынған драйверді пайдаланады."
+msgstr "Бұл құрылғы ұсынылған драйверді қолдануда."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:424
 msgid "This device is using an alternative driver."
-msgstr "Бұл құрылғы балама драйверді пайдаланады."
+msgstr "Бұл құрылғы балама драйверді қолдануда."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:425
 msgid "This device is using a manually-installed driver."
-msgstr "Бұл құрылғы қолмен орнатылған драйверді пайдаланады."
+msgstr "Бұл құрылғы қолмен орнатылған драйверді қолдануда."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:426
 msgid "This device is not working."
@@ -81,7 +82,7 @@ msgstr "Қолмен орнатылған драйверді пайдалану�
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:468
 msgid "Version"
-msgstr "Нұсқа"
+msgstr "Нұсқасы"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:471
 msgid "recommended"
@@ -89,15 +90,15 @@ msgstr "ұсынылған"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:473
 msgid "open-source"
-msgstr "еркін"
+msgstr "ашық бастапқы кодты"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:476
 msgid "requires a connection to the Internet"
-msgstr "Ғаламторға қосылуы қажет"
+msgstr "Интернетке қосылуды қажет етеді"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:500
 msgid "Do not use the device"
-msgstr "Бұл құрылғыны қолданбау"
+msgstr "Құрылғыны пайдаланбау"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:518
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:519
@@ -115,74 +116,78 @@ msgstr "Процессор микрокоды"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:642
 msgid "Do not update the CPU microcode"
-msgstr "Процессор микрокоды жаңартылмайды"
+msgstr "CPU микрокодын жаңартпау"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:683
 msgid "You need to restart the computer to complete the driver changes."
-msgstr "Драйвердің параметрлерін аяқтау үшін компьютерді қайтақосу қажет."
+msgstr "Драйвер өзгерістерін аяқтау үшін компьютерді қайта іске қосу қажет."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:697
 #, python-format
 msgid "%(count)d proprietary driver in use."
 msgid_plural "%(count)d proprietary drivers in use."
-msgstr[0] "%(count)d жеке драйвер пайдаланылуда"
-msgstr[1] "%(count)d жеке драйверлер пайдаланылуда"
+msgstr[0] "%(count)d меншікті драйвер пайдаланылуда."
+msgstr[1] "%(count)d меншікті драйвер пайдаланылуда."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:702
 msgid "No proprietary drivers are in use."
-msgstr "Жеке драйвер пайдаланылмайды"
+msgstr "Меншікті драйверлер пайдаланылмайды."
 
 #: generate_desktop_files:26 generate_desktop_files:41
 #: usr/share/linuxmint/mintdrivers/main.ui.h:13
 msgid "Additional and proprietary drivers"
-msgstr ""
+msgstr "Қосымша және меншікті драйверлер"
 
 #: generate_desktop_files:41
 msgid "Manage the drivers for your devices"
-msgstr "Құрылғылар үшін драйверлерді басқару"
+msgstr "Құрылғыларыңыздың драйверлерін басқару"
 
 #: generate_desktop_files:67 usr/share/linuxmint/mintdrivers/main.ui.h:11
 msgid "Mount installation media"
-msgstr ""
+msgstr "Орнату медиасын орнату"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
 msgid "Looking for drivers"
-msgstr ""
+msgstr "Драйверлер ізделуде"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:2
 msgid "Please wait..."
-msgstr ""
+msgstr "Күте тұрыңыз..."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:3
 msgid "No drivers needed"
-msgstr ""
+msgstr "Драйверлер қажет емес"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:4
 msgid "Your computer does not need any additional drivers."
-msgstr "Компьютеріңізге қосымша драйверлер керек емес"
+msgstr "Компьютеріңізге қосымша драйверлер қажет емес."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:5
 msgid "An error occurred"
-msgstr "Қате кетті"
+msgstr "Қате орын алды"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:6
 msgid "OK"
-msgstr "ОК"
+msgstr "OK"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:7
 msgid "You appear to be offline"
-msgstr ""
+msgstr "Сіз желіден тыссыз сияқтысыз"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:8
 msgid ""
 "Connect to the Internet or insert the Linux Mint installation disc (or USB "
 "stick)."
 msgstr ""
+"Интернетке қосылыңыз немесе Linux Mint орнату дискісін (немесе USB "
+"флешкасын) салыңыз."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:9
 msgid "Installation media detected"
-msgstr ""
+msgstr "Орнату медиасы анықталды"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:10
 msgid "Press the button below to mount it as a software repository."
 msgstr ""
+"Оны бағдарламалық қамтама қоймасы ретінде орнату үшін төмендегі батырманы "
+"басыңыз."

@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: linuxmint\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2022-09-16 10:45+0100\n"
-"PO-Revision-Date: 2025-04-24 12:40+0000\n"
-"Last-Translator: Hiiri522 <Unknown>\n"
+"PO-Revision-Date: 2026-09-08 05:40+0000\n"
+"Last-Translator: Hiiri522 <hhiiri522@gmail.com>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2026-01-08 15:38+0000\n"
-"X-Generator: Launchpad (build 99c00f518760bdd50fc6e353e7736d2fff8fba4a)\n"
+"X-Launchpad-Export-Date: 2026-11-16 11:54+0000\n"
+"X-Generator: Launchpad (build 72ba15af7e009b17d4aa1467977127ac8392a4de)\n"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:67 generate_desktop_files:26
 #: generate_desktop_files:41 usr/share/linuxmint/mintdrivers/main.ui.h:12
@@ -53,7 +53,7 @@ msgstr "Poistetaan ajureita..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:217
 msgid "Cancelling..."
-msgstr "Perutaan..."
+msgstr "Peruutetaan..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:219
 msgid "Loading cache..."
@@ -61,15 +61,15 @@ msgstr "Ladataan välimuistia..."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:423
 msgid "This device is using the recommended driver."
-msgstr "Tämä laite käyttää suositeltua ajuria."
+msgstr "Tämä laite käyttää ajuria, jota suositellaan."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:424
 msgid "This device is using an alternative driver."
-msgstr "Tämä laite käyttää vaihtoehtoista ajuria."
+msgstr "Tämä laite käyttää ajuria, joka on vaihtoehtoinen."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:425
 msgid "This device is using a manually-installed driver."
-msgstr "Tämä laite käyttää ajuria, joka on asennettu manuaalisesti."
+msgstr "Tämä laite käyttää ajuria, joka on manuaalisesti asennettu."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:426
 msgid "This device is not working."
@@ -93,11 +93,11 @@ msgstr "avoin lähdekoodi"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:476
 msgid "requires a connection to the Internet"
-msgstr "vaatii Internet-yhteyden"
+msgstr "vaatii internet-yhteyden"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:500
 msgid "Do not use the device"
-msgstr "Älä käytä laitetta"
+msgstr "Älä käytä tätä laitetta"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:518
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:519
@@ -119,7 +119,7 @@ msgstr "Älä päivitä suorittimen mikrokoodia"
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:683
 msgid "You need to restart the computer to complete the driver changes."
-msgstr "Käynnistä tietokone uudelleen muutosten tulemiseksi voimaan."
+msgstr "Käynnistä tietokone uudelleen, jotta muutokset tulevat voimaan."
 
 #: usr/lib/linuxmint/mintdrivers/mintdrivers.py:697
 #, python-format
@@ -135,7 +135,7 @@ msgstr "Suljettuja ajureita ei ole käytössä."
 #: generate_desktop_files:26 generate_desktop_files:41
 #: usr/share/linuxmint/mintdrivers/main.ui.h:13
 msgid "Additional and proprietary drivers"
-msgstr "Lisäohjaimet ja valmistajan ajurit"
+msgstr "Valinnaiset ja valmistajan ajurit"
 
 #: generate_desktop_files:41
 msgid "Manage the drivers for your devices"
@@ -143,7 +143,7 @@ msgstr "Hallitse ajureita"
 
 #: generate_desktop_files:67 usr/share/linuxmint/mintdrivers/main.ui.h:11
 msgid "Mount installation media"
-msgstr "Kytke Linux Mintin asennusmedia tietokoneeseen ajurien asentamiseksi"
+msgstr "Kytke Linux Mint -asennusmedia tietokoneeseesi"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:1
 msgid "Looking for drivers"
@@ -163,7 +163,7 @@ msgstr "Tietokoneesi ei tarvitse lisäajureita."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:5
 msgid "An error occurred"
-msgstr "Tapahtui virhe"
+msgstr "Tapahtui jokin virhe"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:6
 msgid "OK"
@@ -171,13 +171,13 @@ msgstr "OK"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:7
 msgid "You appear to be offline"
-msgstr "Olet offline-tilassa"
+msgstr "Verkkoyhteyttä ei ole"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:8
 msgid ""
 "Connect to the Internet or insert the Linux Mint installation disc (or USB "
 "stick)."
-msgstr "Yhdistä Internetiin tai liitä Linux Mintin asennusmedia."
+msgstr "Yhdistä internetiin tai kytke Linux Mint -asennusmedia."
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:9
 msgid "Installation media detected"
@@ -185,4 +185,5 @@ msgstr "Asennusmedia havaittu"
 
 #: usr/share/linuxmint/mintdrivers/main.ui.h:10
 msgid "Press the button below to mount it as a software repository."
-msgstr "Paina alla olevaa painiketta liittääksesi sen ohjelmistovarastona."
+msgstr ""
+"Liitä asennusmedia ohjelmistovarastona klikkaamalla alla olevaa painiketta."
