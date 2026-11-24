@@ -308,7 +308,8 @@ class Application:
                 self.button_driver_apply.set_sensitive(bool(self.driver_changes))
         elif len(installs) > 0:
             # Removals are done, now install the new drivers
-            self.start_driver_transaction("install", installs)
+            # Not from within the signal handler of the transaction that just finished
+            self.start_pending_install(installs)
             return
 
         if self.needs_broadcom_reload:
@@ -324,6 +325,10 @@ class Application:
         self.button_driver_cancel.set_visible(False)
         self.scrolled_window_drivers.set_sensitive(True)
         XApp.set_window_progress(self.window_main, 0)
+
+    @idle
+    def start_pending_install(self, installs):
+        self.start_driver_transaction("install", installs)
 
     def start_driver_transaction(self, stage, packages):
         self.transaction_stage = stage
