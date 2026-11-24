@@ -1,3 +1,10 @@
+mintdrivers (1.9.1) adrien; urgency=medium
+
+  * Add .gitignore
+  * Switch from packagekit to aptkit
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue, 24 Nov 2026 10:52:35 +0000
+
 mintdrivers (1.9.0) adrien; urgency=medium
 
   * l10n: Update translations
