@@ -11,8 +11,9 @@ import gi
 gi.require_version("GdkPixbuf", "2.0")
 gi.require_version("Gtk", "3.0")
 gi.require_version("XApp", "1.0")
-from gi.repository import GdkPixbuf, Gtk, XApp, GLib
+from gi.repository import GdkPixbuf, Gio, Gtk, XApp, GLib
 import aptkit.client
+import aptkit.debconf
 import aptkit.enums
 import aptkit.errors
 from UbuntuDrivers import detect
@@ -42,6 +43,8 @@ locale.bindtextdomain(APP, LOCALE_DIR)
 gettext.bindtextdomain(APP, LOCALE_DIR)
 gettext.textdomain(APP)
 _ = gettext.gettext
+
+MOK_CERTIFICATE = "/var/lib/shim-signed/mok/MOK.der"
 
 class Application:
 
@@ -107,6 +110,8 @@ class Application:
         self.finished_signal = None
         self.pending_installs = []
         self.cache_transaction = None
+        self.enroll_mok_after_install = False
+        self.debconf_proxy = None
 
         self.show_page("refresh_page")
 
@@ -297,6 +302,7 @@ class Application:
 
         if errors:
             self.pending_installs = []
+            self.enroll_mok_after_install = False
             if self.on_error(message, silent):
                 # real failure
                 self.on_driver_changes_revert()
@@ -311,7 +317,14 @@ class Application:
             return
         else:
             self.clear_changes()
+            if self.enroll_mok_after_install:
+                self.enroll_mok_after_install = False
+                if self.has_dkms_modules() and self.enroll_mok():
+                    return
 
+        self.finish_driver_changes(errors)
+
+    def finish_driver_changes(self, errors):
         if self.needs_broadcom_reload:
             print("Reloading Broadcom modules")
             subprocess.call(["sudo", "mintdrivers-load-broadcom-modules"])
@@ -325,6 +338,51 @@ class Application:
         self.button_driver_cancel.set_visible(False)
         self.scrolled_window_drivers.set_sensitive(True)
         XApp.set_window_progress(self.window_main, 0)
+
+    def mok_needs_enrollment(self):
+        if not os.path.exists(MOK_CERTIFICATE):
+            return False
+        try:
+            sb_state = subprocess.run(["mokutil", "--sb-state"], capture_output=True, text=True).stdout
+            key_state = subprocess.run(["mokutil", "--test-key", MOK_CERTIFICATE], capture_output=True, text=True).stdout
+        except OSError:
+            return False
+        return "SecureBoot enabled" in sb_state and "is not enrolled" in key_state
+
+    def has_dkms_modules(self):
+        try:
+            return any(entry.is_dir() for entry in os.scandir("/var/lib/dkms"))
+        except OSError:
+            return False
+
+    def enroll_mok(self):
+        # dkms only asks for the enrollment when it creates the key, so a key made while
+        # Secure Boot was disabled is never enrolled.
+        print("Enrolling the Secure Boot signing key")
+        try:
+            self.debconf_proxy = aptkit.debconf.DebconfProxy("gnome")
+            self.debconf_proxy.start()
+            helper = Gio.Subprocess.new(["/usr/bin/pkexec", "/usr/bin/mintdrivers-enroll-mok",
+                                         self.debconf_proxy.socket_path], Gio.SubprocessFlags.NONE)
+        except Exception as e:
+            print("Could not enroll the Secure Boot signing key: %s" % e)
+            self.stop_debconf_proxy()
+            return False
+        helper.wait_async(None, self.on_enroll_mok_finished)
+        return True
+
+    def on_enroll_mok_finished(self, helper, result):
+        try:
+            helper.wait_finish(result)
+        except GLib.Error as e:
+            print("Could not enroll the Secure Boot signing key: %s" % e.message)
+        self.stop_debconf_proxy()
+        self.finish_driver_changes(False)
+
+    def stop_debconf_proxy(self):
+        if self.debconf_proxy is not None:
+            self.debconf_proxy.stop()
+            self.debconf_proxy = None
 
     @idle
     def start_pending_install(self):
@@ -349,6 +407,8 @@ class Application:
                 transaction.set_remove_obsoleted_depends(True)
             else:
                 print("Installing", packages)
+                # When there's no key yet dkms creates one and asks for its enrollment itself
+                self.enroll_mok_after_install = self.mok_needs_enrollment()
                 transaction = client.install_packages(packages)
             transaction.set_debconf_frontend("gnome")
 

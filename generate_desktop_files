@@ -40,7 +40,8 @@ OnlyShowIn=KDE;
 
 additionalfiles.generate(DOMAIN, PATH, "usr/share/applications/kde4/mintdrivers.desktop", prefix, _("Driver Manager"), _("Additional and proprietary drivers"), suffix, genericName=_("Manage the drivers for your devices"))
 
-prefix = """<?xml version="1.0" encoding="UTF-8"?>
+def generate_policy(action_id, message, exec_path):
+    prefix = """<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE policyconfig PUBLIC
  "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
  "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
@@ -48,20 +49,23 @@ prefix = """<?xml version="1.0" encoding="UTF-8"?>
 
   <vendor>Linux Mint</vendor>
   <vendor_url>https://linuxmint.com/</vendor_url>
-  <action id="com.linuxmint.mintdrivers">
-"""
+  <action id="%s">
+""" % action_id
 
-suffix = """
+    suffix = """
     <icon_name>mintdrivers</icon_name>
     <defaults>
       <allow_any>auth_admin_keep</allow_any>
       <allow_inactive>auth_admin_keep</allow_inactive>
       <allow_active>auth_admin_keep</allow_active>
     </defaults>
-    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/mintdrivers-add-live-media</annotate>
+    <annotate key="org.freedesktop.policykit.exec.path">%s</annotate>
   </action>
 
 </policyconfig>
-"""
+""" % exec_path
 
-additionalfiles.generate_polkit_policy(DOMAIN, PATH, "usr/share/polkit-1/actions/com.linuxmint.mintdrivers.policy", prefix, _("Mount installation media"), suffix)
+    additionalfiles.generate_polkit_policy(DOMAIN, PATH, "usr/share/polkit-1/actions/%s.policy" % action_id, prefix, message, suffix)
+
+generate_policy("com.linuxmint.mintdrivers", _("Mount installation media"), "/usr/bin/mintdrivers-add-live-media")
+generate_policy("com.linuxmint.mintdrivers.enroll-mok", _("Enroll the Secure Boot signing key"), "/usr/bin/mintdrivers-enroll-mok")

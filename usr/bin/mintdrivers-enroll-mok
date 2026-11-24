@@ -1,0 +1,28 @@
+#!/usr/bin/python3
+
+import os
+import stat
+import sys
+
+if os.getuid() != 0:
+    print("mintdrivers-enroll-mok needs to be run as root.")
+    sys.exit(1)
+
+if len(sys.argv) != 2:
+    print("Usage: mintdrivers-enroll-mok DEBCONF_SOCKET")
+    sys.exit(1)
+
+# The debconf questions are answered in the session of the user who called us
+debconf_socket = sys.argv[1]
+try:
+    info = os.stat(debconf_socket)
+except OSError as e:
+    print(e)
+    sys.exit(1)
+if not stat.S_ISSOCK(info.st_mode) or str(info.st_uid) != os.environ.get("PKEXEC_UID"):
+    print("%s is not a socket of the calling user." % debconf_socket)
+    sys.exit(1)
+
+os.environ["DEBIAN_FRONTEND"] = "passthrough"
+os.environ["DEBCONF_PIPE"] = debconf_socket
+os.execv("/usr/sbin/update-secureboot-policy", ["update-secureboot-policy", "--enroll-key"])
