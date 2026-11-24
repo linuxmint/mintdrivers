@@ -295,10 +295,8 @@ class Application:
         self.transaction_error = None
         self.finished_signal = None
 
-        installs = self.pending_installs
-        self.pending_installs = []
-
         if errors:
+            self.pending_installs = []
             if self.on_error(message, silent):
                 # real failure
                 self.on_driver_changes_revert()
@@ -306,10 +304,10 @@ class Application:
             else:
                 self.button_driver_revert.set_sensitive(bool(self.driver_changes))
                 self.button_driver_apply.set_sensitive(bool(self.driver_changes))
-        elif len(installs) > 0:
+        elif len(self.pending_installs) > 0:
             # Removals are done, now install the new drivers
             # Not from within the signal handler of the transaction that just finished
-            self.start_pending_install(installs)
+            self.start_pending_install()
             return
 
         if self.needs_broadcom_reload:
@@ -327,8 +325,14 @@ class Application:
         XApp.set_window_progress(self.window_main, 0)
 
     @idle
-    def start_pending_install(self, installs):
-        self.start_driver_transaction("install", installs)
+    def start_pending_install(self):
+        installs = self.pending_installs
+        self.pending_installs = []
+        if len(installs) > 0:
+            self.start_driver_transaction("install", installs)
+        else:
+            # Cancelled between the removal and the installation
+            self.end_driver_transaction(True, True)
 
     def start_driver_transaction(self, stage, packages):
         self.transaction_stage = stage
