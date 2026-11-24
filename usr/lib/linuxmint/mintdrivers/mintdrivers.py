@@ -309,6 +309,8 @@ class Application:
             # Not from within the signal handler of the transaction that just finished
             self.start_pending_install()
             return
+        else:
+            self.clear_changes()
 
         if self.needs_broadcom_reload:
             print("Reloading Broadcom modules")
