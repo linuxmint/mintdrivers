@@ -11,9 +11,10 @@ import gi
 gi.require_version("GdkPixbuf", "2.0")
 gi.require_version("Gtk", "3.0")
 gi.require_version("XApp", "1.0")
-gi.require_version("PackageKitGlib", "1.0")
-from gi.repository import GdkPixbuf, Gtk, XApp, Gio, GLib
-from gi.repository import PackageKitGlib as packagekit
+from gi.repository import GdkPixbuf, Gtk, XApp, GLib
+import aptkit.client
+import aptkit.enums
+import aptkit.errors
 from UbuntuDrivers import detect
 import psutil
 import re
@@ -99,6 +100,14 @@ class Application:
         self.needs_broadcom_reload = False
         self.live_mode = False
 
+        # The aptkit transaction currently running, if any
+        self.transaction = None
+        self.transaction_stage = None
+        self.transaction_error = None
+        self.finished_signal = None
+        self.pending_installs = []
+        self.cache_transaction = None
+
         self.show_page("refresh_page")
 
         with open('/proc/cmdline') as f:
@@ -123,31 +132,38 @@ class Application:
     def update_cache(self):
         print("Updating cache")
         self.show_page("refresh_page")
-        task = packagekit.Task()
-        task.refresh_cache_async(True, Gio.Cancellable(), self.on_cache_update_progress, (None, ), self.on_cache_update_finished, (None, ))
+        try:
+            self.cache_transaction = aptkit.client.AptClient().update_cache()
+            self.cache_transaction.connect("finished", self.on_cache_update_finished)
+            self.cache_transaction.run(reply_handler=lambda *args: None,
+                                       error_handler=self.on_cache_update_run_error)
+        except Exception as e:
+            self.on_cache_update_run_error(e)
 
-    def on_error(self, error):
+    def on_error(self, message, silent):
         # Returns False if the error was from cancelling or failing to authenticate.
         # This will bring the ui back to pre-apply state. Returning True will reset
         # entirely.
-
-        # it thinks it's a PkClientError, but it's really PkErrorEnum
-        # the GError code is set to 0xFF + code
-        if error.code >= 0xFF:
-            real_code = error.code - 0xFF
-
-            if real_code == packagekit.ErrorEnum.NOT_AUTHORIZED:
-                # Silently ignore auth failures or cancellation.
-                return False
+        if silent:
+            return False
 
         self.show_page("error_page")
-        self.builder.get_object("error_label").set_label(error.message)
+        self.builder.get_object("error_label").set_label(message)
         return True
 
-    def on_cache_update_progress(self, progress, ptype, data=None):
-        pass
+    def on_cache_update_run_error(self, error):
+        # Even if the cache couldn't be updated (offline, not authorized..) show whatever is available
+        print("Could not update the cache: %s" % error)
+        self.cache_update_done()
 
-    def on_cache_update_finished(self, source, result, data=None):
+    def on_cache_update_finished(self, transaction, exit_state):
+        self.cache_update_done()
+
+    def cache_update_done(self):
+        # The daemon also finishes the transaction when run() fails, only handle it once
+        if self.cache_transaction is None:
+            return
+        self.cache_transaction = None
         print("Cache updated")
         XApp.set_window_progress(self.window_main, 0)
         self.get_drivers_async()
@@ -207,71 +223,135 @@ class Application:
         subprocess.call(["/usr/bin/pkexec", "mintdrivers-add-live-media"])
         self.check_internet_or_live_media()
 
-    def on_driver_changes_progress(self, progress, ptype, data=None):
+    def show_driver_changes_progress(self):
         self.button_driver_revert.set_visible(False)
         self.button_driver_apply.set_visible(False)
         self.button_driver_restart.set_visible(False)
         self.button_driver_cancel.set_visible(True)
         self.progress_bar.set_visible(True)
-        self.progress_bar.set_visible(True)
 
-        if progress.get_status() == packagekit.StatusEnum.DOWNLOAD:
+    def on_driver_changes_status(self, transaction, status):
+        if transaction is not self.transaction:
+            return
+        self.show_driver_changes_progress()
+
+        if status in (aptkit.enums.STATUS_DOWNLOADING, aptkit.enums.STATUS_DOWNLOADING_REPO):
             self.label_driver_action.set_label(_("Downloading drivers..."))
-        elif progress.get_status() == packagekit.StatusEnum.INSTALL:
-            self.label_driver_action.set_label(_("Installing drivers..."))
-        elif progress.get_status() == packagekit.StatusEnum.REMOVE:
-            self.label_driver_action.set_label(_("Removing drivers..."))
-        elif progress.get_status() == packagekit.StatusEnum.CANCEL:
+        elif status == aptkit.enums.STATUS_COMMITTING:
+            if self.transaction_stage == "remove":
+                self.label_driver_action.set_label(_("Removing drivers..."))
+            else:
+                self.label_driver_action.set_label(_("Installing drivers..."))
+        elif status == aptkit.enums.STATUS_CANCELLING:
             self.label_driver_action.set_label(_("Cancelling..."))
-        elif progress.get_status() == packagekit.StatusEnum.LOADING_CACHE:
+        elif status == aptkit.enums.STATUS_LOADING_CACHE:
             self.label_driver_action.set_label(_("Loading cache..."))
         else:
             self.label_driver_action.set_label("")
-        if ptype == packagekit.ProgressType.PERCENTAGE:
-            prog_value = progress.get_property('percentage')
-            self.progress_bar.set_fraction(prog_value / 100.0)
-            XApp.set_window_progress(self.window_main, prog_value)
 
-    def on_driver_changes_finish(self, source, result, installs):
-        errors = False
-        try:
-            self.pk_task.generic_finish(result)
-        except GLib.Error as e:
-            errors = True
-            if self.on_error(e):
+    def on_driver_changes_progress(self, transaction, progress):
+        if transaction is not self.transaction:
+            return
+        self.show_driver_changes_progress()
+
+        if progress > 100:
+            # Unknown progress
+            self.progress_bar.pulse()
+        else:
+            self.progress_bar.set_fraction(progress / 100.0)
+            XApp.set_window_progress(self.window_main, progress)
+
+    def on_driver_changes_error(self, transaction, error_code, error_details):
+        # The transaction is finished right after, that's where this gets handled
+        if transaction is self.transaction:
+            self.transaction_error = (error_code, error_details)
+
+    def on_driver_changes_finish(self, transaction, exit_state):
+        if transaction is not self.transaction:
+            return
+        if exit_state == aptkit.enums.EXIT_SUCCESS:
+            self.end_driver_transaction(False)
+            return
+
+        error_code, error_details = self.transaction_error or (None, None)
+        silent = (exit_state == aptkit.enums.EXIT_CANCELLED or
+                  error_code in (aptkit.enums.ERROR_NOT_AUTHORIZED, aptkit.enums.ERROR_AUTH_FAILED))
+        self.end_driver_transaction(True, silent, error_details or error_code or exit_state)
+
+    def on_driver_changes_run_error(self, error):
+        # The transaction couldn't be started, for instance because the authentication
+        # was cancelled. The daemon also finishes it, but we're done with it.
+        if self.transaction_stage is None:
+            return
+        if self.transaction is not None and self.finished_signal is not None:
+            self.transaction.disconnect(self.finished_signal)
+        silent = isinstance(error, aptkit.errors.PolicyKitError)
+        message = getattr(error, "details", None) or str(error)
+        self.end_driver_transaction(True, silent, message)
+
+    def end_driver_transaction(self, errors, silent=False, message=""):
+        self.transaction = None
+        self.transaction_stage = None
+        self.transaction_error = None
+        self.finished_signal = None
+
+        installs = self.pending_installs
+        self.pending_installs = []
+
+        if errors:
+            if self.on_error(message, silent):
                 # real failure
                 self.on_driver_changes_revert()
                 self.clear_changes()
             else:
                 self.button_driver_revert.set_sensitive(bool(self.driver_changes))
                 self.button_driver_apply.set_sensitive(bool(self.driver_changes))
+        elif len(installs) > 0:
+            # Removals are done, now install the new drivers
+            self.start_driver_transaction("install", installs)
+            return
 
-        if installs is None or len(installs) == 0 or errors:
-            if self.needs_broadcom_reload:
-                print("Reloading Broadcom modules")
-                subprocess.call(["sudo", "mintdrivers-load-broadcom-modules"])
-            self.needs_restart = (not errors)
-            self.progress_bar.set_visible(False)
-            self.apt_cache = apt.Cache()
-            self.set_driver_action_status()
-            self.update_label_and_icons_from_status()
-            self.button_driver_revert.set_visible(True)
-            self.button_driver_apply.set_visible(True)
-            self.button_driver_cancel.set_visible(False)
-            self.scrolled_window_drivers.set_sensitive(True)
-            XApp.set_window_progress(self.window_main, 0)
-        else:
-            print("Installing", installs)
-            self.pk_task.install_packages_async(installs,
-                    self.cancellable,  # cancellable
-                    self.on_driver_changes_progress,
-                    (None, ),  # progress data
-                    self.on_driver_changes_finish,  # GAsyncReadyCallback
-                    None  # callback data
-             )
+        if self.needs_broadcom_reload:
+            print("Reloading Broadcom modules")
+            subprocess.call(["sudo", "mintdrivers-load-broadcom-modules"])
+        self.needs_restart = (not errors)
+        self.progress_bar.set_visible(False)
+        self.apt_cache = apt.Cache()
+        self.set_driver_action_status()
+        self.update_label_and_icons_from_status()
+        self.button_driver_revert.set_visible(True)
+        self.button_driver_apply.set_visible(True)
+        self.button_driver_cancel.set_visible(False)
+        self.scrolled_window_drivers.set_sensitive(True)
+        XApp.set_window_progress(self.window_main, 0)
+
+    def start_driver_transaction(self, stage, packages):
+        self.transaction_stage = stage
+        self.transaction_error = None
+        try:
+            client = aptkit.client.AptClient()
+            if stage == "remove":
+                print("Purging", packages)
+                transaction = client.commit_packages(install=[], reinstall=[], remove=[], purge=packages,
+                                                     upgrade=[], downgrade=[])
+                # Also remove what was only installed for these packages
+                transaction.set_remove_obsoleted_depends(True)
+            else:
+                print("Installing", packages)
+                transaction = client.install_packages(packages)
+            transaction.set_debconf_frontend("gnome")
+
+            self.transaction = transaction
+            transaction.connect("status-changed", self.on_driver_changes_status)
+            transaction.connect("progress-changed", self.on_driver_changes_progress)
+            transaction.connect("error", self.on_driver_changes_error)
+            self.finished_signal = transaction.connect("finished", self.on_driver_changes_finish)
+            transaction.run(reply_handler=lambda *args: None,
+                            error_handler=self.on_driver_changes_run_error)
+        except Exception as e:
+            self.on_driver_changes_run_error(e)
 
     def on_driver_changes_apply(self, button):
-        self.pk_task = packagekit.Task()
         installs = []
         removals = []
 
@@ -279,52 +359,19 @@ class Application:
             if pkg.is_installed:
                 removals.extend(self.get_removals(pkg))
             else:
-                installs.append(self.get_package_id(pkg.candidate))
+                installs.append(pkg.name)
                 if pkg.shortname == "broadcom-sta-dkms":
                     self.needs_broadcom_reload = True
 
-        self.cancellable = Gio.Cancellable()
-        try:
-            if len(removals) > 0:
-                try:
-                    # Try to purge (Mint specific version of packagekit)
-                    print("Purging", removals)
-                    self.pk_task.purge_packages_async(removals,
-                                False,  # allow deps
-                                True,  # autoremove
-                                self.cancellable,  # cancellable
-                                self.on_driver_changes_progress,
-                                (None, ),  # progress data
-                                self.on_driver_changes_finish,  # callback ready
-                                installs  # callback data
-                     )
-                except:
-                    # If purging isn't supported, just remove
-                    print("Couldn't purge! Removing", removals)
-                    self.pk_task.remove_packages_async(removals,
-                                False,  # allow deps
-                                True,  # autoremove
-                                self.cancellable,  # cancellable
-                                self.on_driver_changes_progress,
-                                (None, ),  # progress data
-                                self.on_driver_changes_finish,  # callback ready
-                                installs  # callback data
-                     )
-            elif len(installs) > 0:
-                print("Installing", installs)
-                self.pk_task.install_packages_async(installs,
-                        self.cancellable,  # cancellable
-                        self.on_driver_changes_progress,
-                        (None, ),  # progress data
-                        self.on_driver_changes_finish,  # GAsyncReadyCallback
-                        None  # callback data
-                 )
+        if len(removals) > 0:
+            self.pending_installs = installs
+            self.start_driver_transaction("remove", removals)
+        elif len(installs) > 0:
+            self.start_driver_transaction("install", installs)
 
-            self.button_driver_revert.set_sensitive(False)
-            self.button_driver_apply.set_sensitive(False)
-            self.scrolled_window_drivers.set_sensitive(False)
-        except Exception as e:
-            print("Warning: install not completed successfully: {}".format(e))
+        self.button_driver_revert.set_sensitive(False)
+        self.button_driver_apply.set_sensitive(False)
+        self.scrolled_window_drivers.set_sensitive(False)
 
     def on_driver_changes_revert(self, button_revert=None):
 
@@ -343,7 +390,11 @@ class Application:
         self.button_driver_apply.set_sensitive(False)
 
     def on_driver_changes_cancel(self, button_cancel):
-        self.cancellable.cancel()
+        # Don't go on with the installation if we're cancelling the removal
+        self.pending_installs = []
+        if self.transaction is not None:
+            self.transaction.cancel(reply_handler=lambda *args: None,
+                                    error_handler=lambda e: print("Could not cancel: %s" % e))
         self.clear_changes()
 
     def on_driver_restart_clicked(self, button_restart):
@@ -390,13 +441,8 @@ class Application:
         self.button_driver_apply.set_sensitive(bool(self.driver_changes))
 
 
-    def get_package_id(self, ver):
-        """ Return the PackageKit package id """
-        assert isinstance(ver, apt.package.Version)
-        return "%s;%s;%s;" % (ver.package.shortname, ver.version, ver.package.architecture())
-
     def get_removals(self, pkg):
-        """ Return the PackageKit ids of pkg and everything that must go with it """
+        """ Return the names of pkg and everything that must go with it """
         to_remove = [pkg]
         # The main NVIDIA package is only a metapackage.
         # We need to collect its dependencies, so that
@@ -406,9 +452,9 @@ class Application:
                 if dep in self.apt_cache and self.apt_cache[dep].is_installed:
                     to_remove.append(self.apt_cache[dep])
 
-        # PackageKit refuses to remove a package if something still installed
-        # depends on it, so keep adding whatever the removal breaks until
-        # nothing is left broken (this is what apt does).
+        # Packages that still depend on what we remove would be removed too.
+        # Keep adding whatever the removal breaks until nothing is left broken
+        # (this is what apt does), so that they are purged along with the rest.
         try:
             with self.apt_cache.actiongroup():
                 for p in to_remove:
@@ -419,7 +465,7 @@ class Application:
                         p.mark_delete(auto_fix=False)
                     if any(p.is_inst_broken for p in broken):
                         break
-            removals = [self.get_package_id(p.installed) for p in self.apt_cache.get_changes() if p.marked_delete]
+            removals = [p.name for p in self.apt_cache.get_changes() if p.marked_delete]
         finally:
             self.apt_cache.clear()
 
