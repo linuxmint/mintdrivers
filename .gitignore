@@ -1,2 +1,6 @@
 debian/mintdrivers
 usr/share/locale
+debian/.debhelper
+debian/files
+debian/*.debhelper.log
+debian/*.substvars
