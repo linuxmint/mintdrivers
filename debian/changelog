@@ -1,3 +1,10 @@
+mintdrivers (1.9.2) adrien; urgency=medium
+
+  * Fix switching drivers hanging after the old driver is removed
+  * Don't install the new driver if cancelled between the removal and the installation
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue, 24 Nov 2026 14:51:02 +0000
+
 mintdrivers (1.9.1) adrien; urgency=medium
 
   * Add .gitignore
