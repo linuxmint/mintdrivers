@@ -1,3 +1,10 @@
+mintdrivers (1.9.3) adrien; urgency=medium
+
+  * l10n: Update translations
+  * l10n: Update files
+
+ -- Clement Lefebvre <root@linuxmint.com>  Tue, 24 Nov 2026 16:17:57 +0000
+
 mintdrivers (1.9.2) adrien; urgency=medium
 
   * Fix switching drivers hanging after the old driver is removed
