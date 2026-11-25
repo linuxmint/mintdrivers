@@ -1,3 +1,12 @@
+mintdrivers (1.9.4) adrien; urgency=medium
+
+  [ Michael Webster ]
+  * mintdrivers.py: Clear changes after a transaction
+  * Update .gitignore
+  * Enroll the Secure Boot signing key when dkms doesn't ask for it
+
+ -- Clement Lefebvre <root@linuxmint.com>  Wed, 25 Nov 2026 10:11:24 +0000
+
 mintdrivers (1.9.3) adrien; urgency=medium
 
   * l10n: Update translations
